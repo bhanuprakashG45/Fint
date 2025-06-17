@@ -4,6 +4,8 @@ import 'package:fint/view/auth/otp_screen.dart';
 import 'package:fint/view/auth/signup_screen.dart';
 import 'package:fint/view/home_screen/coupons_screen.dart';
 import 'package:fint/view/home_screen/home_screen.dart';
+import 'package:fint/view/home_screen/notification_screen.dart';
+import 'package:fint/view/home_screen/transaction_history_screen.dart';
 import 'package:fint/view/profile/profile_screen.dart';
 import 'package:fint/view/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ import 'package:flutter/material.dart';
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case RoutesName.splash:
+      case RoutesName.splashscreen:
         return MaterialPageRoute(
           builder: (BuildContext context) => SplashScreen(),
         );
@@ -40,6 +42,14 @@ class Routes {
       case RoutesName.profilescreen:
         return MaterialPageRoute(
           builder: (BuildContext context) => ProfileScreen(),
+        );
+      case RoutesName.transactionhistoty:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => TransactionHistoryScreen(),
+        );
+      case RoutesName.notificationscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => NotificationScreen(),
         );
       default:
         return MaterialPageRoute(

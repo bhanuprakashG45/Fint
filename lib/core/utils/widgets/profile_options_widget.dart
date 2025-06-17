@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProfileOptionsWidget extends StatelessWidget {
   final IconData leadingIcon;
   final String text;
-  final IconData? trailingIcon; // Optional
-  final Widget? trailingWidget; // New: accepts switch or custom widget
+  final IconData? trailingIcon;
+  final Widget? trailingWidget;
   final VoidCallback? onTap;
   final Color? iconColor;
   final TextStyle? textStyle;
@@ -37,25 +37,15 @@ class ProfileOptionsWidget extends StatelessWidget {
               size: 24.sp,
             ),
             SizedBox(width: 12.w),
-            Expanded(
-              child: Text(
-                text,
-                style:
-                    textStyle ??
-                    TextStyle(
-                      fontSize: 16.sp,
-                      color: theme.textTheme.bodyLarge?.color,
-                    ),
+            Expanded(child: Text(text, style: TextStyle(fontSize: 16.0.sp))),
+            if (trailingWidget != null)
+              trailingWidget!
+            else if (trailingIcon != null)
+              Icon(
+                trailingIcon,
+                color: iconColor ?? theme.iconTheme.color,
+                size: 20.sp,
               ),
-            ),
-            trailingWidget ??
-                (trailingIcon != null
-                    ? Icon(
-                      trailingIcon,
-                      color: iconColor ?? theme.iconTheme.color,
-                      size: 20.sp,
-                    )
-                    : SizedBox.shrink()),
           ],
         ),
       ),

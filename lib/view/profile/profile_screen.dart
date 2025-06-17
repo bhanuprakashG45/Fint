@@ -1,7 +1,9 @@
 import 'package:fint/core/constants/color.dart';
+import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:fint/core/utils/widgets/profile_options_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,16 +13,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool isDonor = true;
+  bool isBiometricEnabled = false;
+
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final colorscheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Column(
         children: [
           Container(
-            // height: screenHeight * 0.4,
             width: screenWidth,
             padding: EdgeInsets.all(10).r,
             decoration: BoxDecoration(
@@ -40,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: IconButton(
                           icon: Icon(
                             Icons.arrow_back,
-                            color: Colors.white,
+                            color: colorscheme.onPrimary,
                             size: 28.sp,
                           ),
                           onPressed: () => Navigator.pop(context),
@@ -60,54 +64,182 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10).r,
-                  child: Image.network(
-                    "https://randomuser.me/api/portraits/men/10.jpg",
-                    height: 120.h,
-                    width: 120.h,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                SizedBox(height: 10.0.h),
                 Container(
-                  padding: EdgeInsets.all(5).r,
+                  height: 100.0.h,
+                  width: 160.0.w,
                   decoration: BoxDecoration(
-                    // color: Colorscheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(10).r,
+                    borderRadius: BorderRadius.circular(25).r,
+                    color: colorscheme.onPrimary,
                   ),
-                  child: Text(
-                    "BhanuPrakash",
-                    style: TextStyle(
-                      color: colorscheme.primaryContainer,
-                      fontSize: 18.0.sp,
-                      fontWeight: FontWeight.bold,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25).r,
+                    child: Image.network(
+                      "https://randomuser.me/api/portraits/men/10.jpg",
+
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                SizedBox(height: 10.0.h),
+                SizedBox(height: 10.h),
+                Text(
+                  "BhanuPrakash",
+                  style: TextStyle(
+                    color: colorscheme.primaryContainer,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 _profileInfo(colorscheme, "UPI ID : abcd123@ybl"),
-                SizedBox(height: 5.0.h),
+                SizedBox(height: 5.h),
                 _profileInfo(colorscheme, "Pin code : 123456"),
+                SizedBox(height: 10.h),
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(20).r,
-            decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ).r,
-            ),
-            child: Column(
+          Expanded(
+            child: Stack(
               children: [
-                ProfileOptionsWidget(
-                  leadingIcon: Icons.water_drop_outlined,
-                  text: "Be a Donar",
-                  trailingIcon: Icons.arrow_forward_ios,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 40.h),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(20).r,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20).r,
+                          topRight: Radius.circular(20).r,
+                        ),
+                        color: colorscheme.primaryContainer,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10).r,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10).r,
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  colorscheme.secondaryContainer,
+                                  colorscheme.onSecondaryContainer,
+
+                                  colorscheme.onSecondary,
+                                ],
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                FaIcon(FontAwesomeIcons.buildingColumns),
+                                Text(
+                                  "Bank Accounts",
+                                  style: TextStyle(fontSize: 18.0.sp),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ProfileOptionsWidget(
+                            leadingIcon: Icons.water_drop_outlined,
+                            text: "Be a Donor",
+                            trailingWidget: Transform.scale(
+                              scale: 0.7,
+                              child: Switch(
+                                activeColor: colorscheme.secondary,
+                                inactiveThumbColor: colorscheme.onSecondary,
+                                inactiveTrackColor:
+                                    colorscheme.onSecondaryContainer,
+                                value: isDonor,
+                                onChanged:
+                                    (value) => setState(() => isDonor = value),
+                              ),
+                            ),
+                          ),
+                          ProfileOptionsWidget(
+                            leadingIcon: FontAwesomeIcons.fingerprint,
+                            text: "Bio Metric & Screen Lock",
+                            trailingWidget: Transform.scale(
+                              scale: 0.7,
+                              child: Switch(
+                                activeColor: colorscheme.secondary,
+                                inactiveThumbColor: colorscheme.onSecondary,
+                                inactiveTrackColor:
+                                    colorscheme.onSecondaryContainer,
+                                value: isBiometricEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isBiometricEnabled = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15.0.h),
+                          ProfileOptionsWidget(
+                            leadingIcon: Icons.key,
+                            text: "Change Password",
+                            trailingIcon: Icons.arrow_forward_ios,
+                          ),
+                          SizedBox(height: 15.0.h),
+                          ProfileOptionsWidget(
+                            leadingIcon: FontAwesomeIcons.shieldHalved,
+                            text: "Privacy and Security",
+                            trailingIcon: Icons.arrow_forward_ios,
+                          ),
+                          SizedBox(height: 15.0.h),
+                          ProfileOptionsWidget(
+                            leadingIcon: FontAwesomeIcons.phone,
+                            text: "Contact Us",
+                            trailingIcon: Icons.arrow_forward_ios,
+                          ),
+                          SizedBox(height: 15.0.h),
+                          ProfileOptionsWidget(
+                            leadingIcon: Icons.help_center_outlined,
+                            text: "Help Center",
+                            trailingIcon: Icons.arrow_forward_ios,
+                          ),
+                          SizedBox(height: 15.0.h),
+                          ProfileOptionsWidget(
+                            leadingIcon: Icons.info_outline,
+                            text: "About Fint",
+                            trailingIcon: Icons.arrow_forward_ios,
+                          ),
+                          SizedBox(height: 20.0.h),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 20.h,
+                  left: 20.w,
+                  right: 20.w,
+                  child: SizedBox(
+                    height: 50.h,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorscheme.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          RoutesName.loginscreen,
+                        );
+                      },
+                      child: Text(
+                        "Log out",
+                        style: TextStyle(
+                          color: colorscheme.onPrimary,
+                          fontSize: 18.0.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -116,15 +248,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
 
-Widget _profileInfo(ColorScheme colorscheme, String text) {
-  return Container(
-    padding: EdgeInsets.all(5).r,
-    decoration: BoxDecoration(
-      color: colorscheme.secondaryContainer,
-      borderRadius: BorderRadius.circular(10).r,
-    ),
-    child: Text(text),
-  );
+  Widget _profileInfo(ColorScheme colorscheme, String text) {
+    return Container(
+      padding: EdgeInsets.all(5).r,
+      decoration: BoxDecoration(
+        color: colorscheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(10).r,
+      ),
+      child: Text(text, style: TextStyle(fontSize: 14.sp)),
+    );
+  }
 }

@@ -7,8 +7,8 @@ class MaterialTheme {
   static ColorScheme lightScheme() {
     return ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xFF010101),
-      surfaceTint: Color(0xff),
+      primary: Color(0xFF000000),
+      surfaceTint: Color(0xFFF2F2F2),
       onPrimary:
           Colors
               .white, // Text color on primary (usually white on darker colors)

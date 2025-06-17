@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(
                                     color: colorScheme.primaryContainer,
                                     fontSize: 28.sp,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -72,10 +72,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         'SIGN IN TO FINT',
                         style: TextStyle(
                           color: colorScheme.onPrimaryContainer,
-                          fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
+                          fontSize: 20.sp,
                         ),
                       ),
+
                       Text(
                         'Hi! Welcome back, you were missed!',
                         style: TextStyle(
