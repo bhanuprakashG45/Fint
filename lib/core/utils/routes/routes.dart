@@ -2,9 +2,11 @@ import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:fint/view/auth/login_screen.dart';
 import 'package:fint/view/auth/otp_screen.dart';
 import 'package:fint/view/auth/signup_screen.dart';
-import 'package:fint/view/home_screen/coupons_screen.dart';
+import 'package:fint/view/home_screen/coupons/coupons_screen.dart';
 import 'package:fint/view/home_screen/home_screen.dart';
+import 'package:fint/view/home_screen/insurance/pet_insurance_screen.dart';
 import 'package:fint/view/home_screen/notification_screen.dart';
+import 'package:fint/view/home_screen/red_drop/red_drop_screen.dart';
 import 'package:fint/view/home_screen/transaction_history_screen.dart';
 import 'package:fint/view/profile/profile_screen.dart';
 import 'package:fint/view/splash_screen/splash_screen.dart';
@@ -50,6 +52,14 @@ class Routes {
       case RoutesName.notificationscreen:
         return MaterialPageRoute(
           builder: (BuildContext context) => NotificationScreen(),
+        );
+      case RoutesName.reddropscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => RedDropScreen(),
+        );
+      case RoutesName.petinsurancescreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => PetInsuranceScreen(),
         );
       default:
         return MaterialPageRoute(

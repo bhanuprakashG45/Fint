@@ -252,7 +252,9 @@ Widget _buildInputField({
       controller: controller,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
+
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0).r,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),

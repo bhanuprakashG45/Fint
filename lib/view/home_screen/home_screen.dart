@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.all(30).r,
-                  height: screenHeight * 0.2,
+                  height: screenHeight * 0.36,
                   width: screenWidth,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -37,65 +37,75 @@ class _HomeScreenState extends State<HomeScreen> {
                       colors: [colorScheme.primary, colorScheme.secondary],
                     ),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: colorScheme.primaryContainer,
-                            width: 2.r,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: colorScheme.primaryContainer,
+                                width: 2.r,
+                              ),
+                              borderRadius: BorderRadius.circular(20).r,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesName.profilescreen,
+                                );
+                              },
+                              child: Icon(
+                                Icons.person_outline,
+                                color: colorScheme.primaryContainer,
+                                size: 25.0.sp,
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(20).r,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.profilescreen,
-                            );
-                          },
-                          child: Icon(
-                            Icons.person_outline,
-                            color: colorScheme.primaryContainer,
-                            size: 25.0.sp,
+                          const Spacer(flex: 10),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.notificationscreen,
+                              );
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.solidBell,
+                              color: colorScheme.primaryContainer,
+                              size: 30.0.sp,
+                            ),
                           ),
-                        ),
+                          const Spacer(flex: 1),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.transactionhistoty,
+                              );
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.clockRotateLeft,
+                              color: colorScheme.primaryContainer,
+                              size: 25.0.sp,
+                            ),
+                          ),
+                        ],
                       ),
-                      const Spacer(flex: 10),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.notificationscreen,
-                          );
-                        },
-                        child: FaIcon(
-                          FontAwesomeIcons.solidBell,
-                          color: colorScheme.primaryContainer,
-                          size: 30.0.sp,
-                        ),
-                      ),
-                      const Spacer(flex: 1),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.transactionhistoty,
-                          );
-                        },
-                        child: FaIcon(
-                          FontAwesomeIcons.clockRotateLeft,
-                          color: colorScheme.primaryContainer,
-                          size: 25.0.sp,
-                        ),
+
+                      Image.asset(
+                        "assets/images/homelogo.png",
+                        height: screenHeight * 0.25,
+                        width: screenWidth,
                       ),
                     ],
                   ),
                 ),
 
                 Container(
-                  height: screenHeight * 0.8,
+                  height: screenHeight * 0.64,
                   width: screenWidth,
                   decoration: BoxDecoration(
                     color: colorScheme.primaryContainer,
@@ -112,9 +122,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           Align(
                             alignment: Alignment.center,
                             child: Container(
-                              padding: EdgeInsets.all(8).r,
+                              padding: EdgeInsets.all(15).r,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20).r,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 6,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                                border: Border.all(
+                                  color: colorScheme.primaryContainer,
+                                  width: 2.r,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(80.r),
+                                  bottomLeft: Radius.circular(80.r),
+                                  bottomRight: Radius.circular(5.r),
+                                  topLeft: Radius.circular(5.r),
+                                ),
                                 color: colorScheme.secondaryContainer,
                               ),
                               child: Row(
@@ -159,17 +185,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 10.h),
                                       Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          _buildInsuranceCard(
-                                            Icons.pets,
-                                            "Pet \nInsurance",
-                                            colorScheme,
-                                          ),
-                                          Spacer(),
-                                          _buildInsuranceCard(
-                                            Icons.pets,
-                                            "View Insurance\n Quotes",
-                                            colorScheme,
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                RoutesName.petinsurancescreen,
+                                              );
+                                            },
+                                            child: _buildInsuranceCard(
+                                              Icons.pets,
+                                              "Pet Insurance",
+                                              colorScheme,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -177,30 +209,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 20.0.h),
-                                Container(
-                                  padding: EdgeInsets.all(10).r,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.onSecondaryContainer,
-                                    borderRadius: BorderRadius.circular(20).r,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Red Drop",
-                                        style: TextStyle(
-                                          color: colorScheme.onSecondary,
-                                          fontSize: 20.0.sp,
-                                          fontWeight: FontWeight.bold,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      RoutesName.reddropscreen,
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(10).r,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.onSecondaryContainer,
+                                      borderRadius: BorderRadius.circular(20).r,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Red Drop",
+                                          style: TextStyle(
+                                            color: colorScheme.onSecondary,
+                                            fontSize: 20.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      _buildInsuranceCard(
-                                        Icons.water_drop_outlined,
-                                        "A DROP OF HOPE, A LIFE OF MANY",
-                                        colorScheme,
-                                      ),
-                                    ],
+                                        SizedBox(height: 10.h),
+                                        _buildInsuranceCard(
+                                          Icons.water_drop_outlined,
+                                          "A DROP OF HOPE, A LIFE OF MANY",
+                                          colorScheme,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 20.0.h),
@@ -337,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           Positioned(
-            top: screenHeight * 0.12,
+            top: screenHeight * 0.28,
             left: 20,
             right: 20,
             child: Container(
@@ -376,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildVerticalDivider(colorScheme),
                     TransferOptionWidget(
                       icon: FontAwesomeIcons.buildingColumns,
-                      label: 'Pay to Bank Acc',
+                      label: 'Pay to Bank A/c',
                     ),
                     _buildVerticalDivider(colorScheme),
                     TransferOptionWidget(
@@ -395,17 +435,30 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             bottom: 5,
-            left: screenWidth * 0.3,
-            right: screenWidth * 0.3,
+            left: screenWidth * 0.4,
+            right: screenWidth * 0.4,
             child: Container(
               height: 80.0.h,
               width: 80.0.w,
-              decoration: BoxDecoration(shape: BoxShape.circle),
-              alignment: Alignment.center,
-              child: Image(
-                image: AssetImage('assets/images/QRHome-modified.png'),
-                fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [colorScheme.secondary, colorScheme.primary],
+                ),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(50).r,
               ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.qr_code_scanner_rounded,
+                size: 50.0.sp,
+                color: Color(0xFFFFCF50),
+              ),
+              // child: Image(
+              //   image: AssetImage('assets/images/QRHome-modified.png'),
+              //   fit: BoxFit.cover,
+              // ),
             ),
           ),
         ],

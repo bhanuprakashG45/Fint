@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Container(
                   height: 100.0.h,
-                  width: 160.0.w,
+                  width: 100.0.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25).r,
                     color: colorscheme.onPrimary,

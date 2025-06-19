@@ -8,4 +8,6 @@ class RoutesName {
   static const String profilescreen = "profilescreen";
   static const String transactionhistoty = "transactionhistoty";
   static const String notificationscreen = "notificationscreen";
+  static const String reddropscreen = "reddropscreen";
+  static const String petinsurancescreen = "petinsurancescreen";
 }
