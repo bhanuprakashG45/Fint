@@ -23,7 +23,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: colorscheme.secondaryContainer,
+        backgroundColor: colorscheme.primaryContainer,
       ),
       backgroundColor: colorscheme.secondaryContainer,
       body: Center(child: Text("Notifications Screen")),

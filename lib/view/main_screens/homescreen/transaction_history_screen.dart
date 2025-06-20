@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({super.key});
@@ -59,38 +60,70 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: colorscheme.secondaryContainer,
+        backgroundColor: colorscheme.primaryContainer,
       ),
       backgroundColor: colorscheme.secondaryContainer,
       body: Padding(
         padding: EdgeInsets.all(16.0.r),
         child: Column(
           children: [
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-                _filterTransactions();
-              },
-              decoration: InputDecoration(
-                labelText: 'Search by ID',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 2.0,
+            Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
+                      _filterTransactions();
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12.h,
+                        horizontal: 12.w,
+                      ),
+                      hint: Text("Search by Id"),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: colorscheme.onPrimaryFixed,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+
+                SizedBox(width: 10.w),
+
+                Container(
+                  height: 48.h,
+                  width: 48.h,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.filter,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
             ),
 
             SizedBox(height: 16.h),

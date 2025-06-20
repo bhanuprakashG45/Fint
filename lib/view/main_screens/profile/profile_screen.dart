@@ -115,31 +115,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Column(
                         children: [
-                          Container(
-                            padding: EdgeInsets.all(10).r,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10).r,
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  colorscheme.secondaryContainer,
-                                  colorscheme.onSecondaryContainer,
-
-                                  colorscheme.onSecondary,
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.bankaccountsscreen,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 14.h,
+                                horizontal: 16.w,
+                              ),
+                              margin: EdgeInsets.only(bottom: 15.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.r),
+                                color: colorscheme.secondaryContainer,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 40.h,
+                                    width: 40.h,
+                                    decoration: BoxDecoration(
+                                      color: colorscheme.secondary,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Center(
+                                      child: FaIcon(
+                                        FontAwesomeIcons.buildingColumns,
+                                        color: colorscheme.onPrimary,
+                                        size: 18.sp,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    "Bank Accounts",
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16.sp,
+                                    color: Colors.grey,
+                                  ),
                                 ],
                               ),
                             ),
-                            child: Column(
-                              children: [
-                                FaIcon(FontAwesomeIcons.buildingColumns),
-                                Text(
-                                  "Bank Accounts",
-                                  style: TextStyle(fontSize: 18.0.sp),
-                                ),
-                              ],
-                            ),
                           ),
+
                           ProfileOptionsWidget(
                             leadingIcon: Icons.water_drop_outlined,
                             text: "Be a Donor",

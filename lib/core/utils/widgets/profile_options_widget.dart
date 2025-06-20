@@ -37,7 +37,12 @@ class ProfileOptionsWidget extends StatelessWidget {
               size: 24.sp,
             ),
             SizedBox(width: 12.w),
-            Expanded(child: Text(text, style: TextStyle(fontSize: 16.0.sp))),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
             if (trailingWidget != null)
               trailingWidget!
             else if (trailingIcon != null)

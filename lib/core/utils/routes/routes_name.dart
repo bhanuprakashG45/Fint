@@ -13,4 +13,6 @@ class RoutesName {
   static const String couponredeempage = "couponredeempage";
   static const String couponanalyticsscreen = "couponanalyticsscreen";
   static const String qrscanorgalleryscreen = "qrscanorgalleryscreen";
+  static const String viewallbloodrequestsscreen = "viewallbloodrequestsscreen";
+  static const String bankaccountsscreen = "bankaccountsscreen";
 }

@@ -1,17 +1,19 @@
 import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:fint/view/auth/login_screen.dart';
-import 'package:fint/view/auth/otp_screen.dart';
-import 'package:fint/view/auth/signup_screen.dart';
-import 'package:fint/view/home_screen/coupons/coupon_redeem_screen.dart';
-import 'package:fint/view/home_screen/coupons/coupons_analytics_screen.dart';
-import 'package:fint/view/home_screen/coupons/coupons_screen.dart';
-import 'package:fint/view/home_screen/homescreen/home_screen.dart';
-import 'package:fint/view/home_screen/homescreen/qr_scan_or_galleryscreen.dart';
-import 'package:fint/view/home_screen/insurance/pet_insurance_screen.dart';
-import 'package:fint/view/home_screen/homescreen/notification_screen.dart';
-import 'package:fint/view/home_screen/red_drop/red_drop_screen.dart';
-import 'package:fint/view/home_screen/homescreen/transaction_history_screen.dart';
-import 'package:fint/view/profile/profile_screen.dart';
+import 'package:fint/view/auth_screens/login_screen.dart';
+import 'package:fint/view/auth_screens/otp_screen.dart';
+import 'package:fint/view/auth_screens/signup_screen.dart';
+import 'package:fint/view/main_screens/coupons/coupon_redeem_screen.dart';
+import 'package:fint/view/main_screens/coupons/coupons_analytics_screen.dart';
+import 'package:fint/view/main_screens/coupons/coupons_screen.dart';
+import 'package:fint/view/main_screens/homescreen/home_screen.dart';
+import 'package:fint/view/main_screens/homescreen/qr_scan_or_galleryscreen.dart';
+import 'package:fint/view/main_screens/insurance/pet_insurance_screen.dart';
+import 'package:fint/view/main_screens/homescreen/notification_screen.dart';
+import 'package:fint/view/main_screens/red_drop/red_drop_screen.dart';
+import 'package:fint/view/main_screens/homescreen/transaction_history_screen.dart';
+import 'package:fint/view/main_screens/red_drop/view_all_bloodrequests_screen.dart';
+import 'package:fint/view/main_screens/profile/bank_accounts_screen.dart';
+import 'package:fint/view/main_screens/profile/profile_screen.dart';
 import 'package:fint/view/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -75,6 +77,14 @@ class Routes {
       case RoutesName.qrscanorgalleryscreen:
         return MaterialPageRoute(
           builder: (BuildContext context) => QRScanOrGalleryScreen(),
+        );
+      case RoutesName.viewallbloodrequestsscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => ViewAllBloodrequestsScreen(),
+        );
+      case RoutesName.bankaccountsscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => BankAccountsScreen(),
         );
       default:
         return MaterialPageRoute(
