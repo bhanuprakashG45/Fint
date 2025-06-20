@@ -167,32 +167,94 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
       },
     );
 
-    return ListView.builder(
+    return ListView.separated(
       padding: EdgeInsets.all(16).r,
       itemCount: coupons.length,
+      separatorBuilder: (context, index) => SizedBox(height: 10.0.h),
       itemBuilder: (context, i) {
         final c = coupons[i];
-        return Card(
-          color: Colors.white,
-          margin: EdgeInsets.symmetric(vertical: 8).r,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12).r,
+        return Container(
+          padding: EdgeInsets.all(10).r,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15.r),
           ),
-          child: ListTile(
-            leading: Icon(Icons.local_offer, color: iconColor),
-            title: Text(
-              c["title"]!,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              c["description"]!,
-              style: TextStyle(color: Colors.green),
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5.r),
+                child: Image.network(
+                  'https://tse2.mm.bing.net/th?id=OIP.oXt4_1HIiaezAlVKLtnzEgHaGV&pid=Api&P=0&h=180',
+                  height: 30.h,
+                  width: 30.h,
+                  fit: BoxFit.fill,
+                ),
+              ),
 
-            trailing: Text(
-              "Until ${c["validTill"]!}",
-              style: TextStyle(color: Colors.green),
-            ),
+              SizedBox(width: 15.w),
+
+              Column(
+                children: List.generate(
+                  8,
+                  (index) => Container(
+                    width: 1.5,
+                    height: 3,
+                    margin: EdgeInsets.symmetric(vertical: 2).r,
+                    color: Colors.orange,
+                  ),
+                ),
+              ),
+
+              SizedBox(width: 10.w),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      c["title"].toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      c["description"].toString(),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey.shade300,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    SizedBox(height: 5.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Valid until:",
+                          style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                        ),
+                        Text(
+                          c["validTill"].toString(),
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            color: Colors.red.shade400,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },

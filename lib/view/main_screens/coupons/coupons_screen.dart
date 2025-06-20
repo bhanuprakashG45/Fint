@@ -131,71 +131,104 @@ class CouponsScreen extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
       padding: EdgeInsets.all(16).r,
       itemCount: filtered.length,
+      separatorBuilder: (context, index) => SizedBox(height: 10.0.h),
       itemBuilder: (context, index) {
         final coupon = filtered[index];
         return ClipPath(
           clipper: _CouponClipper(),
           child: Container(
-            margin: EdgeInsets.only(bottom: 20.h),
-            padding: EdgeInsets.all(16).r,
+            padding: EdgeInsets.all(10).r,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15.r),
-
-              border: Border.all(
-                color: Colors.black.withOpacity(0.1),
-                width: 2,
-              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  coupon["title"].toString(),
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green.shade800,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  coupon["description"].toString(),
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Divider(
-                  color: Colors.grey.shade300,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Valid until:",
-                      style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.couponredeempage);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5.r),
+                    child: Image.network(
+                      'https://tse2.mm.bing.net/th?id=OIP.oXt4_1HIiaezAlVKLtnzEgHaGV&pid=Api&P=0&h=180',
+                      height: 30.h,
+                      width: 30.h,
+                      fit: BoxFit.fill,
                     ),
-                    Text(
-                      coupon["validTill"].toString(),
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: Colors.red.shade400,
-                        fontWeight: FontWeight.bold,
+                  ),
+
+                  SizedBox(width: 15.w),
+
+                  Column(
+                    children: List.generate(
+                      8,
+                      (index) => Container(
+                        width: 1.5,
+                        height: 3,
+                        margin: EdgeInsets.symmetric(vertical: 2).r,
+                        color: Colors.orange,
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+
+                  SizedBox(width: 10.w),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          coupon["title"].toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          coupon["description"].toString(),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey.shade300,
+                          thickness: 1,
+                          indent: 0,
+                          endIndent: 0,
+                        ),
+                        SizedBox(height: 5.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Valid until:",
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Text(
+                              coupon["validTill"].toString(),
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: Colors.red.shade400,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

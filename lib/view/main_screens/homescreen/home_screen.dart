@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: colorScheme.secondary,
+      backgroundColor: Color(0xFF000033),
       body: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -32,11 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: screenHeight * 0.36,
                   width: screenWidth,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [colorScheme.primary, colorScheme.secondary],
-                    ),
+                    color: Color(0xFF000033),
+                    // gradient: LinearGradient(
+                    //   begin: Alignment.topCenter,
+                    //   end: Alignment.bottomCenter,
+                    //   colors: [colorScheme.primary, colorScheme.secondary],
+                    // ),
                   ),
                   child: Column(
                     children: [
@@ -468,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 alignment: Alignment.center,
                 child: Icon(
-                  Icons.qr_code_rounded,
+                  Icons.qr_code_2_outlined,
                   size: 50.0.sp,
                   color: AppColor.appcolor,
                   // color: Color.fromARGB(255, 252, 223, 1),
