@@ -10,4 +10,7 @@ class RoutesName {
   static const String notificationscreen = "notificationscreen";
   static const String reddropscreen = "reddropscreen";
   static const String petinsurancescreen = "petinsurancescreen";
+  static const String couponredeempage = "couponredeempage";
+  static const String couponanalyticsscreen = "couponanalyticsscreen";
+  static const String qrscanorgalleryscreen = "qrscanorgalleryscreen";
 }

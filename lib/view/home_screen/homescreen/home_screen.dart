@@ -1,3 +1,4 @@
+import 'package:fint/core/constants/color.dart';
 import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:fint/core/utils/widgets/transfer_option_widget.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       Image.asset(
-                        "assets/images/homelogo.png",
+                        "assets/images/homelogo2.png",
                         height: screenHeight * 0.25,
                         width: screenWidth,
                       ),
@@ -291,73 +292,84 @@ class _HomeScreenState extends State<HomeScreen> {
                                             15.r,
                                           ),
                                         ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.r),
-                                              child: Image.network(
-                                                'https://tse2.mm.bing.net/th?id=OIP.oXt4_1HIiaezAlVKLtnzEgHaGV&pid=Api&P=0&h=180',
-                                                height: 30.h,
-                                                width: 30.h,
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-
-                                            SizedBox(width: 15.w),
-
-                                            Column(
-                                              children: List.generate(
-                                                8,
-                                                (index) => Container(
-                                                  width: 1.5,
-                                                  height: 3,
-                                                  margin: EdgeInsets.symmetric(
-                                                    vertical: 2,
-                                                  ),
-                                                  color: Colors.orange,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              RoutesName.couponredeempage,
+                                            );
+                                          },
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                child: Image.network(
+                                                  'https://tse2.mm.bing.net/th?id=OIP.oXt4_1HIiaezAlVKLtnzEgHaGV&pid=Api&P=0&h=180',
+                                                  height: 30.h,
+                                                  width: 30.h,
+                                                  fit: BoxFit.fill,
                                                 ),
                                               ),
-                                            ),
 
-                                            SizedBox(width: 10.w),
+                                              SizedBox(width: 15.w),
 
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "McDonald's Coupon",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.sp,
-                                                    ),
+                                              Column(
+                                                children: List.generate(
+                                                  8,
+                                                  (index) => Container(
+                                                    width: 1.5,
+                                                    height: 3,
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                          vertical: 2,
+                                                        ),
+                                                    color: Colors.orange,
                                                   ),
-                                                  SizedBox(height: 4.h),
-                                                  Text(
-                                                    "₹50 OFF on orders above ₹299",
-                                                    style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      color:
-                                                          Colors.grey.shade700,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 2.h),
-                                                  Text(
-                                                    "Valid until: 30 Jun 2025",
-                                                    style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+
+                                              SizedBox(width: 10.w),
+
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "McDonald's Coupon",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 4.h),
+                                                    Text(
+                                                      "₹50 OFF on orders above ₹299",
+                                                      style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color:
+                                                            Colors
+                                                                .grey
+                                                                .shade700,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 2.h),
+                                                    Text(
+                                                      "Valid until: 30 Jun 2025",
+                                                      style: TextStyle(
+                                                        fontSize: 12.sp,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -437,28 +449,35 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 5,
             left: screenWidth * 0.4,
             right: screenWidth * 0.4,
-            child: Container(
-              height: 80.0.h,
-              width: 80.0.w,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [colorScheme.secondary, colorScheme.primary],
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.qrscanorgalleryscreen);
+              },
+              child: Container(
+                height: 80.0.h,
+                width: 80.0.w,
+                decoration: BoxDecoration(
+                  color: colorScheme.secondaryContainer,
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.topCenter,
+                  //   end: Alignment.bottomCenter,
+                  //   colors: [colorScheme.secondary, colorScheme.primary],
+                  // ),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(50).r,
                 ),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(50).r,
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.qr_code_rounded,
+                  size: 50.0.sp,
+                  color: AppColor.appcolor,
+                  // color: Color.fromARGB(255, 252, 223, 1),
+                ),
+                // child: Image(
+                //   image: AssetImage('assets/images/QRHome-modified.png'),
+                //   fit: BoxFit.cover,
+                // ),
               ),
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.qr_code_scanner_rounded,
-                size: 50.0.sp,
-                color: Color(0xFFFFCF50),
-              ),
-              // child: Image(
-              //   image: AssetImage('assets/images/QRHome-modified.png'),
-              //   fit: BoxFit.cover,
-              // ),
             ),
           ),
         ],

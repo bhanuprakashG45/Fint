@@ -9,12 +9,9 @@ class MaterialTheme {
       brightness: Brightness.light,
       primary: Color(0xFF000000),
       surfaceTint: Color(0xFFF2F2F2),
-      onPrimary:
-          Colors
-              .white, // Text color on primary (usually white on darker colors)
-      primaryContainer: Colors.white, // Lightened primary container color
+      onPrimary: Colors.white,
+      primaryContainer: Colors.white,
       onPrimaryContainer: Color(0xFF000000),
-      // color on primary container
       secondary: Color(0xFF5760D3), // Secondary color
       onSecondary: Colors.blueGrey.shade400, // Text color on secondary
       secondaryContainer: Color(0xFFF3F4F6), // Secondary container color

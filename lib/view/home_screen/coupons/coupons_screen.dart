@@ -1,6 +1,8 @@
 import 'package:fint/core/constants/color.dart';
+import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CouponsScreen extends StatelessWidget {
   const CouponsScreen({super.key});
@@ -17,10 +19,24 @@ class CouponsScreen extends StatelessWidget {
             "My Coupons",
             style: TextStyle(
               color: AppColor.appcolor,
-              fontSize: 20.0.sp,
+              fontSize: 22.0.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.couponanalyticsscreen);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20.0).r,
+                child: FaIcon(
+                  FontAwesomeIcons.chartSimple,
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+            ),
+          ],
           centerTitle: true,
           backgroundColor: colorScheme.secondaryContainer,
         ),
@@ -39,7 +55,12 @@ class CouponsScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildCouponList(active: true),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.couponredeempage);
+                    },
+                    child: _buildCouponList(active: true),
+                  ),
                   _buildCouponList(active: false),
                 ],
               ),
