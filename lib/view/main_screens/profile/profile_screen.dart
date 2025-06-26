@@ -1,4 +1,4 @@
-import 'package:fint/core/constants/color.dart';
+
 import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:fint/core/utils/widgets/profile_options_widget.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             width: screenWidth,
             padding: EdgeInsets.all(10).r,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [AppColor.appcolor, colorscheme.secondary],
-              ),
+              color: colorscheme.tertiary,
+              
             ),
             child: Column(
               children: [

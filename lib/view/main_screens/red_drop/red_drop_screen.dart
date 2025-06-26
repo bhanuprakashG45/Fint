@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:fint/core/utils/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RedDropScreen extends StatefulWidget {
   const RedDropScreen({super.key});
@@ -33,6 +35,19 @@ class _RedDropScreenState extends State<RedDropScreen> {
     'Miami',
   ];
 
+  final ImagePicker _picker = ImagePicker();
+  File? _receiptImage;
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _receiptImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -63,7 +78,6 @@ class _RedDropScreenState extends State<RedDropScreen> {
                       borderRadius: BorderRadius.circular(20).r,
                     ),
                     child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Align(
                           alignment: AlignmentDirectional.topCenter,
@@ -106,13 +120,12 @@ class _RedDropScreenState extends State<RedDropScreen> {
                                 ),
                               ),
                               isExpanded: true,
-                              items:
-                                  bloodGroups.map((String group) {
-                                    return DropdownMenuItem<String>(
-                                      value: group,
-                                      child: Text(group),
-                                    );
-                                  }).toList(),
+                              items: bloodGroups.map((String group) {
+                                return DropdownMenuItem<String>(
+                                  value: group,
+                                  child: Text(group),
+                                );
+                              }).toList(),
                               dropdownColor: colorScheme.secondaryContainer,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -153,13 +166,12 @@ class _RedDropScreenState extends State<RedDropScreen> {
                                 ),
                               ),
                               isExpanded: true,
-                              items:
-                                  locations.map((String location) {
-                                    return DropdownMenuItem<String>(
-                                      value: location,
-                                      child: Text(location),
-                                    );
-                                  }).toList(),
+                              items: locations.map((String location) {
+                                return DropdownMenuItem<String>(
+                                  value: location,
+                                  child: Text(location),
+                                );
+                              }).toList(),
                               dropdownColor: colorScheme.secondaryContainer,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -182,11 +194,10 @@ class _RedDropScreenState extends State<RedDropScreen> {
                               fontWeight: FontWeight.bold,
                             ),
 
-                            contentPadding:
-                                EdgeInsets.symmetric(
-                                  vertical: 8.0,
-                                  horizontal: 8.0,
-                                ).r,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 8.0,
+                            ).r,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(10.0).r,
@@ -227,7 +238,7 @@ class _RedDropScreenState extends State<RedDropScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: colorScheme.secondary,
                           ),
-                          onPressed: () {},
+                          onPressed: _pickImageFromGallery,
                           child: Text(
                             "Upload",
                             style: TextStyle(
@@ -237,6 +248,45 @@ class _RedDropScreenState extends State<RedDropScreen> {
                             ),
                           ),
                         ),
+                        if (_receiptImage != null)
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0.h),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10).r,
+                                  child: Image.file(
+                                    _receiptImage!,
+                                    height: 120.h,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 5,
+                                  right: 5,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _receiptImage = null;
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black54,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 20.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),

@@ -17,7 +17,7 @@ class MaterialTheme {
       secondaryContainer: Color(0xFFF3F4F6), // Secondary container color
       onSecondaryContainer:
           Colors.blueGrey.shade100, // Text color on secondary container
-      tertiary: Color(0xFF), // Tertiary color
+      tertiary: Color(0xFF000033), // Tertiary color
       onTertiary: Color(0xff), // Text color on tertiary
       tertiaryContainer: Color(0xff), // Lightened tertiary container color
       onTertiaryContainer: Color(0xff), // Text color on tertiary container

@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFF000033),
+      backgroundColor: colorScheme.tertiary,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: screenHeight * 0.36,
                   width: screenWidth,
                   decoration: BoxDecoration(
-                    color: Color(0xFF000033),
+                    color: colorScheme.tertiary,
                     // gradient: LinearGradient(
                     //   begin: Alignment.topCenter,
                     //   end: Alignment.bottomCenter,
@@ -352,10 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "₹50 OFF on orders above ₹299",
                                                       style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color:
-                                                            Colors
-                                                                .grey
-                                                                .shade700,
+                                                        color: Colors
+                                                            .grey
+                                                            .shade700,
                                                       ),
                                                     ),
                                                     SizedBox(height: 2.h),
@@ -457,27 +456,24 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 height: 80.0.h,
                 width: 80.0.w,
+                // padding: EdgeInsets.all(7).r,
                 decoration: BoxDecoration(
-                  color: colorScheme.secondaryContainer,
-                  // gradient: LinearGradient(
-                  //   begin: Alignment.topCenter,
-                  //   end: Alignment.bottomCenter,
-                  //   colors: [colorScheme.secondary, colorScheme.primary],
-                  // ),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(50).r,
+                  color: colorScheme.tertiary,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(5),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(30),
+                  ).r,
                 ),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.qr_code_2_outlined,
-                  size: 50.0.sp,
-                  color: AppColor.appcolor,
-                  // color: Color.fromARGB(255, 252, 223, 1),
+                child: Padding(
+                  padding: EdgeInsets.all(18.0.r),
+                  child: Image.asset(
+                    "assets/images/qr.png",
+                    fit: BoxFit.cover,
+                    color: colorScheme.primaryContainer,
+                  ),
                 ),
-                // child: Image(
-                //   image: AssetImage('assets/images/QRHome-modified.png'),
-                //   fit: BoxFit.cover,
-                // ),
               ),
             ),
           ),
@@ -507,7 +503,10 @@ Widget _buildInsuranceCard(
       borderRadius: BorderRadius.circular(10).r,
     ),
     child: Column(
-      children: [Icon(icon), Text(text, textAlign: TextAlign.center)],
+      children: [
+        Icon(icon),
+        Text(text, textAlign: TextAlign.center),
+      ],
     ),
   );
 }
