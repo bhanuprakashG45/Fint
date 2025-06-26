@@ -1,7 +1,6 @@
-import 'package:fint/core/constants/color.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pie_chart/pie_chart.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class CouponsAnalyticsScreen extends StatefulWidget {
   const CouponsAnalyticsScreen({super.key});

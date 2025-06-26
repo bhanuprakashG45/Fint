@@ -1,8 +1,6 @@
-import 'package:fint/core/constants/color.dart';
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class CouponsScreen extends StatelessWidget {
   const CouponsScreen({super.key});

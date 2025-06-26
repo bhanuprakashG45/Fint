@@ -1,9 +1,6 @@
-import 'package:fint/core/constants/color.dart';
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:fint/core/utils/widgets/transfer_option_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,11 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: screenWidth,
                   decoration: BoxDecoration(
                     color: colorScheme.tertiary,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    //   colors: [colorScheme.primary, colorScheme.secondary],
-                    // ),
+                    
                   ),
                   child: Column(
                     children: [

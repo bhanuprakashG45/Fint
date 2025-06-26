@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class BankAccountsScreen extends StatelessWidget {
   const BankAccountsScreen({super.key});

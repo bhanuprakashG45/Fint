@@ -1,10 +1,6 @@
-import 'package:fint/core/constants/color.dart';
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

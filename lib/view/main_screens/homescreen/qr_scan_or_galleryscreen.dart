@@ -1,8 +1,6 @@
-import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+
+import 'package:fint/core/constants/exports.dart';
 
 class QRScanOrGalleryScreen extends StatefulWidget {
   const QRScanOrGalleryScreen({super.key});

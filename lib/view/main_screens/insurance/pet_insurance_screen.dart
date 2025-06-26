@@ -1,7 +1,6 @@
-import 'package:fint/core/utils/widgets/pet_insurance_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class PetInsuranceScreen extends StatefulWidget {
   const PetInsuranceScreen({super.key});

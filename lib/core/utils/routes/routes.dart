@@ -1,21 +1,6 @@
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:fint/view/auth_screens/login_screen.dart';
-import 'package:fint/view/auth_screens/otp_screen.dart';
-import 'package:fint/view/auth_screens/signup_screen.dart';
-import 'package:fint/view/main_screens/coupons/coupon_redeem_screen.dart';
-import 'package:fint/view/main_screens/coupons/coupons_analytics_screen.dart';
-import 'package:fint/view/main_screens/coupons/coupons_screen.dart';
-import 'package:fint/view/main_screens/homescreen/home_screen.dart';
-import 'package:fint/view/main_screens/homescreen/qr_scan_or_galleryscreen.dart';
-import 'package:fint/view/main_screens/insurance/pet_insurance_screen.dart';
-import 'package:fint/view/main_screens/homescreen/notification_screen.dart';
-import 'package:fint/view/main_screens/red_drop/red_drop_screen.dart';
-import 'package:fint/view/main_screens/homescreen/transaction_history_screen.dart';
-import 'package:fint/view/main_screens/red_drop/view_all_bloodrequests_screen.dart';
-import 'package:fint/view/main_screens/profile/bank_accounts_screen.dart';
-import 'package:fint/view/main_screens/profile/profile_screen.dart';
-import 'package:fint/view/splash_screen/splash_screen.dart';
-import 'package:flutter/material.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {

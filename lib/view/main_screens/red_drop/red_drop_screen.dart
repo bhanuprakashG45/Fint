@@ -1,9 +1,6 @@
-import 'dart:io';
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+
+
+import 'package:fint/core/constants/exports.dart';
 
 class RedDropScreen extends StatefulWidget {
   const RedDropScreen({super.key});
