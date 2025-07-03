@@ -29,5 +29,14 @@ export 'dart:io';
 export 'package:image_picker/image_picker.dart';
 export 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 export 'package:fint/core/utils/widgets/pet_insurance_widget.dart';
-
 export 'package:fint/core/utils/widgets/profile_options_widget.dart';
+export 'package:fint/core/constants/theme.dart';
+export 'package:fint/core/utils/routes/routes.dart';
+export 'package:google_fonts/google_fonts.dart';
+
+export 'package:fint/view_model/auth_viewmodel/signup_viewmodel.dart';
+export 'package:provider/provider.dart';
+export 'package:fint/core/constants/app_urls.dart';
+export 'package:fint/core/utils/widgets/toast_helper_widget.dart';
+export 'package:toastification/toastification.dart';
+export 'package:fint/model/auth_model/signup_model.dart';

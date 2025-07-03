@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class TransferOptionWidget extends StatelessWidget {
@@ -16,7 +14,7 @@ class TransferOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     double boxSize = MediaQuery.of(context).size.height * 0.1;
 
     return GestureDetector(
@@ -31,12 +29,16 @@ class TransferOptionWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(icon, size: 20.sp),
+            FaIcon(icon, size: 20.sp, color: colorScheme.tertiary),
             SizedBox(height: 8.h),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12.sp),
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.tertiary,
+              ),
             ),
           ],
         ),

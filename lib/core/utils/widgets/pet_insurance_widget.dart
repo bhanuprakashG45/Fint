@@ -48,7 +48,7 @@ class PetownerInputField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.circular(10.0).r,
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0).r),
         ),
       ),
     );

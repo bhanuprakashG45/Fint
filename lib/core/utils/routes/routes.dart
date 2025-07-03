@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class Routes {
@@ -24,8 +22,8 @@ class Routes {
       case RoutesName.otpscreen:
         final phoneNumber = settings.arguments as String;
         return MaterialPageRoute(
-          builder:
-              (BuildContext context) => OtpScreen(phoneNumber: phoneNumber),
+          builder: (BuildContext context) =>
+              OtpScreen(phoneNumber: phoneNumber),
         );
       case RoutesName.couponsscreen:
         return MaterialPageRoute(
@@ -73,9 +71,8 @@ class Routes {
         );
       default:
         return MaterialPageRoute(
-          builder:
-              (_) =>
-                  const Scaffold(body: Center(child: Text('Page not found'))),
+          builder: (_) =>
+              const Scaffold(body: Center(child: Text('Page not found'))),
         );
     }
   }

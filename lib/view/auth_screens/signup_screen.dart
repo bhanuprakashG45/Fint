@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +13,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final emailController = TextEditingController();
   final bloodGroupController = TextEditingController();
   final pincodeController = TextEditingController();
+  bool isSignUpLoading = false;
 
   @override
   void dispose() {
@@ -24,6 +23,62 @@ class _SignupScreenState extends State<SignupScreen> {
     bloodGroupController.dispose();
     pincodeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _userSignUp() async {
+    setState(() {
+      isSignUpLoading = true;
+    });
+    final signupprovider = Provider.of<SignupViewmodel>(context, listen: false);
+    final name = nameController.text.trim();
+    final email = emailController.text.trim();
+    final phone = phoneController.text.trim();
+    final blood = bloodGroupController.text.toUpperCase().trim();
+    final pincode = pincodeController.text.trim();
+
+    if (name.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        blood.isEmpty ||
+        pincode.isEmpty) {
+      ToastHelper.show(
+        context,
+        "All Fields are Required",
+        type: ToastificationType.info,
+        duration: Duration(seconds: 5),
+      );
+      setState(() {
+        isSignUpLoading = false;
+      });
+    } else {
+      await signupprovider.signup(name, phone, email, blood, pincode, context);
+      signupprovider.isSignupLoading
+          ? setState(() {
+              isSignUpLoading = true;
+            })
+          : setState(() {
+              isSignUpLoading = false;
+            });
+      // if (success) {
+      //   ToastHelper.show(
+      //     context,
+      //     "SignUp successfully",
+      //     type: ToastificationType.success,
+      //     duration: Duration(seconds: 5),
+      //   );
+      //   Navigator.pushNamed(context, RoutesName.loginscreen);
+      // } else {
+      //   ToastHelper.show(
+      //     context,
+      //     "SignUp Failed",
+      //     type: ToastificationType.error,
+      //     duration: Duration(seconds: 5),
+      //   );
+      //   setState(() {
+      //     isSignUpLoading = false;
+      //   });
+      // }
+    }
   }
 
   @override
@@ -143,11 +198,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 50.h,
                       decoration: BoxDecoration(
                         color: AppColor.appcolor,
-                        // gradient: LinearGradient(
-                        //   colors: [Colors.blue, colorScheme.secondary],
-                        //   begin: Alignment.topCenter,
-                        //   end: Alignment.bottomCenter,
-                        // ),
+
                         borderRadius: BorderRadius.circular(10.0).r,
                       ),
                       child: ElevatedButton(
@@ -159,15 +210,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, RoutesName.loginscreen);
+                          _userSignUp();
                         },
-                        child: Text(
-                          'SIGN UP',
-                          style: TextStyle(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: isSignUpLoading
+                            ? SizedBox(
+                                height: 20.0.h,
+                                width: 20.0.w,
+                                child: CircularProgressIndicator(
+                                  color: colorScheme.onPrimary,
+                                  strokeWidth: 3.0,
+                                ),
+                              )
+                            : Text(
+                                'SIGN UP',
+                                style: TextStyle(
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -201,14 +261,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           fontWeight: FontWeight.w500,
                           color: Colors.blueAccent,
                         ),
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  RoutesName.loginscreen,
-                                );
-                              },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              RoutesName.loginscreen,
+                            );
+                          },
                       ),
                     ],
                   ),

@@ -1,6 +1,5 @@
-
-
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/core/storage/shared_preference.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,11 +16,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateAfterDelay() async {
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => LoginScreen()),
-      );
+    SharedPref pref = SharedPref();
+    Future.delayed(Duration(seconds: 5), () async {
+      final accessToken = await pref.getAccessToken();
+      if (accessToken.isEmpty) {
+        Navigator.pushReplacementNamed(context, RoutesName.loginscreen);
+      } else {
+        Navigator.pushReplacementNamed(context, RoutesName.homescreen);
+      }
     });
   }
 

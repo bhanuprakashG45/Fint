@@ -1,6 +1,6 @@
-
-
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view_model/auth_viewmodel/login_viewmodel.dart';
+import 'package:fint/view_model/auth_viewmodel/otp_viewmodel.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -12,6 +12,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController otpController = TextEditingController();
+  bool isOtpVerifying = false;
 
   @override
   void dispose() {
@@ -22,6 +23,47 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final otpprovider = Provider.of<OtpViewModel>(context, listen: false);
+    final loginprovider = Provider.of<LoginViewModel>(context, listen: false);
+    Future<void> checkOTP() async {
+      setState(() {
+        isOtpVerifying = true;
+      });
+      final phone = widget.phoneNumber;
+      final otp = otpController.text;
+      if (otp.isEmpty) {
+        ToastHelper.show(
+          context,
+          'OTP is required',
+          type: ToastificationType.error,
+          duration: Duration(seconds: 5),
+        );
+        setState(() {
+          isOtpVerifying = false;
+        });
+      } else {
+        await otpprovider.verifyOtp(phone, otp, context);
+        otpprovider.isOtpLoading
+            ? setState(() {
+                isOtpVerifying = true;
+              })
+            : setState(() {
+                isOtpVerifying = false;
+              });
+      }
+    }
+
+    Future<void> resendOTP() async {
+      final phone = widget.phoneNumber;
+      await loginprovider.loginUser(phone, context);
+      loginprovider.isLoginLoading
+          ? setState(() {
+              isOtpVerifying = true;
+            })
+          : setState(() {
+              isOtpVerifying = false;
+            });
+    }
 
     return Scaffold(
       body: Stack(
@@ -117,12 +159,17 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
 
                       SizedBox(height: 20.h),
-                      Text(
-                        "RESEND OTP >",
-                        style: TextStyle(
-                          color: AppColor.appcolor,
-                          fontSize: 16.0.sp,
-                          fontWeight: FontWeight.w500,
+                      InkWell(
+                        onTap: () async {
+                          await resendOTP();
+                        },
+                        child: Text(
+                          "RESEND OTP >",
+                          style: TextStyle(
+                            color: AppColor.appcolor,
+                            fontSize: 16.0.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       SizedBox(height: 20.h),
@@ -143,20 +190,25 @@ class _OtpScreenState extends State<OtpScreen> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                RoutesName.homescreen,
-                              );
+                            onPressed: () async {
+                              await checkOTP();
                             },
-                            child: Text(
-                              'VERIFY',
-                              style: TextStyle(
-                                fontSize: 18.0.sp,
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: isOtpVerifying
+                                ? SizedBox(
+                                    height: 20.0.h,
+                                    width: 20.0.w,
+                                    child: CircularProgressIndicator(
+                                      color: colorScheme.onPrimary,
+                                      strokeWidth: 3.0,
+                                    ),
+                                  )
+                                : Text(
+                                    'VERIFY',
+                                    style: TextStyle(
+                                      color: colorScheme.onPrimary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

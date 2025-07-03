@@ -1,6 +1,5 @@
-
-
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view_model/auth_viewmodel/login_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,9 +10,57 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phonecontroller = TextEditingController();
+  bool isLoginLoading = false;
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    Future<void> checkLogin() async {
+      setState(() {
+        isLoginLoading = true;
+      });
+      final loginprovider = Provider.of<LoginViewModel>(context, listen: false);
+      final phone = phonecontroller.text.trim();
+      if (phone.isEmpty) {
+        ToastHelper.show(
+          context,
+          'Phone Number is required',
+          type: ToastificationType.warning,
+          duration: Duration(seconds: 5),
+        );
+        setState(() {
+          isLoginLoading = false;
+        });
+      } else {
+        await loginprovider.loginUser(phone, context);
+        loginprovider.isLoginLoading
+            ? setState(() {
+                isLoginLoading = true;
+              })
+            : setState(() {
+                isLoginLoading = false;
+              });
+        // if (result) {
+        //   ToastHelper.show(
+        //     context,
+        //     'OTP sent to $phone',
+        //     type: ToastificationType.success,
+        //     duration: Duration(seconds: 5),
+        //   );
+        //   Navigator.pushNamed(context, RoutesName.otpscreen, arguments: phone);
+        // } else {
+        //   ToastHelper.show(
+        //     context,
+        //     'Phone Number not Exists',
+        //     type: ToastificationType.error,
+        //     duration: Duration(seconds: 5),
+        //   );
+        //   setState(() {
+        //     isLoginLoading = false;
+        //   });
+        // }
+      }
+    }
 
     return Scaffold(
       body: Stack(
@@ -34,17 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: SafeArea(
                           child: Stack(
                             children: [
-                              // Align(
-                              //   alignment: Alignment.centerLeft,
-                              //   child: IconButton(
-                              //     icon: Icon(
-                              //       Icons.arrow_back,
-                              //       color: Colors.white,
-                              //       size: 28.sp,
-                              //     ),
-                              //     onPressed: () => Navigator.pop(context),
-                              //   ),
-                              // ),
                               Center(
                                 child: Text(
                                   'Sign In',
@@ -137,11 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50.h,
                       decoration: BoxDecoration(
                         color: AppColor.appcolor,
-                        // gradient: LinearGradient(
-                        //   colors: [Colors.blue, colorScheme.secondary],
-                        //   begin: Alignment.topCenter,
-                        //   end: Alignment.bottomCenter,
-                        // ),
+
                         borderRadius: BorderRadius.circular(10.0).r,
                       ),
                       child: ElevatedButton(
@@ -149,23 +181,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(10.0).r,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.otpscreen,
-                            arguments: phonecontroller.text.trim(),
-                          );
+                        onPressed: () async {
+                          await checkLogin();
                         },
-                        child: Text(
-                          'VERIFY',
-                          style: TextStyle(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: isLoginLoading
+                            ? SizedBox(
+                                height: 20.0.h,
+                                width: 20.0.w,
+                                child: CircularProgressIndicator(
+                                  color: colorScheme.onPrimary,
+                                  strokeWidth: 3.0,
+                                ),
+                              )
+                            : Text(
+                                'VERIFY',
+                                style: TextStyle(
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -193,13 +230,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.blueAccent,
                                 ),
-                                recognizer:
-                                    TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // launchUrls(
-                                        //   'https://aoladmin.kods.app/terms-of-use',
-                                        // );
-                                      },
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // launchUrls(
+                                    //   'https://aoladmin.kods.app/terms-of-use',
+                                    // );
+                                  },
                               ),
                               TextSpan(
                                 text: ' and ',
@@ -215,13 +251,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.blueAccent,
                                 ),
-                                recognizer:
-                                    TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // launchUrls(
-                                        //   'https://aoladmin.kods.app/privacy-policy',
-                                        // );
-                                      },
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // launchUrls(
+                                    //   'https://aoladmin.kods.app/privacy-policy',
+                                    // );
+                                  },
                               ),
                             ],
                           ),
@@ -259,14 +294,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.w500,
                           color: Colors.blueAccent,
                         ),
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(
-                                  context,
-                                  RoutesName.signupscreen,
-                                );
-                              },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.signupscreen,
+                            );
+                          },
                       ),
                     ],
                   ),

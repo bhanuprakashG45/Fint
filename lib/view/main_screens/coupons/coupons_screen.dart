@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class CouponsScreen extends StatelessWidget {
@@ -47,7 +45,10 @@ class CouponsScreen extends StatelessWidget {
                 labelColor: AppColor.appcolor,
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: AppColor.appcolor,
-                tabs: const [Tab(text: "Active"), Tab(text: "Inactive")],
+                tabs: const [
+                  Tab(text: "Active"),
+                  Tab(text: "Inactive"),
+                ],
               ),
             ),
             Expanded(

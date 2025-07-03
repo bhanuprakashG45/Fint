@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,10 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.all(30).r,
                   height: screenHeight * 0.36,
                   width: screenWidth,
-                  decoration: BoxDecoration(
-                    color: colorScheme.tertiary,
-                    
-                  ),
+                  decoration: BoxDecoration(color: colorScheme.tertiary),
                   child: Column(
                     children: [
                       Row(
@@ -141,11 +136,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.qr_code_scanner),
+                                  Icon(
+                                    Icons.qr_code_scanner,
+                                    color: colorScheme.tertiary,
+                                  ),
                                   SizedBox(width: 10.w),
-                                  Text("UPI ID : abcde12345@ybl"),
+                                  Text(
+                                    "UPI ID : abcde12345@ybl",
+                                    style: TextStyle(
+                                      color: colorScheme.tertiary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   SizedBox(width: 10.w),
-                                  Icon(Icons.arrow_forward_ios, size: 20.sp),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 20.sp,
+                                    color: colorScheme.tertiary,
+                                  ),
                                 ],
                               ),
                             ),
@@ -337,6 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
+                                                        color: colorScheme
+                                                            .tertiary,
                                                         fontSize: 16.sp,
                                                       ),
                                                     ),
@@ -345,9 +355,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "₹50 OFF on orders above ₹299",
                                                       style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: Colors
-                                                            .grey
-                                                            .shade700,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: colorScheme
+                                                            .tertiary,
                                                       ),
                                                     ),
                                                     SizedBox(height: 2.h),
@@ -355,7 +366,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "Valid until: 30 Jun 2025",
                                                       style: TextStyle(
                                                         fontSize: 12.sp,
-                                                        color: Colors.grey,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: colorScheme
+                                                            .tertiary,
                                                       ),
                                                     ),
                                                   ],
@@ -439,33 +453,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            bottom: 5,
-            left: screenWidth * 0.4,
-            right: screenWidth * 0.4,
+            bottom: 0,
+            left: screenWidth * 0.38,
+            right: screenWidth * 0.38,
             child: InkWell(
               onTap: () {
                 Navigator.pushNamed(context, RoutesName.qrscanorgalleryscreen);
               },
               child: Container(
-                height: 80.0.h,
-                width: 80.0.w,
-                // padding: EdgeInsets.all(7).r,
-                decoration: BoxDecoration(
-                  color: colorScheme.tertiary,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(30),
-                  ).r,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(18.0.r),
-                  child: Image.asset(
-                    "assets/images/qr.png",
-                    fit: BoxFit.cover,
-                    color: colorScheme.primaryContainer,
-                  ),
+                decoration: BoxDecoration(),
+                child: Image.asset(
+                  "assets/images/qr_home2.png",
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -477,11 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Widget _buildVerticalDivider(ColorScheme colorScheme) {
-  return Container(
-    height: 80.h,
-    width: 1.5.w,
-    color: colorScheme.primaryContainer,
-  );
+  return Container(height: 80.h, width: 1.5.w, color: colorScheme.tertiary);
 }
 
 Widget _buildInsuranceCard(
@@ -497,8 +492,15 @@ Widget _buildInsuranceCard(
     ),
     child: Column(
       children: [
-        Icon(icon),
-        Text(text, textAlign: TextAlign.center),
+        Icon(icon, color: colorscheme.tertiary),
+        Text(
+          text,
+          style: TextStyle(
+            color: colorscheme.tertiary,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ],
     ),
   );
