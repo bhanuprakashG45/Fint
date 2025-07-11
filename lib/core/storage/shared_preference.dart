@@ -7,6 +7,13 @@ class SharedPref {
     _prefs ??= await SharedPreferences.getInstance();
   }
 
+  Future<void> storeFirebaseToken(String? firebaseToken) async {
+    await _initSharedPreferences();
+    if (firebaseToken != null) {
+      await _prefs!.setString('firebaseToken', firebaseToken);
+    }
+  }
+
   Future<void> storeAccessToken(String? accessToken) async {
     await _initSharedPreferences();
     if (accessToken != null) {
@@ -31,10 +38,21 @@ class SharedPref {
     return _prefs!.getString('refreshToken') ?? '';
   }
 
+   Future<String> getFirebaseToken() async {
+    await _initSharedPreferences();
+    return _prefs!.getString('firebaseToken') ?? '';
+  }
+
   Future<void> clearAccessToken() async {
     await _initSharedPreferences();
     if (_prefs!.containsKey('accessToken')) {
       await _prefs!.remove('accessToken');
+    }
+  }
+  Future<void> clearFirebaseToken() async {
+    await _initSharedPreferences();
+    if (_prefs!.containsKey('firebaseToken')) {
+      await _prefs!.remove('firebaseToken');
     }
   }
 

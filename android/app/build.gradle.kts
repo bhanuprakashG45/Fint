@@ -37,6 +37,10 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+     dependencies {
+      // Add this line for PhonePe
+       implementation("phonepe.intentsdk.android.release:IntentSDK:5.1.0")
+    }
 }
 
 flutter {

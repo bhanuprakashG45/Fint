@@ -1,6 +1,5 @@
-
-
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/phone_pe_sdk/checkout_page.dart';
 
 class QRScanOrGalleryScreen extends StatefulWidget {
   const QRScanOrGalleryScreen({super.key});
@@ -12,7 +11,6 @@ class QRScanOrGalleryScreen extends StatefulWidget {
 class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
-  String? scanResult;
   bool isTorchOn = false;
   bool isCameraPaused = false;
   final ImagePicker _picker = ImagePicker();
@@ -30,15 +28,31 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
     controller = qrController;
     controller?.resumeCamera();
 
-    qrController.scannedDataStream.listen((scanData) {
+    qrController.scannedDataStream.listen((scanData) async {
       if (isCameraPaused) return;
 
-      setState(() {
-        scanResult = scanData.code;
-        isCameraPaused = true;
-      });
-      controller?.pauseCamera();
-      _showResultBottomSheet(scanData.code ?? "No data");
+      final code = scanData.code;
+      if (code != null && code.startsWith("upi://")) {
+        HapticFeedback.mediumImpact();
+        setState(() {
+          isCameraPaused = true;
+        });
+        controller?.pauseCamera();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CheckoutPage(),
+          ),
+        );
+      } else {
+        HapticFeedback.heavyImpact();
+        setState(() {
+          isCameraPaused = true;
+        });
+        controller?.pauseCamera();
+        _showInvalidQrBottomSheet();
+      }
     });
   }
 
@@ -64,10 +78,10 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
       );
 
       if (picked != null) {
-        setState(() {
-          scanResult = "Image selected: ${picked.path.split('/').last}";
-        });
-        _showResultBottomSheet(scanResult!);
+        // NOTE: You can add logic here to scan QR from the image if needed
+        _showInvalidQrBottomSheet(
+          message: "Image selected but scanning from image is not implemented.",
+        );
       }
     } catch (e) {
       debugPrint('Error picking image: $e');
@@ -75,24 +89,7 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
     }
   }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  void _showResultBottomSheet(String result) {
+  void _showInvalidQrBottomSheet({String? message}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -100,32 +97,54 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Wrap(
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.red.shade50,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Center(
-                child: Text(
-                  "Scan Result",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Icon(Icons.error_outline, size: 60, color: Colors.red.shade400),
+              const SizedBox(height: 16),
+              Text(
+                "Invalid QR Code",
+                style: TextStyle(
+                  color: Colors.red.shade400,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 10),
-              SelectableText(result, textAlign: TextAlign.center),
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      isCameraPaused = false;
-                    });
-                    controller?.resumeCamera();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.qr_code_scanner),
-                  label: const Text("Scan Again"),
-                ),
+              Text(
+                message ??
+                    "This QR code is not a valid UPI code. Please scan a valid UPI QR.",
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black54),
               ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade400,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () {
+                  setState(() => isCameraPaused = false);
+                  controller?.resumeCamera();
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.qr_code_scanner),
+                label: const Text("Scan Again"),
+              ),
+              const SizedBox(height: 10),
             ],
           ),
         );
@@ -133,9 +152,25 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
     );
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    // controller?.dispose();
+    controller?.dispose();
     super.dispose();
   }
 

@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class BankAccountsScreen extends StatelessWidget {
@@ -29,7 +27,7 @@ class BankAccountsScreen extends StatelessWidget {
           final bank = bankAccounts[index];
           return Container(
             margin: EdgeInsets.only(bottom: 12.h),
-            padding: EdgeInsets.all(12.r),
+            padding: EdgeInsets.all(12).r,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
               color: colorScheme.secondaryContainer,

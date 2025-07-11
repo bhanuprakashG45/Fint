@@ -15,6 +15,7 @@ class NetworkApiServices extends BaseApiServices {
     Map<String, String>? extraHeaders,
   }) async {
     String token = await _sharedPref.getAccessToken();
+    print(token);
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -23,7 +24,7 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   /// ===== REFRESH TOKEN FUNCTION =====
-  Future<bool> _refreshToken() async {
+  Future<bool> _refreshToken(BuildContext context) async {
     print("Entered into REfresh Token");
     try {
       String token = await _sharedPref.getAccessToken();
@@ -49,6 +50,13 @@ class NetworkApiServices extends BaseApiServices {
 
         print("Access token refreshed");
         return true;
+      } else if (response.statusCode == 403) {
+        await _sharedPref.clear();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.loginscreen,
+          (route) => false,
+        );
       }
     } catch (e) {
       print(" Refresh token failed: $e");
@@ -79,7 +87,7 @@ class NetworkApiServices extends BaseApiServices {
       print(response.body);
 
       if (response.statusCode == 401) {
-        if (await _refreshToken()) {
+        if (await _refreshToken(context)) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.get(uri, headers: requestHeaders);
         } else if (response.statusCode == 403) {
@@ -110,20 +118,22 @@ class NetworkApiServices extends BaseApiServices {
       Map<String, String> requestHeaders = await _getHeaders(
         extraHeaders: headers,
       );
+      print(requestHeaders);
       http.Response response = await http.post(
         Uri.parse(url),
         headers: requestHeaders,
         body: jsonEncode(data),
       );
+
       print("${response.statusCode}");
 
       if (response.statusCode == 401) {
-        if (await _refreshToken()) {
+        if (await _refreshToken(context)) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.post(
             Uri.parse(url),
             headers: requestHeaders,
-            body: jsonEncode(data),
+            body: data != null ? jsonEncode(data) : null,
           );
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
@@ -159,7 +169,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken()) {
+        if (await _refreshToken(context)) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.put(
             Uri.parse(url),
@@ -200,7 +210,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken()) {
+        if (await _refreshToken(context)) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.patch(
             Uri.parse(url),
@@ -241,7 +251,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken()) {
+        if (await _refreshToken(context)) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.delete(
             Uri.parse(url),

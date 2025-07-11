@@ -1,4 +1,8 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/model/coupon_model/all_coupon_model.dart';
+import 'package:fint/view_model/coupons_viewmodel/coupons_viewmodel.dart';
+import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CouponsAnalyticsScreen extends StatefulWidget {
   const CouponsAnalyticsScreen({super.key});
@@ -11,8 +15,6 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final Map<String, double> dataMap = {"Claimed": 8, "Active": 2, "Expired": 2};
-
   final List<Color> colorList = [
     Color(0xFF8DBCC7),
     Color(0xFFA4CCD9),
@@ -22,6 +24,13 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final couponsViewModel = Provider.of<CouponsViewmodel>(
+        context,
+        listen: false,
+      );
+      await couponsViewModel.fetchCoupons(context);
+    });
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -50,126 +59,133 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
         centerTitle: true,
       ),
       backgroundColor: colorScheme.secondaryContainer,
-      body: Padding(
-        padding: const EdgeInsets.all(15.0).r,
-        child: Column(
-          children: [
-            Container(
-              height: screenheight * 0.4,
-              width: screenwidth,
-              padding: EdgeInsets.all(20).r,
-              decoration: BoxDecoration(
-                color: Color(0xFFFDFAF6),
-                borderRadius: BorderRadius.circular(20).r,
-              ),
-              child: Column(
-                children: [
-                  PieChart(
-                    dataMap: dataMap,
-                    colorList: colorList,
-                    chartType: ChartType.disc,
-                    ringStrokeWidth: 32,
-                    chartRadius: MediaQuery.of(context).size.width / 2,
-                    // centerText: "Coupons",
-                    legendOptions: LegendOptions(
-                      showLegends: false,
-                      // legendPosition: LegendPosition.bottom,
-                    ),
-                    chartValuesOptions: ChartValuesOptions(
-                      // showChartValuesInPercentage: true,
-                      // showChartValuesOutside: true,
-                      showChartValues: false,
-                    ),
+      body: Consumer<CouponsViewmodel>(
+        builder: (context, coupons, _) {
+          // if (coupons.isCouponsLoading) {
+          //   return const Center(child: CircularProgressIndicator());
+          // }
+          final count = coupons.allCoupons.data.statusSummary;
+          final Map<String, double> dataMap = {
+            "Claimed": count.claimed.toDouble(),
+            "Active": count.active.toDouble(),
+            "Expired": count.expired.toDouble(),
+          };
+
+          final colorList = [
+            Color(0xFF8DBCC7),
+            Color(0xFFA4CCD9),
+            Color(0xFFC4E1E6),
+          ];
+
+          return Skeletonizer(
+            enabled: coupons.isCouponsLoading,
+            child: Column(
+              children: [
+                Container(
+                  height: screenheight * 0.4,
+                  width: screenwidth,
+                  padding: EdgeInsets.all(20).r,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFDFAF6),
+                    borderRadius: BorderRadius.circular(20).r,
                   ),
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
                     children: [
-                      _buildLegendItem(
-                        "Claimed",
-                        dataMap["Claimed"]!.toInt(),
-                        Color(0xFF8DBCC7),
+                      PieChart(
+                        dataMap: dataMap,
+                        colorList: colorList,
+                        chartType: ChartType.disc,
+                        ringStrokeWidth: 32,
+                        chartRadius: screenwidth / 2,
+                        legendOptions: LegendOptions(showLegends: false),
+                        chartValuesOptions: ChartValuesOptions(
+                          showChartValues: false,
+                        ),
                       ),
-                      _buildLegendItem(
-                        "Active",
-                        dataMap["Active"]!.toInt(),
-                        Color(0xFFA4CCD9),
-                      ),
-                      _buildLegendItem(
-                        "Expired",
-                        dataMap["Expired"]!.toInt(),
-                        Color(0xFFC4E1E6),
+                      SizedBox(height: 20.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildLegendItem(
+                            "Claimed",
+                            count.claimed,
+                            colorList[0],
+                          ),
+                          _buildLegendItem(
+                            "Active",
+                            count.active,
+                            colorList[1],
+                          ),
+                          _buildLegendItem(
+                            "Expired",
+                            count.expired,
+                            colorList[2],
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 30.h),
-
-            TabBar(
-              controller: _tabController,
-              labelColor: colorScheme.secondary,
-              unselectedLabelColor: colorScheme.onSurface.withValues(),
-
-              indicatorColor: colorScheme.secondary,
-              tabs: [
-                Text(
-                  "CLAIMED",
-                  style: TextStyle(
-                    fontSize: 17.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
-                Text(
-                  "ACTIVE",
-                  style: TextStyle(
-                    fontSize: 17.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+
+                SizedBox(height: 30.h),
+
+                // Tabs
+                TabBar(
+                  controller: _tabController,
+                  labelColor: colorScheme.secondary,
+                  unselectedLabelColor: colorScheme.onSurface,
+                  indicatorColor: colorScheme.secondary,
+                  tabs: const [
+                    Tab(text: "CLAIMED"),
+                    Tab(text: "ACTIVE"),
+                    Tab(text: "EXPIRED"),
+                  ],
                 ),
-                Text(
-                  "EXPIRED",
-                  style: TextStyle(
-                    fontSize: 17.0.sp,
-                    fontWeight: FontWeight.w500,
+
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildCouponsList(
+                        coupons.coupons,
+                        "claimed",
+                        Colors.green,
+                      ),
+                      _buildCouponsList(coupons.coupons, "active", Colors.blue),
+                      _buildCouponsList(coupons.coupons, "expired", Colors.red),
+                    ],
                   ),
                 ),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildCouponsList("Claimed", Colors.green),
-                  _buildCouponsList("Active", Colors.blue),
-                  _buildCouponsList("Expired", Colors.red),
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCouponsList(String type, Color iconColor) {
-    final coupons = List.generate(
-      5,
-      (i) => {
-        "title": "$type Coupon",
-        "description": "Sample offer details here",
-        "validTill": "30 Jun 2025",
-      },
-    );
+  Widget _buildCouponsList(List<Coupon> all, String type, Color iconColor) {
+    final filtered = all.where((c) => c.status.toLowerCase() == type).toList();
+
+    if (filtered.isEmpty) {
+      return Center(
+        child: Text(
+          "No ${type.toUpperCase()} coupons found.",
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+      );
+    }
 
     return ListView.separated(
       padding: EdgeInsets.all(16).r,
-      itemCount: coupons.length,
-      separatorBuilder: (context, index) => SizedBox(height: 10.0.h),
-      itemBuilder: (context, i) {
-        final c = coupons[i];
+      itemCount: filtered.length,
+      separatorBuilder: (_, __) => SizedBox(height: 10.h),
+      itemBuilder: (context, index) {
+        final c = filtered[index];
         return Container(
           padding: EdgeInsets.all(10).r,
           decoration: BoxDecoration(
@@ -181,19 +197,21 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(5.r),
-                child: Image.network(
-                  'https://tse2.mm.bing.net/th?id=OIP.oXt4_1HIiaezAlVKLtnzEgHaGV&pid=Api&P=0&h=180',
-                  height: 30.h,
-                  width: 30.h,
-                  fit: BoxFit.fill,
-                ),
+                child: c.logo == null
+                    ? Icon(Icons.image_not_supported, size: 30.h)
+                    : Image.network(
+                        c.logo!,
+                        height: 30.h,
+                        width: 30.h,
+                        fit: BoxFit.fill,
+                      ),
               ),
-
               SizedBox(width: 15.w),
 
+              SizedBox(width: 15.w),
               Column(
                 children: List.generate(
-                  8,
+                  10,
                   (index) => Container(
                     width: 1.5,
                     height: 3,
@@ -202,52 +220,31 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
                   ),
                 ),
               ),
-
               SizedBox(width: 10.w),
-
               Expanded(
+                flex: 5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      c["title"].toString(),
+                      c.title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.sp,
                       ),
                     ),
                     SizedBox(height: 4.h),
-                    Text(
-                      c["description"].toString(),
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey.shade300,
-                      thickness: 1,
-                      indent: 0,
-                      endIndent: 0,
-                    ),
+                    Text(c.offerTitle, style: TextStyle(fontSize: 14.sp)),
                     SizedBox(height: 5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Valid until:",
-                          style: TextStyle(fontSize: 13.sp, color: Colors.grey),
-                        ),
-                        Text(
-                          c["validTill"].toString(),
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: Colors.red.shade400,
-                            fontWeight: FontWeight.bold,
+                    type == "active"
+                        ? Text(
+                            "Valid until: ${DateFormat("dd MMM yyyy").format(c.expiryDate)}",
+                            style: TextStyle(color: Colors.green),
+                          )
+                        : Text(
+                            "Status: ${c.status.toUpperCase()}",
+                            style: TextStyle(color: iconColor),
                           ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

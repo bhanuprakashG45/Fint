@@ -50,8 +50,9 @@ class Routes {
           builder: (BuildContext context) => PetInsuranceScreen(),
         );
       case RoutesName.couponredeempage:
+      final couponId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (BuildContext context) => CouponRedeemScreen(),
+          builder: (BuildContext context) => CouponRedeemScreen(couponId: couponId)
         );
       case RoutesName.couponanalyticsscreen:
         return MaterialPageRoute(

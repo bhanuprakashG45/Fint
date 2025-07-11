@@ -7,13 +7,13 @@ import 'package:fint/model/auth_model/login_model.dart';
 class LoginRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
-  Future<LoginModel> login(BuildContext contex, String phone) async {
+  Future<LoginModel> login(BuildContext context, String phone) async {
     print("Entered into Login repo");
     try {
       final body = {"phoneNumber": phone};
 
       final response = await _apiServices.postApiResponse(
-        contex,
+        context,
         AppUrls.loginUrl,
         body,
       );

@@ -4,13 +4,11 @@ import 'package:fint/view_model/profile_viewmodel/profile_viewmodel.dart';
 class UpdateProfileDialog extends StatefulWidget {
   final String currentName;
   final String currentPincode;
-  final void Function(String name, String email) onUpdate;
 
   const UpdateProfileDialog({
     Key? key,
     required this.currentName,
     required this.currentPincode,
-    required this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -51,6 +49,7 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
           fontWeight: FontWeight.bold,
         ),
       ),
+
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -102,16 +101,24 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
         ],
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colorscheme.onSecondary,
+          ),
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: colorscheme.tertiary,
+            ),
+          ),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colorscheme.tertiary,
+          ),
           onPressed: () async {
-            widget.onUpdate(
-              _nameController.text.trim(),
-              _pincodeController.text.trim(),
-            );
             await profileprovider.updateProfile(
               context,
               name: _nameController.text.trim(),
@@ -121,7 +128,13 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
 
             Navigator.of(context).pop();
           },
-          child: const Text('Update'),
+          child: Text(
+            'Update',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: colorscheme.primaryContainer,
+            ),
+          ),
         ),
       ],
     );

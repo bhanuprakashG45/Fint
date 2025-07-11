@@ -33,13 +33,16 @@ class OtpViewModel with ChangeNotifier {
         _otpData = result.data;
         final accesstoken = otpData?.accessToken;
         final refreshtoken = otpData?.refreshToken;
+        final firebaseToken = otpData?.firebaseToken;
         await pref.clearAccessToken();
         await pref.clearRefreshToken();
+        await pref.clearFirebaseToken();
         await pref.storeAccessToken(accesstoken);
         await pref.storeRefreshToken(refreshtoken);
-        // await pref.storeUserData(otpData!.user);
+        await pref.storeFirebaseToken(firebaseToken);
         print("Access:$accesstoken");
         print("Refresh:$refreshtoken");
+        print("FIrebase:$firebaseToken");
 
         notifyListeners();
 

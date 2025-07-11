@@ -1,11 +1,27 @@
 class AppUrls {
   static const String baseUrl = 'https://fint-backend.onrender.com/fint/';
+
+  //Authentication
   static const String signUpUrl = '${baseUrl}auth/fint/sign-up';
   static const String loginUrl = '${baseUrl}auth/fint/login';
   static const String otpUrl = '${baseUrl}auth/fint/check-otp';
+  static const String logoutUrl = '${baseUrl}auth/fint/logout';
+
+  //Refresh TOken
   static const String refreshTokenUrl =
       '${baseUrl}auth/fint/renew-access-token';
+
+  //Profile
   static const String profileUrl = '${baseUrl}auth/fint/profile';
   static const String updateProfileUrl = '${baseUrl}auth/fint/update-profile';
-  static const String logoutUrl = '${baseUrl}auth/fint/logout';
+  //Insurance
+  static const String applyPetInsuranceUrl = '${baseUrl}petInsurance/apply';
+
+  //Coupons
+  static const String getAllCouponsUrl =
+      '${baseUrl}coupons/user-display-all-coupons';
+  static const String redeemCouponUrl =
+      '${baseUrl}coupons/display-coupons-details/';
+
+      
 }

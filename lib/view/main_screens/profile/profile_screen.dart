@@ -1,8 +1,10 @@
 import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/storage/shared_preference.dart';
 import 'package:fint/core/utils/widgets/update_profiledetails.dart';
+import 'package:fint/view_model/auth_viewmodel/logout_viewmodel.dart';
 import 'package:fint/view_model/profile_viewmodel/profile_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -12,7 +14,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // bool isDonor = true;
   bool isBiometricEnabled = false;
   SharedPref pref = SharedPref();
 
@@ -28,7 +29,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Future<void> handleUpdate() async {}
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
+    await launchUrl(launchUri);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context,
       listen: false,
     );
+    final logoutprovider = Provider.of<LogoutViewmodel>(context, listen: false);
     // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final colorscheme = Theme.of(context).colorScheme;
@@ -77,19 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   size: 28.sp,
                                 ),
                                 onPressed: () {
-                                  print(profile.name);
                                   showDialog(
                                     context: context,
                                     builder: (_) => UpdateProfileDialog(
                                       currentName: profile.name,
 
                                       currentPincode: profile.pinCode,
-
-                                      onUpdate: (updatedName, updatedEmail) {
-                                        // Call your update logic here
-                                        print("Updated name: $updatedName");
-                                        print("Updated email: $updatedEmail");
-                                      },
                                     ),
                                   );
                                 },
@@ -263,10 +261,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   trailingIcon: Icons.arrow_forward_ios,
                                 ),
                                 SizedBox(height: 15.0.h),
-                                ProfileOptionsWidget(
-                                  leadingIcon: FontAwesomeIcons.phone,
-                                  text: "Contact Us",
-                                  trailingIcon: Icons.arrow_forward_ios,
+                                InkWell(
+                                  onTap: () async {
+                                    await _makePhoneCall("9631445521");
+                                  },
+                                  child: ProfileOptionsWidget(
+                                    leadingIcon: FontAwesomeIcons.phone,
+                                    text: "Contact Us",
+                                    trailingIcon: Icons.arrow_forward_ios,
+                                  ),
                                 ),
                                 SizedBox(height: 15.0.h),
                                 ProfileOptionsWidget(
@@ -300,17 +303,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              final access = await pref.getAccessToken();
-                              final refresh = await pref.getRefreshToken();
-                              await pref.clearAccessToken();
-                              await pref.clearRefreshToken();
-                              print("AccessTokenq :$access");
-                              print("RefreshTokenq :$refresh");
-                              Navigator.pushNamedAndRemoveUntil(
+                              final result = await logoutprovider.userLogout(
                                 context,
-                                RoutesName.loginscreen,
-                                (Route<dynamic> route) => false,
                               );
+                              if (result == true) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  RoutesName.loginscreen,
+                                  (route) => false,
+                                );
+                              }
                             },
                             child: Text(
                               "Log out",
