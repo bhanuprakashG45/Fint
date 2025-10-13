@@ -1,5 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/core/exceptions/app_exceptions.dart';
 import 'package:fint/core/repository/insurance/insurance_repository.dart';
 
 class PetInsuranceViewmodel with ChangeNotifier {

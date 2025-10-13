@@ -87,7 +87,7 @@ class Coupon {
   factory Coupon.fromJson(Map<String, dynamic> json) => Coupon(
     id: json["id"] ?? '',
     title: json["title"] ?? '',
-    logo: json["logo"], 
+    logo: json["logo"],
     offerTitle: json["offerTitle"] ?? '',
     offerDescription: json["offerDescription"] ?? '',
     expiryDate:

@@ -19,18 +19,18 @@ class SignUpModel {
   });
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => SignUpModel(
-        statusCode: json["statusCode"] ?? 0,
-        data: SignUpData.fromJson(json["data"] ?? {}),
-        message: json["message"] ?? '',
-        success: json["success"] ?? false,
-      );
+    statusCode: json["statusCode"] ?? 0,
+    data: SignUpData.fromJson(json["data"] ?? {}),
+    message: json["message"] ?? '',
+    success: json["success"] ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data.toJson(),
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data.toJson(),
+    "message": message,
+    "success": success,
+  };
 }
 
 class SignUpData {
@@ -38,13 +38,10 @@ class SignUpData {
 
   SignUpData({required this.createUser});
 
-  factory SignUpData.fromJson(Map<String, dynamic> json) => SignUpData(
-        createUser: CreateUser.fromJson(json["createUser"] ?? {}),
-      );
+  factory SignUpData.fromJson(Map<String, dynamic> json) =>
+      SignUpData(createUser: CreateUser.fromJson(json["createUser"] ?? {}));
 
-  Map<String, dynamic> toJson() => {
-        "createUser": createUser.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"createUser": createUser.toJson()};
 }
 
 class CreateUser {
@@ -75,31 +72,30 @@ class CreateUser {
   });
 
   factory CreateUser.fromJson(Map<String, dynamic> json) => CreateUser(
-        name: json["name"] ?? '',
-        phoneNumber: json["phoneNumber"] ?? '',
-        bloodGroup: json["bloodGroup"] ?? '',
-        beADonor: json["beADonor"] ?? false,
-        email: json["email"] ?? '',
-        pinCode: json["pinCode"] ?? '',
-        refreshToken: json["refreshToken"],
-        id: json["_id"] ?? '',
-        createdAt: DateTime.tryParse(json["createdAt"] ?? '') ?? DateTime(1970),
-        updatedAt:
-            DateTime.tryParse(json["updatedAt"] ?? '') ?? DateTime(1970),
-        v: json["__v"] ?? 0,
-      );
+    name: json["name"] ?? '',
+    phoneNumber: json["phoneNumber"] ?? '',
+    bloodGroup: json["bloodGroup"] ?? '',
+    beADonor: json["beADonor"] ?? false,
+    email: json["email"] ?? '',
+    pinCode: json["pinCode"] ?? '',
+    refreshToken: json["refreshToken"],
+    id: json["_id"] ?? '',
+    createdAt: DateTime.tryParse(json["createdAt"] ?? '') ?? DateTime(1970),
+    updatedAt: DateTime.tryParse(json["updatedAt"] ?? '') ?? DateTime(1970),
+    v: json["__v"] ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "phoneNumber": phoneNumber,
-        "bloodGroup": bloodGroup,
-        "beADonor": beADonor,
-        "email": email,
-        "pinCode": pinCode,
-        "refreshToken": refreshToken,
-        "_id": id,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
-      };
+    "name": name,
+    "phoneNumber": phoneNumber,
+    "bloodGroup": bloodGroup,
+    "beADonor": beADonor,
+    "email": email,
+    "pinCode": pinCode,
+    "refreshToken": refreshToken,
+    "_id": id,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "__v": v,
+  };
 }

@@ -19,16 +19,16 @@ class LogoutModel {
   });
 
   factory LogoutModel.fromJson(Map<String, dynamic> json) => LogoutModel(
-        statusCode: json["statusCode"] is int ? json["statusCode"] : 0,
-        data: json.containsKey("data") ? json["data"] : null,
-        message: json["message"]?.toString() ?? "Unknown error",
-        success: json["success"] == true,
-      );
+    statusCode: json["statusCode"] is int ? json["statusCode"] : 0,
+    data: json.containsKey("data") ? json["data"] : null,
+    message: json["message"]?.toString() ?? "Unknown error",
+    success: json["success"] == true,
+  );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data,
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data,
+    "message": message,
+    "success": success,
+  };
 }

@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class ViewAllBloodrequestsScreen extends StatefulWidget {
@@ -25,15 +23,20 @@ class _ViewAllBloodrequestsScreenState
           style: TextStyle(fontSize: 20.0.sp, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        backgroundColor: colorScheme.tertiary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       backgroundColor: colorScheme.secondaryContainer,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(10).r,
-          child: Column(
-            children: List.generate(
-              count,
-              (index) => _buildBloodRequestCard(colorScheme, screenWidth),
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(10).r,
+            child: Column(
+              children: List.generate(
+                count,
+                (index) => _buildBloodRequestCard(colorScheme, screenWidth),
+              ),
             ),
           ),
         ),
@@ -66,7 +69,7 @@ class _ViewAllBloodrequestsScreenState
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.red.shade400,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15).r,
                     ),
@@ -134,7 +137,7 @@ class _ViewAllBloodrequestsScreenState
                           width: 120.0.h,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                              backgroundColor: colorScheme.tertiary,
                               padding: EdgeInsets.all(0).r,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15).r,

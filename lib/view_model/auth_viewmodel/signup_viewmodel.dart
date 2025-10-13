@@ -1,4 +1,3 @@
-import 'package:fint/core/exceptions/app_exceptions.dart';
 import 'package:fint/core/repository/auth_rep/signup_repository.dart';
 import 'package:fint/core/constants/exports.dart';
 
@@ -49,13 +48,19 @@ class SignupViewmodel with ChangeNotifier {
 
         Navigator.pushNamed(context, RoutesName.loginscreen);
       } else {
+        ToastHelper.show(
+          context,
+          result.message.isNotEmpty ? result.message : "Sign up Failed",
+          type: ToastificationType.success,
+          duration: const Duration(seconds: 3),
+        );
         throw Exception("Sign Up Failed :${result.statusCode}");
       }
     } catch (e) {
       if (e is AppException) {
         ToastHelper.show(
           context,
-          e.userFriendlyMessage,
+          e.message ?? 'Sign Up Failed',
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );

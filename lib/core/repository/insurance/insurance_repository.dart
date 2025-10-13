@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/network/network_api_services.dart';
-import 'package:fint/model/insurance/pet_insurance_model.dart';
+import 'package:fint/core/constants/exports.dart';
 
 class InsuranceRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
@@ -28,7 +24,7 @@ class InsuranceRepository {
         "email": email,
         "password": password,
         "phoneNumber": phoneNumber,
-        "address":address,
+        "address": address,
         "pinCode": pincode,
         "parentAge": parentAge,
         "petName": petName,

@@ -1,5 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/view/phone_pe_sdk/phonepe_pg.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({
@@ -52,7 +51,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
       final response = await _phonePe.startPayment(
         amountInRupees: amount,
-        mobileNumber: "9999999999", 
+        mobileNumber: "9999999999",
         description: description.isNotEmpty ? description : null,
       );
 
@@ -60,7 +59,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
         if (response != null && response['status'] == 'SUCCESS') {
           _paymentStatus = ' Payment Successful!';
         } else {
-          final reason = response?['error'] ?? response?['message'] ?? 'Unknown error';
+          final reason =
+              response?['error'] ?? response?['message'] ?? 'Unknown error';
           _paymentStatus = 'Payment Failed: $reason';
         }
       });
@@ -90,6 +90,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        backgroundColor: colorScheme.tertiary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16).r,
@@ -104,13 +106,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     _paymentStatus!,
                     style: TextStyle(
                       color: _paymentStatus!.contains('Successful')
-                          ? Colors.green
-                          : Colors.red,
+                          ? Colors.green.shade400
+                          : Colors.red.shade400,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                 ],
                 Text(
                   "Choose the Facility for which to Pay for",
@@ -119,7 +121,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: 20.h),
 
                 /// Amount Input
                 TextFormField(
@@ -156,7 +158,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 /// Description Input
                 TextFormField(
@@ -184,13 +186,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24.h),
-
-                /// Proceed Button
+                SizedBox(height: 20.h),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50.h),
-                    backgroundColor: colorScheme.secondary,
+                    backgroundColor: colorScheme.tertiary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0).r,
                     ),

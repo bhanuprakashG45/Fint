@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class RedDropScreen extends StatefulWidget {
@@ -57,432 +55,462 @@ class _RedDropScreenState extends State<RedDropScreen> {
           style: TextStyle(fontSize: 20.0.sp, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: colorScheme.primaryContainer,
+        backgroundColor: colorScheme.tertiary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       backgroundColor: colorScheme.secondaryContainer,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0).r,
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: screenWidth,
-                    padding: EdgeInsets.all(10).r,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(20).r,
-                    ),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional.topCenter,
-                          child: Text(
-                            "Find Donar",
-
-                            style: TextStyle(
-                              fontSize: 18.0.sp,
-                              // color: colorScheme.onSecondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-
-                        Align(
-                          alignment: AlignmentDirectional.topStart,
-                          child: Text(
-                            "Select Blood Group",
-                            style: TextStyle(
-                              fontSize: 17.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10, right: 10).r,
-                          decoration: BoxDecoration(
-                            color: colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(10).r,
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedBloodGroup,
-                              hint: Text(
-                                "Choose Blood Group",
-                                style: TextStyle(
-                                  fontSize: 16.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0).r,
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: screenWidth,
+                      padding: EdgeInsets.all(10).r,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(20).r,
+                      ),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional.topCenter,
+                            child: Text(
+                              "Find Donar",
+                              style: TextStyle(
+                                fontSize: 18.0.sp,
+                                color: colorScheme.tertiary,
+                                fontWeight: FontWeight.bold,
                               ),
-                              isExpanded: true,
-                              items: bloodGroups.map((String group) {
-                                return DropdownMenuItem<String>(
-                                  value: group,
-                                  child: Text(group),
-                                );
-                              }).toList(),
-                              dropdownColor: colorScheme.secondaryContainer,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedBloodGroup = newValue;
-                                });
-                              },
                             ),
                           ),
-                        ),
-
-                        SizedBox(height: 20.h),
-
-                        Align(
-                          alignment: AlignmentDirectional.topStart,
-                          child: Text(
-                            "Select Location",
-                            style: TextStyle(
-                              fontSize: 17.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10, right: 10).r,
-                          decoration: BoxDecoration(
-                            color: colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(10).r,
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedLocation,
-
-                              hint: Text(
-                                "Choose Location",
-                                style: TextStyle(
-                                  fontSize: 16.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          SizedBox(height: 20.h),
+                          Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              "Select Blood Group",
+                              style: TextStyle(
+                                fontSize: 17.0.sp,
+                                color: colorScheme.tertiary,
+                                fontWeight: FontWeight.bold,
                               ),
-                              isExpanded: true,
-                              items: locations.map((String location) {
-                                return DropdownMenuItem<String>(
-                                  value: location,
-                                  child: Text(location),
-                                );
-                              }).toList(),
-                              dropdownColor: colorScheme.secondaryContainer,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedLocation = newValue;
-                                });
-                              },
                             ),
                           ),
-                        ),
-                        SizedBox(height: 10.0.h),
-                        TextFormField(
-                          controller: notecontroller,
-
-                          decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintText: "Write a note",
-                            hintStyle: TextStyle(
-                              color: colorScheme.onSecondary,
-                              fontSize: 15.0.sp,
-                              fontWeight: FontWeight.bold,
+                          Container(
+                            padding: EdgeInsets.only(left: 10, right: 10).r,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryContainer,
+                              borderRadius: BorderRadius.circular(10).r,
                             ),
-
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 8.0,
-                            ).r,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10.0).r,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10.0).r,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0).r,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 15.sp),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20.0.h),
-                  Container(
-                    width: screenWidth,
-                    padding: EdgeInsets.all(10).r,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(20).r,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Click Here to Add Reciept",
-                          style: TextStyle(
-                            fontSize: 17.0.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10.0.h),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: colorScheme.secondary,
-                          ),
-                          onPressed: _pickImageFromGallery,
-                          child: Text(
-                            "Upload",
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontSize: 16.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        if (_receiptImage != null)
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0.h),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10).r,
-                                  child: Image.file(
-                                    _receiptImage!,
-                                    height: 120.h,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                borderRadius: BorderRadius.circular(10).r,
+                                value: selectedBloodGroup,
+                                hint: Text(
+                                  "Choose Blood Group",
+                                  style: TextStyle(
+                                    fontSize: 16.0.sp,
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Positioned(
-                                  top: 5,
-                                  right: 5,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _receiptImage = null;
-                                      });
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black54,
-                                        shape: BoxShape.circle,
+                                isExpanded: true,
+                                items: bloodGroups.map((String group) {
+                                  return DropdownMenuItem<String>(
+                                    value: group,
+                                    child: Text(
+                                      group,
+                                      style: TextStyle(
+                                        color: colorScheme.tertiary,
+                                        fontSize: 17.sp,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                        size: 20.sp,
+                                    ),
+                                  );
+                                }).toList(),
+                                dropdownColor: colorScheme.secondaryContainer,
+
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedBloodGroup = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 20.h),
+
+                          Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              "Select Location",
+                              style: TextStyle(
+                                fontSize: 17.0.sp,
+                                color: colorScheme.tertiary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10, right: 10).r,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryContainer,
+                              borderRadius: BorderRadius.circular(10).r,
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedLocation,
+                                borderRadius: BorderRadius.circular(10).r,
+
+                                hint: Text(
+                                  "Choose Location",
+                                  style: TextStyle(
+                                    fontSize: 16.0.sp,
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                isExpanded: true,
+                                items: locations.map((String location) {
+                                  return DropdownMenuItem<String>(
+                                    value: location,
+                                    child: Text(
+                                      location,
+                                      style: TextStyle(
+                                        color: colorScheme.tertiary,
+                                        fontSize: 17.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                dropdownColor: colorScheme.secondaryContainer,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedLocation = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10.0.h),
+                          TextFormField(
+                            controller: notecontroller,
+
+                            decoration: InputDecoration(
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              hintText: "Write a note",
+                              hintStyle: TextStyle(
+                                color: colorScheme.onSecondary,
+                                fontSize: 16.0.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 8.0,
+                              ).r,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10.0).r,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10.0).r,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0).r,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0.h),
+                    Container(
+                      width: screenWidth,
+                      padding: EdgeInsets.all(10).r,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(20).r,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Click Here to Add Reciept",
+                            style: TextStyle(
+                              fontSize: 17.0.sp,
+                              color: colorScheme.tertiary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10.0.h),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colorScheme.tertiary,
+                            ),
+                            onPressed: _pickImageFromGallery,
+                            child: Text(
+                              "Upload",
+                              style: TextStyle(
+                                color: colorScheme.onPrimary,
+                                fontSize: 16.0.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          if (_receiptImage != null)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.0.h),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10).r,
+                                    child: Image.file(
+                                      _receiptImage!,
+                                      height: 120.h,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 5,
+                                    right: 5,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _receiptImage = null;
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black54,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 20.sp,
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0.h),
+                    Container(
+                      width: screenWidth,
+                      padding: EdgeInsets.all(10).r,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(20).r,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Click Here to Request for blood",
+                            style: TextStyle(
+                              fontSize: 17.0.sp,
+                              color: colorScheme.tertiary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10.0.h),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colorScheme.tertiary,
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Request Blood",
+                              style: TextStyle(
+                                color: colorScheme.onPrimary,
+                                fontSize: 16.0.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 20.0.h),
+                    Container(
+                      width: screenWidth,
+                      padding: EdgeInsets.all(10).r,
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary,
+                        borderRadius: BorderRadius.circular(20).r,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Blood Requests",
+                            style: TextStyle(
+                              fontSize: 20.0.sp,
+                              color: colorScheme.tertiary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.viewallbloodrequestsscreen,
+                              );
+                            },
+                            child: Align(
+                              alignment: AlignmentDirectional.topEnd,
+                              child: Text(
+                                "View All",
+                                style: TextStyle(
+                                  color: colorScheme.tertiary,
+                                  fontSize: 14.0.sp,
+
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Container(
+                            width: screenWidth,
+                            padding: EdgeInsets.all(5).r,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondaryContainer,
+                              borderRadius: BorderRadius.circular(15).r,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red.shade400,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15).r,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "URGENT",
+                                    style: TextStyle(
+                                      color: colorScheme.onPrimary,
+                                      fontSize: 16.0.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+
+                                // SizedBox(height: 10.0.h),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      "https://media.istockphoto.com/id/1136879204/vector/creative-vector-illustration-of-blood-type-group-isolated-on-transparent-background-art.jpg?s=612x612&w=0&k=20&c=zhrVB6wXtIFkpgWk5IpnU5eqTNYoAG99SmiBa-LLjao=",
+                                      height: 80.0.h,
+                                      width: 90.0.w,
+                                    ),
+                                    SizedBox(width: 15.0.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Jackie John",
+                                          style: TextStyle(
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5.0.h),
+                                        Row(
+                                          children: [
+                                            FaIcon(
+                                              FontAwesomeIcons.kitMedical,
+                                              size: 20.0.sp,
+                                            ),
+                                            SizedBox(width: 10.0.w),
+                                            Text(
+                                              "ABC Hospital",
+                                              style: TextStyle(
+                                                fontSize: 16.0.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0.h),
+                                        Row(
+                                          children: [
+                                            FaIcon(
+                                              FontAwesomeIcons.locationDot,
+
+                                              size: 20.0.sp,
+                                            ),
+                                            SizedBox(width: 15.0.w),
+                                            Text(
+                                              "Location",
+                                              style: TextStyle(
+                                                fontSize: 15.0.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.0.h),
+                                        SizedBox(
+                                          height: 30.0.h,
+                                          width: 120.0.h,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  colorScheme.tertiary,
+                                              padding: EdgeInsets.all(0).r,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15).r,
+                                              ),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                              "Stop Request",
+                                              style: TextStyle(
+                                                color: colorScheme.onPrimary,
+                                                fontSize: 16.0.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20.0.h),
-                  Container(
-                    width: screenWidth,
-                    padding: EdgeInsets.all(10).r,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(20).r,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Click Here to Request for blood",
-                          style: TextStyle(
-                            fontSize: 17.0.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10.0.h),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: colorScheme.secondary,
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Request Blood",
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontSize: 16.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 20.0.h),
-                  Container(
-                    width: screenWidth,
-                    padding: EdgeInsets.all(10).r,
-                    decoration: BoxDecoration(
-                      color: colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(20).r,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Blood Requests",
-                          style: TextStyle(
-                            fontSize: 20.0.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.viewallbloodrequestsscreen,
-                            );
-                          },
-                          child: Align(
-                            alignment: AlignmentDirectional.topEnd,
-                            child: Text(
-                              "View All >",
-                              style: TextStyle(
-                                color: colorScheme.secondary,
-                                fontSize: 16.0.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: screenWidth,
-                          padding: EdgeInsets.all(5).r,
-                          decoration: BoxDecoration(
-                            color: colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(15).r,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15).r,
-                                  ),
-                                ),
-                                onPressed: () {},
-                                child: Text(
-                                  "URGENT",
-                                  style: TextStyle(
-                                    color: colorScheme.onPrimary,
-                                    fontSize: 16.0.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-
-                              // SizedBox(height: 10.0.h),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.network(
-                                    "https://media.istockphoto.com/id/1136879204/vector/creative-vector-illustration-of-blood-type-group-isolated-on-transparent-background-art.jpg?s=612x612&w=0&k=20&c=zhrVB6wXtIFkpgWk5IpnU5eqTNYoAG99SmiBa-LLjao=",
-                                    height: 80.0.h,
-                                    width: 90.0.w,
-                                  ),
-                                  SizedBox(width: 15.0.w),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Jackie John",
-                                        style: TextStyle(
-                                          fontSize: 18.0.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5.0.h),
-                                      Row(
-                                        children: [
-                                          FaIcon(
-                                            FontAwesomeIcons.kitMedical,
-                                            size: 20.0.sp,
-                                          ),
-                                          SizedBox(width: 10.0.w),
-                                          Text(
-                                            "ABC Hospital",
-                                            style: TextStyle(
-                                              fontSize: 16.0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5.0.h),
-                                      Row(
-                                        children: [
-                                          FaIcon(
-                                            FontAwesomeIcons.locationDot,
-
-                                            size: 20.0.sp,
-                                          ),
-                                          SizedBox(width: 15.0.w),
-                                          Text(
-                                            "Location",
-                                            style: TextStyle(
-                                              fontSize: 15.0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5.0.h),
-                                      SizedBox(
-                                        height: 30.0.h,
-                                        width: 120.0.h,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blue,
-                                            padding: EdgeInsets.all(0).r,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15).r,
-                                            ),
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(
-                                            "Stop Request",
-                                            style: TextStyle(
-                                              color: colorScheme.onPrimary,
-                                              fontSize: 16.0.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

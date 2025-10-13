@@ -18,18 +18,18 @@ class OtpModel {
   });
 
   factory OtpModel.fromJson(Map<String, dynamic> json) => OtpModel(
-        statusCode: json["statusCode"] ?? 0,
-        data: OtpData.fromJson(json["data"] ?? {}),
-        message: json["message"] ?? '',
-        success: json["success"] ?? false,
-      );
+    statusCode: json["statusCode"] ?? 0,
+    data: OtpData.fromJson(json["data"] ?? {}),
+    message: json["message"] ?? '',
+    success: json["success"] ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data.toJson(),
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data.toJson(),
+    "message": message,
+    "success": success,
+  };
 }
 
 class OtpData {
@@ -44,14 +44,14 @@ class OtpData {
   });
 
   factory OtpData.fromJson(Map<String, dynamic> json) => OtpData(
-        firebaseToken: json["firebaseToken"] ?? '',
-        accessToken: json["accessToken"] ?? '',
-        refreshToken: json["refreshToken"] ?? '',
-      );
+    firebaseToken: json["firebaseToken"] ?? '',
+    accessToken: json["accessToken"] ?? '',
+    refreshToken: json["refreshToken"] ?? '',
+  );
 
   Map<String, dynamic> toJson() => {
-        "firebaseToken": firebaseToken,
-        "accessToken": accessToken,
-        "refreshToken": refreshToken,
-      };
+    "firebaseToken": firebaseToken,
+    "accessToken": accessToken,
+    "refreshToken": refreshToken,
+  };
 }

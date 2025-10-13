@@ -57,13 +57,21 @@ class OtpViewModel with ChangeNotifier {
 
         Navigator.pushNamed(context, RoutesName.homescreen);
       } else {
+        ToastHelper.show(
+          context,
+          result.message.isNotEmpty
+              ? result.message
+              : "Invalid Otp",
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
         throw Exception("Otp Verified Failed :${result.statusCode}");
       }
     } catch (e) {
       if (e is AppException) {
         ToastHelper.show(
           context,
-          e.userFriendlyMessage,
+          e.message?? '',
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );

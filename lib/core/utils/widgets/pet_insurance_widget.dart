@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class PetownerInputField extends StatelessWidget {
@@ -20,6 +18,7 @@ class PetownerInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorscheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15).r,
       child: TextFormField(
@@ -28,17 +27,23 @@ class PetownerInputField extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
-          prefixIcon: Icon(prefixIcon, color: Colors.black),
+          prefixIcon: Icon(prefixIcon, color: colorscheme.tertiary),
           hint: Text(
             hintText,
             style: TextStyle(
-              color: Colors.grey,
+              color: colorscheme.onSecondary,
               fontSize: 15.0.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0).r,
+          hintStyle: TextStyle(
+            color: colorscheme.onSecondary,
+            fontWeight: FontWeight.bold,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ).r,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey),
@@ -48,7 +53,9 @@ class PetownerInputField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.circular(10.0).r,
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0).r),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0).r,
+          ),
         ),
       ),
     );
@@ -71,6 +78,7 @@ class PetInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorscheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15).r,
       child: TextFormField(
@@ -82,13 +90,15 @@ class PetInputField extends StatelessWidget {
           hint: Text(
             hintText,
             style: TextStyle(
-              color: Colors.grey,
+              color: colorscheme.onSecondary,
               fontSize: 15.0.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0).r,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ).r,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey),

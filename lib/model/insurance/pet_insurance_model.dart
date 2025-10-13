@@ -28,27 +28,22 @@ class PetInsuranceModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data.toJson(),
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data.toJson(),
+    "message": message,
+    "success": success,
+  };
 }
 
 class InsuranceData {
   SavedUser savedUser;
 
-  InsuranceData({
-    required this.savedUser,
-  });
+  InsuranceData({required this.savedUser});
 
-  factory InsuranceData.fromJson(Map<String, dynamic> json) => InsuranceData(
-        savedUser: SavedUser.fromJson(json["savedUser"] ?? {}),
-      );
+  factory InsuranceData.fromJson(Map<String, dynamic> json) =>
+      InsuranceData(savedUser: SavedUser.fromJson(json["savedUser"] ?? {}));
 
-  Map<String, dynamic> toJson() => {
-        "savedUser": savedUser.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"savedUser": savedUser.toJson()};
 }
 
 class SavedUser {
@@ -81,38 +76,40 @@ class SavedUser {
   });
 
   factory SavedUser.fromJson(Map<String, dynamic> json) => SavedUser(
-        name: json["name"] ?? '',
-        email: json["email"] ?? '',
-        password: json["password"] ?? '',
-        phoneNumber: json["phoneNumber"] ?? '',
-        address: json["address"] ?? '',
-        pinCode: json["pinCode"] ?? '',
-        parentAge: json["parentAge"] ?? '',
-        pets: json["pets"] != null
-            ? List<Pet>.from(json["pets"].map((x) => Pet.fromJson(x ?? {})))
-            : [],
-        id: json["_id"] ?? '',
-        createdAt: DateTime.tryParse(json["createdAt"] ?? '') ??
-            DateTime.fromMillisecondsSinceEpoch(0),
-        updatedAt: DateTime.tryParse(json["updatedAt"] ?? '') ??
-            DateTime.fromMillisecondsSinceEpoch(0),
-        v: json["__v"] ?? 0,
-      );
+    name: json["name"] ?? '',
+    email: json["email"] ?? '',
+    password: json["password"] ?? '',
+    phoneNumber: json["phoneNumber"] ?? '',
+    address: json["address"] ?? '',
+    pinCode: json["pinCode"] ?? '',
+    parentAge: json["parentAge"] ?? '',
+    pets: json["pets"] != null
+        ? List<Pet>.from(json["pets"].map((x) => Pet.fromJson(x ?? {})))
+        : [],
+    id: json["_id"] ?? '',
+    createdAt:
+        DateTime.tryParse(json["createdAt"] ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0),
+    updatedAt:
+        DateTime.tryParse(json["updatedAt"] ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0),
+    v: json["__v"] ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "email": email,
-        "password": password,
-        "phoneNumber": phoneNumber,
-        "address": address,
-        "pinCode": pinCode,
-        "parentAge": parentAge,
-        "pets": List<dynamic>.from(pets.map((x) => x.toJson())),
-        "_id": id,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
-      };
+    "name": name,
+    "email": email,
+    "password": password,
+    "phoneNumber": phoneNumber,
+    "address": address,
+    "pinCode": pinCode,
+    "parentAge": parentAge,
+    "pets": List<dynamic>.from(pets.map((x) => x.toJson())),
+    "_id": id,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "__v": v,
+  };
 }
 
 class Pet {
@@ -133,20 +130,20 @@ class Pet {
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) => Pet(
-        petName: json["petName"] ?? '',
-        petBreed: json["petBreed"] ?? '',
-        petAge: json["petAge"] ?? '',
-        petAddress: json["petAddress"] ?? '',
-        petNoseImg: json["petNoseImg"],
-        petId: json["petId"] ?? '',
-      );
+    petName: json["petName"] ?? '',
+    petBreed: json["petBreed"] ?? '',
+    petAge: json["petAge"] ?? '',
+    petAddress: json["petAddress"] ?? '',
+    petNoseImg: json["petNoseImg"],
+    petId: json["petId"] ?? '',
+  );
 
   Map<String, dynamic> toJson() => {
-        "petName": petName,
-        "petBreed": petBreed,
-        "petAge": petAge,
-        "petAddress": petAddress,
-        "petNoseImg": petNoseImg,
-        "petId": petId,
-      };
+    "petName": petName,
+    "petBreed": petBreed,
+    "petAge": petAge,
+    "petAddress": petAddress,
+    "petNoseImg": petNoseImg,
+    "petId": petId,
+  };
 }

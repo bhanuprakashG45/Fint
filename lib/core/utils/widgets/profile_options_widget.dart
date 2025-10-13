@@ -1,5 +1,3 @@
-
-
 import 'package:fint/core/constants/exports.dart';
 
 class ProfileOptionsWidget extends StatelessWidget {

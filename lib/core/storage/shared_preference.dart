@@ -1,3 +1,4 @@
+import 'package:fint/core/constants/exports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -38,7 +39,7 @@ class SharedPref {
     return _prefs!.getString('refreshToken') ?? '';
   }
 
-   Future<String> getFirebaseToken() async {
+  Future<String> getFirebaseToken() async {
     await _initSharedPreferences();
     return _prefs!.getString('firebaseToken') ?? '';
   }
@@ -49,6 +50,7 @@ class SharedPref {
       await _prefs!.remove('accessToken');
     }
   }
+
   Future<void> clearFirebaseToken() async {
     await _initSharedPreferences();
     if (_prefs!.containsKey('firebaseToken')) {
@@ -66,6 +68,27 @@ class SharedPref {
   Future<void> clear() async {
     await _initSharedPreferences();
     await _prefs!.clear();
+  }
+
+  Future<void> storeDeviceToken(String devicetoken) async {
+    debugPrint("Device Token : $devicetoken");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (devicetoken.isNotEmpty) {
+      await prefs.setString('device_token', devicetoken);
+    } else {}
+  }
+
+  Future<String?> fetchDeviceToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    print("Fetching Device Token ");
+    String? devicetoken = preferences.getString("device_token");
+    if (devicetoken != null && devicetoken.isNotEmpty) {
+      return devicetoken;
+    } else {
+      return null;
+    }
   }
 
   // Future<void> storeUserData(User userData) async {

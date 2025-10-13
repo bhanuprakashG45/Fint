@@ -15,4 +15,7 @@ class RoutesName {
   static const String qrscanorgalleryscreen = "qrscanorgalleryscreen";
   static const String viewallbloodrequestsscreen = "viewallbloodrequestsscreen";
   static const String bankaccountsscreen = "bankaccountsscreen";
+  static const String payToNumberScreen = "payToNumberScreen";
+  static const String payToBankscreen = "payToBankscreen";
+  static const String payToSelfscreen = "payToSelfscreen";
 }

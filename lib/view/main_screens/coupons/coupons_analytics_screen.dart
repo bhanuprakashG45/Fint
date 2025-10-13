@@ -1,8 +1,5 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/model/coupon_model/all_coupon_model.dart';
-import 'package:fint/view_model/coupons_viewmodel/coupons_viewmodel.dart';
 import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class CouponsAnalyticsScreen extends StatefulWidget {
   const CouponsAnalyticsScreen({super.key});
@@ -20,6 +17,10 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
     Color(0xFFA4CCD9),
     Color(0xFFC4E1E6),
   ];
+
+  int _selectedTabIndex = 0;
+
+  final List<String> _tabTitles = ["CLAIMED", "ACTIVE", "EXPIRED"];
 
   @override
   void initState() {
@@ -50,131 +51,187 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
       appBar: AppBar(
         title: Text(
           "COUPONS",
-          style: TextStyle(
-            color: AppColor.appcolor,
-            fontSize: 22.0.sp,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20.0.sp, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        backgroundColor: colorScheme.tertiary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       backgroundColor: colorScheme.secondaryContainer,
-      body: Consumer<CouponsViewmodel>(
-        builder: (context, coupons, _) {
-          // if (coupons.isCouponsLoading) {
-          //   return const Center(child: CircularProgressIndicator());
-          // }
-          final count = coupons.allCoupons.data.statusSummary;
-          final Map<String, double> dataMap = {
-            "Claimed": count.claimed.toDouble(),
-            "Active": count.active.toDouble(),
-            "Expired": count.expired.toDouble(),
-          };
+      body: SafeArea(
+        top: false,
+        child: Consumer<CouponsViewmodel>(
+          builder: (context, coupons, _) {
+            final count = coupons.allCoupons.data.statusSummary;
+            final Map<String, double> dataMap = {
+              "Claimed": count.claimed.toDouble(),
+              "Active": count.active.toDouble(),
+              "Expired": count.expired.toDouble(),
+            };
 
-          final colorList = [
-            Color(0xFF8DBCC7),
-            Color(0xFFA4CCD9),
-            Color(0xFFC4E1E6),
-          ];
+            final colorList = [
+              Color(0xFF8DBCC7),
+              Color(0xFFA4CCD9),
+              Color(0xFFC4E1E6),
+            ];
 
-          return Skeletonizer(
-            enabled: coupons.isCouponsLoading,
-            child: Column(
-              children: [
-                Container(
-                  height: screenheight * 0.4,
-                  width: screenwidth,
-                  padding: EdgeInsets.all(20).r,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFDFAF6),
-                    borderRadius: BorderRadius.circular(20).r,
+            return Skeletonizer(
+              enabled: coupons.isCouponsLoading,
+              child: Column(
+                children: [
+                  Container(
+                    height: screenheight * 0.4,
+                    width: screenwidth,
+                    padding: EdgeInsets.all(20).r,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFDFAF6),
+                      borderRadius: BorderRadius.circular(20).r,
+                    ),
+                    child: Column(
+                      children: [
+                        PieChart(
+                          dataMap: dataMap,
+                          colorList: colorList,
+                          chartType: ChartType.disc,
+                          ringStrokeWidth: 32,
+                          chartRadius: screenwidth / 2,
+                          legendOptions: LegendOptions(showLegends: false),
+                          chartValuesOptions: ChartValuesOptions(
+                            showChartValues: false,
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildLegendItem(
+                              "Claimed",
+                              count.claimed,
+                              colorList[0],
+                            ),
+                            _buildLegendItem(
+                              "Active",
+                              count.active,
+                              colorList[1],
+                            ),
+                            _buildLegendItem(
+                              "Expired",
+                              count.expired,
+                              colorList[2],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      PieChart(
-                        dataMap: dataMap,
-                        colorList: colorList,
-                        chartType: ChartType.disc,
-                        ringStrokeWidth: 32,
-                        chartRadius: screenwidth / 2,
-                        legendOptions: LegendOptions(showLegends: false),
-                        chartValuesOptions: ChartValuesOptions(
-                          showChartValues: false,
+
+                  SizedBox(height: 20.h),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                      vertical: 5.0,
+                    ).r,
+                    child: Container(
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15).r,
+                        color: colorScheme.surfaceTint,
+                        border: Border.all(
+                          width: 1,
+                          color: colorScheme.onPrimary,
                         ),
                       ),
-                      SizedBox(height: 20.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildLegendItem(
-                            "Claimed",
-                            count.claimed,
-                            colorList[0],
-                          ),
-                          _buildLegendItem(
-                            "Active",
-                            count.active,
-                            colorList[1],
-                          ),
-                          _buildLegendItem(
-                            "Expired",
-                            count.expired,
-                            colorList[2],
-                          ),
-                        ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(3, (index) {
+                          final isSelected = _selectedTabIndex == index;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedTabIndex = index;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? colorScheme.tertiary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(15.r),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Text(
+                                  _tabTitles[index],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.sp,
+                                    color: isSelected
+                                        ? colorScheme.onPrimary
+                                        : colorScheme.tertiary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                       ),
-                    ],
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 30.h),
-
-                // Tabs
-                TabBar(
-                  controller: _tabController,
-                  labelColor: colorScheme.secondary,
-                  unselectedLabelColor: colorScheme.onSurface,
-                  indicatorColor: colorScheme.secondary,
-                  tabs: const [
-                    Tab(text: "CLAIMED"),
-                    Tab(text: "ACTIVE"),
-                    Tab(text: "EXPIRED"),
-                  ],
-                ),
-
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildCouponsList(
-                        coupons.coupons,
-                        "claimed",
-                        Colors.green,
-                      ),
-                      _buildCouponsList(coupons.coupons, "active", Colors.blue),
-                      _buildCouponsList(coupons.coupons, "expired", Colors.red),
-                    ],
+                  Expanded(
+                    child: Builder(
+                      builder: (context) {
+                        final coupons = Provider.of<CouponsViewmodel>(
+                          context,
+                        ).coupons;
+                        switch (_selectedTabIndex) {
+                          case 0:
+                            return _buildCouponsList(
+                              coupons,
+                              "claimed",
+                              Colors.green.shade400,
+                            );
+                          case 1:
+                            return _buildCouponsList(
+                              coupons,
+                              "active",
+                              Colors.blue.shade400,
+                            );
+                          case 2:
+                            return _buildCouponsList(
+                              coupons,
+                              "expired",
+                              Colors.red.shade400,
+                            );
+                          default:
+                            return Container();
+                        }
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _buildCouponsList(List<Coupon> all, String type, Color iconColor) {
     final filtered = all.where((c) => c.status.toLowerCase() == type).toList();
+    final colorscheme = Theme.of(context).colorScheme;
 
     if (filtered.isEmpty) {
       return Center(
         child: Text(
-          "No ${type.toUpperCase()} coupons found.",
+          "No ${type.toUpperCase()} Coupons Found.",
           style: TextStyle(
             fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+            color: colorscheme.onSecondary,
           ),
         ),
       );
@@ -186,70 +243,84 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
       separatorBuilder: (_, __) => SizedBox(height: 10.h),
       itemBuilder: (context, index) {
         final c = filtered[index];
-        return Container(
-          padding: EdgeInsets.all(10).r,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15.r),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5.r),
-                child: c.logo == null
-                    ? Icon(Icons.image_not_supported, size: 30.h)
-                    : Image.network(
-                        c.logo!,
-                        height: 30.h,
-                        width: 30.h,
-                        fit: BoxFit.fill,
-                      ),
+        return Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10).r,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15.r),
               ),
-              SizedBox(width: 15.w),
-
-              SizedBox(width: 15.w),
-              Column(
-                children: List.generate(
-                  10,
-                  (index) => Container(
-                    width: 1.5,
-                    height: 3,
-                    margin: EdgeInsets.symmetric(vertical: 2).r,
-                    color: Colors.orange,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5.r),
+                    child: c.logo == null
+                        ? Icon(Icons.image_not_supported, size: 30.h)
+                        : Image.network(
+                            c.logo!,
+                            height: 30.h,
+                            width: 30.h,
+                            fit: BoxFit.fill,
+                          ),
                   ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                flex: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      c.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
+                  SizedBox(width: 15.w),
+                  Column(
+                    children: List.generate(
+                      10,
+                      (index) => Container(
+                        width: 1.5,
+                        height: 3,
+                        margin: EdgeInsets.symmetric(vertical: 2).r,
+                        color: Colors.orange,
                       ),
                     ),
-                    SizedBox(height: 4.h),
-                    Text(c.offerTitle, style: TextStyle(fontSize: 14.sp)),
-                    SizedBox(height: 5.h),
-                    type == "active"
-                        ? Text(
-                            "Valid until: ${DateFormat("dd MMM yyyy").format(c.expiryDate)}",
-                            style: TextStyle(color: Colors.green),
-                          )
-                        : Text(
-                            "Status: ${c.status.toUpperCase()}",
-                            style: TextStyle(color: iconColor),
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          c.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
                           ),
-                  ],
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(c.offerTitle, style: TextStyle(fontSize: 14.sp)),
+                        SizedBox(height: 5.h),
+                        type == "active"
+                            ? Text(
+                                "Valid until: ${DateFormat("dd MMM yyyy").format(c.expiryDate)}",
+                                style: TextStyle(color: Colors.green),
+                              )
+                            : type == "expired"
+                            ? SizedBox()
+                            : Text(
+                                "Status: ${c.status.toUpperCase()}",
+                                style: TextStyle(color: iconColor),
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (type == "expired")
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Image.asset(
+                  "assets/icons/expired.png",
+                  height: 60.h,
+                  width: 60.h,
                 ),
               ),
-            ],
-          ),
+          ],
         );
       },
     );

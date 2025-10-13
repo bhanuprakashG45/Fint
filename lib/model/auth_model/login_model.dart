@@ -19,32 +19,27 @@ class LoginModel {
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-        statusCode: json["statusCode"] ?? 0,
-        data: LoginData.fromJson(json["data"] ?? {}),
-        message: json["message"] ?? '',
-        success: json["success"] ?? false,
-      );
+    statusCode: json["statusCode"] ?? 0,
+    data: LoginData.fromJson(json["data"] ?? {}),
+    message: json["message"] ?? '',
+    success: json["success"] ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data.toJson(),
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data.toJson(),
+    "message": message,
+    "success": success,
+  };
 }
 
 class LoginData {
   String phoneNumber;
 
-  LoginData({
-    required this.phoneNumber,
-  });
+  LoginData({required this.phoneNumber});
 
-  factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
-        phoneNumber: json["phoneNumber"] ?? '',
-      );
+  factory LoginData.fromJson(Map<String, dynamic> json) =>
+      LoginData(phoneNumber: json["phoneNumber"] ?? '');
 
-  Map<String, dynamic> toJson() => {
-        "phoneNumber": phoneNumber,
-      };
+  Map<String, dynamic> toJson() => {"phoneNumber": phoneNumber};
 }

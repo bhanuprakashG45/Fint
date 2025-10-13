@@ -1,5 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/view/phone_pe_sdk/checkout_page.dart';
 
 class QRScanOrGalleryScreen extends StatefulWidget {
   const QRScanOrGalleryScreen({super.key});
@@ -41,9 +40,7 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => CheckoutPage(),
-          ),
+          MaterialPageRoute(builder: (context) => CheckoutPage()),
         );
       } else {
         HapticFeedback.heavyImpact();
@@ -90,6 +87,7 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
   }
 
   void _showInvalidQrBottomSheet({String? message}) {
+    final colorscheme = Theme.of(context).colorScheme;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -97,55 +95,67 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.red.shade50,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.error_outline, size: 60, color: Colors.red.shade400),
-              const SizedBox(height: 16),
-              Text(
-                "Invalid QR Code",
-                style: TextStyle(
+        return SafeArea(
+          top: false,
+          child: Container(
+            padding: EdgeInsets.all(20).r,
+            decoration: BoxDecoration(
+              color: colorscheme.onPrimary,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ).r,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 60.sp,
                   color: Colors.red.shade400,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                message ??
-                    "This QR code is not a valid UPI code. Please scan a valid UPI QR.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.black54),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade400,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                const SizedBox(height: 16),
+                Text(
+                  "Invalid QR Code",
+                  style: TextStyle(
+                    color: Colors.red.shade400,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
-                  setState(() => isCameraPaused = false);
-                  controller?.resumeCamera();
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.qr_code_scanner),
-                label: const Text("Scan Again"),
-              ),
-              const SizedBox(height: 10),
-            ],
+                SizedBox(height: 10.h),
+                Text(
+                  message ??
+                      "This QR code is not a valid UPI code. Please scan a valid UPI QR.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: colorscheme.tertiary,fontWeight: FontWeight.bold),
+                ),
+                 SizedBox(height: 20.h),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorscheme.tertiary,
+                    foregroundColor: colorscheme.onPrimary,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.h,
+                      vertical: 12.w,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20).r,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() => isCameraPaused = false);
+                    controller?.resumeCamera();
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.qr_code_scanner),
+                  label: Text(
+                    "Scan Again",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
           ),
         );
       },
@@ -170,74 +180,80 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorscheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: Stack(
-        children: [
-          QRView(
-            key: qrKey,
-            onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(
-              borderColor: Colors.deepPurple,
-              borderRadius: 10,
-              borderLength: 30,
-              borderWidth: 8,
-              cutOutSize: MediaQuery.of(context).size.width * 0.7,
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: colorscheme.tertiary,
+                borderRadius: 10.r,
+                borderLength: 30.h,
+                borderWidth: 8.w,
+                cutOutSize: MediaQuery.of(context).size.width * 0.7,
+              ),
             ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 16,
-            left: 16,
-            right: 16,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                const Text(
-                  "Scan Any QR",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 16,
+              left: 16,
+              right: 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: colorscheme.onPrimary),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    "Scan Any QR",
+                    style: TextStyle(
+                      color: colorscheme.onPrimary,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isTorchOn ? Icons.flash_on : Icons.flash_off,
+                      color: colorscheme.onPrimary,
+                    ),
+                    onPressed: _toggleTorch,
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 40.h,
+              left: 40.w,
+              right: 40.w,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorscheme.tertiary,
+                  foregroundColor: colorscheme.onPrimary,
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20).r,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    isTorchOn ? Icons.flash_on : Icons.flash_off,
-                    color: Colors.white,
-                  ),
-                  onPressed: _toggleTorch,
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 40,
-            left: 40,
-            right: 40,
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.deepPurple,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                onPressed: _pickImageFromGallery,
+                icon: Icon(Icons.image, color: colorscheme.onPrimary),
+                label: Text(
+                  "Upload from Gallery",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              onPressed: _pickImageFromGallery,
-              icon: const Icon(Icons.image),
-              label: const Text("Upload from Gallery"),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

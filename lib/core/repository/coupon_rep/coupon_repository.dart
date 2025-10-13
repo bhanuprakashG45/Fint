@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/network/network_api_services.dart';
-import 'package:fint/model/coupon_model/all_coupon_model.dart';
-import 'package:fint/model/coupon_model/coupon_model.dart';
-import 'package:flutter/material.dart';
+import 'package:fint/core/constants/exports.dart';
 
 class CouponRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();

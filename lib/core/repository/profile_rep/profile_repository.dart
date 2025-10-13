@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/network/network_api_services.dart';
-import 'package:fint/model/profile_model/profile_model.dart';
+import 'package:fint/core/constants/exports.dart';
 
 class ProfileRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
@@ -30,7 +26,11 @@ class ProfileRepository {
     }
   }
 
-  Future<ProfileModel> updateprofileData(context, String url, dynamic data) async {
+  Future<ProfileModel> updateprofileData(
+    context,
+    String url,
+    dynamic data,
+  ) async {
     try {
       final response = await _apiServices.patchApiResponse(context, url, data);
       print("${response}");

@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
+import 'package:fint/core/constants/exports.dart';
 
 class PhonepePg {
   final String environment;
@@ -21,7 +17,7 @@ class PhonepePg {
   PhonepePg({
     this.environment = 'SANDBOX',
     this.enableLogging = true,
-    this.appSchema = "com.example.fint",
+    this.appSchema = "com.fint.app",
     this.packageName = "com.phonepe.simulator",
     this.merchantId = "PGTESTPAYUAT",
     this.saltKey = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399",
@@ -94,7 +90,7 @@ class PhonepePg {
         if (appsJson == null) return [];
 
         final apps = jsonDecode(appsJson) as List;
-        return apps.map((app) => app['com.example.fint'].toString()).toList();
+        return apps.map((app) => app['com.fint.app'].toString()).toList();
       } else if (Platform.isIOS) {
         final apps = await PhonePePaymentSdk.getInstalledUpiAppsForiOS();
         return apps?.whereType<String>().toList() ?? [];

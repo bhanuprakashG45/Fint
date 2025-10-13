@@ -1,5 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/view_model/profile_viewmodel/profile_viewmodel.dart';
 
 class UpdateProfileDialog extends StatefulWidget {
   final String currentName;
@@ -41,7 +40,7 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
     );
     final colorscheme = Theme.of(context).colorScheme;
     return AlertDialog(
-      backgroundColor: colorscheme.onSecondaryContainer,
+      backgroundColor: colorscheme.onPrimary,
       title: Text(
         'Update Profile',
         style: TextStyle(
@@ -63,11 +62,11 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
-                borderSide: BorderSide(color: colorscheme.tertiary),
+                borderSide: BorderSide(color: colorscheme.onSecondary),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
-                borderSide: BorderSide(color: colorscheme.tertiary),
+                borderSide: BorderSide(color: colorscheme.onSecondary),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
@@ -75,7 +74,7 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+           SizedBox(height: 12.h),
           TextField(
             controller: _pincodeController,
             decoration: InputDecoration(
@@ -103,7 +102,7 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: colorscheme.onSecondary,
+            backgroundColor: colorscheme.onPrimary,
           ),
           onPressed: () => Navigator.of(context).pop(),
           child: Text(

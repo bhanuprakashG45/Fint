@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/network/network_api_services.dart';
 import 'package:fint/core/constants/exports.dart';
 
 class SignupRepository {
@@ -19,7 +16,7 @@ class SignupRepository {
     try {
       final Map<String, dynamic> requestBody = {
         "name": name,
-        "email": email,
+        // "email": email,
         "phoneNumber": phone,
         "bloodGroup": bloodGroup,
         "pinCode": pinCode,

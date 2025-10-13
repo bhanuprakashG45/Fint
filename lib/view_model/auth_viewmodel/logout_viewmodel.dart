@@ -52,6 +52,19 @@ class LogoutViewmodel with ChangeNotifier {
           duration: Duration(seconds: 3),
         );
         return true;
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
+        await prefs.clearAccessToken();
+        await prefs.clearRefreshToken();
+        final responseData = logoutModelFromJson(response.body);
+        _logoutdata = responseData;
+        notifyListeners();
+        ToastHelper.show(
+          context,
+          responseData.message,
+          type: ToastificationType.success,
+          duration: Duration(seconds: 3),
+        );
+        return true;
       } else {
         ToastHelper.show(
           context,

@@ -1,12 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:fint/core/constants/app_urls.dart';
-import 'package:fint/core/utils/routes/routes_name.dart';
-import 'package:flutter/widgets.dart';
+import 'package:fint/core/constants/exports.dart';
 import 'package:http/http.dart' as http;
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/network/base_api_services.dart';
-import 'package:fint/core/storage/shared_preference.dart';
 
 class NetworkApiServices extends BaseApiServices {
   final SharedPref _sharedPref = SharedPref();
@@ -50,7 +43,7 @@ class NetworkApiServices extends BaseApiServices {
 
         print("Access token refreshed");
         return true;
-      } else if (response.statusCode == 403) {
+      } else if (response.statusCode == 403 || response.statusCode == 401) {
         await _sharedPref.clear();
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -280,13 +273,22 @@ class NetworkApiServices extends BaseApiServices {
       case 201:
         return response.body.isNotEmpty ? jsonDecode(response.body) : null;
       case 400:
-        throw BadRequestException(response.body);
+        final error = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
+        throw BadRequestException(error?['message'] ?? "Bad Request");
       case 401:
       case 403:
-        throw UnauthorizedException(response.body);
+        final error = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
+        throw UnauthorizedException(error?['message'] ?? "Unauthorized");
       case 404:
       case 500:
-        return jsonDecode(response.body);
+        final error = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : null;
+        return error;
       default:
         throw FetchDataException(
           'Error occurred with status code: ${response.statusCode}',

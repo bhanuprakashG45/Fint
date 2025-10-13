@@ -21,7 +21,6 @@ class RouteTracker extends NavigatorObserver {
     final prefs = await SharedPreferences.getInstance();
     if (route != null) {
       await prefs.setString('last_screen', route);
-      print('Saved route: $route');
     }
   }
 }

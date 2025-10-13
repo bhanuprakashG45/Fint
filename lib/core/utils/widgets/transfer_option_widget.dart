@@ -30,7 +30,7 @@ class TransferOptionWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FaIcon(icon, size: 20.sp, color: colorScheme.tertiary),
-            SizedBox(height: 8.h),
+            SizedBox(height: 5.h),
             Text(
               label,
               textAlign: TextAlign.center,

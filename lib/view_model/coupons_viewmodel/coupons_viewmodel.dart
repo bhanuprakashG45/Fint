@@ -1,7 +1,5 @@
 import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/repository/coupon_rep/coupon_repository.dart';
-import 'package:fint/model/coupon_model/all_coupon_model.dart';
-import 'package:fint/model/coupon_model/coupon_model.dart';
 
 class CouponsViewmodel with ChangeNotifier {
   final CouponRepository _couponRepository = CouponRepository();

@@ -1,5 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/core/storage/shared_preference.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

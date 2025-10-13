@@ -1,4 +1,7 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/main_screens/payment/pay_to_bank_screen.dart';
+import 'package:fint/view/main_screens/payment/pay_to_number_screen.dart';
+import 'package:fint/view/main_screens/payment/pay_to_self_screen.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -50,9 +53,10 @@ class Routes {
           builder: (BuildContext context) => PetInsuranceScreen(),
         );
       case RoutesName.couponredeempage:
-      final couponId = settings.arguments as String;
+        final couponId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (BuildContext context) => CouponRedeemScreen(couponId: couponId)
+          builder: (BuildContext context) =>
+              CouponRedeemScreen(couponId: couponId),
         );
       case RoutesName.couponanalyticsscreen:
         return MaterialPageRoute(
@@ -69,6 +73,18 @@ class Routes {
       case RoutesName.bankaccountsscreen:
         return MaterialPageRoute(
           builder: (BuildContext context) => BankAccountsScreen(),
+        );
+      case RoutesName.payToNumberScreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => PayToNumberScreen(),
+        );
+      case RoutesName.payToBankscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => PayToBankScreen(),
+        );
+      case RoutesName.payToSelfscreen:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => PayToSelfScreen(),
         );
       default:
         return MaterialPageRoute(

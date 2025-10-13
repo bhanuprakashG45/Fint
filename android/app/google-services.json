@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077361954637",
+    "project_id": "fint-4f4f4",
+    "storage_bucket": "fint-4f4f4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077361954637:android:7d365eab5725e2d4027104",
+        "android_client_info": {
+          "package_name": "com.fint.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxn4rG2CFMxva1TThJgiXzEm5m02Uc8cY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

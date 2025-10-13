@@ -19,34 +19,29 @@ class ProfileModel {
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
-        statusCode: json["statusCode"] ?? 0,
-        data: ProfileData.fromJson(json["data"] ?? {}),
-        message: json["message"] ?? '',
-        success: json["success"] ?? false,
-      );
+    statusCode: json["statusCode"] ?? 0,
+    data: ProfileData.fromJson(json["data"] ?? {}),
+    message: json["message"] ?? '',
+    success: json["success"] ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "data": data.toJson(),
-        "message": message,
-        "success": success,
-      };
+    "statusCode": statusCode,
+    "data": data.toJson(),
+    "message": message,
+    "success": success,
+  };
 }
 
 class ProfileData {
   UserProfile user;
 
-  ProfileData({
-    required this.user,
-  });
+  ProfileData({required this.user});
 
-  factory ProfileData.fromJson(Map<String, dynamic> json) => ProfileData(
-        user: UserProfile.fromJson(json["user"] ?? {}),
-      );
+  factory ProfileData.fromJson(Map<String, dynamic> json) =>
+      ProfileData(user: UserProfile.fromJson(json["user"] ?? {}));
 
-  Map<String, dynamic> toJson() => {
-        "user": user.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"user": user.toJson()};
 }
 
 class UserProfile {
@@ -75,28 +70,28 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-        id: json["_id"] ?? '',
-        name: json["name"] ?? '',
-        phoneNumber: json["phoneNumber"] ?? '',
-        bloodGroup: json["bloodGroup"] ?? '',
-        email: json["email"] ?? '',
-        pinCode: json["pinCode"] ?? '',
-        createdAt: DateTime.tryParse(json["createdAt"] ?? '') ?? DateTime.now(),
-        updatedAt: DateTime.tryParse(json["updatedAt"] ?? '') ?? DateTime.now(),
-        beADonor: json["beADonor"] ?? false,
-        avatar: json["avatar"] ?? '',
-      );
+    id: json["_id"] ?? '',
+    name: json["name"] ?? '',
+    phoneNumber: json["phoneNumber"] ?? '',
+    bloodGroup: json["bloodGroup"] ?? '',
+    email: json["email"] ?? '',
+    pinCode: json["pinCode"] ?? '',
+    createdAt: DateTime.tryParse(json["createdAt"] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json["updatedAt"] ?? '') ?? DateTime.now(),
+    beADonor: json["beADonor"] ?? false,
+    avatar: json["avatar"] ?? '',
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-        "phoneNumber": phoneNumber,
-        "bloodGroup": bloodGroup,
-        "email": email,
-        "pinCode": pinCode,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "beADonor": beADonor,
-        "avatar": avatar,
-      };
+    "_id": id,
+    "name": name,
+    "phoneNumber": phoneNumber,
+    "bloodGroup": bloodGroup,
+    "email": email,
+    "pinCode": pinCode,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "beADonor": beADonor,
+    "avatar": avatar,
+  };
 }
