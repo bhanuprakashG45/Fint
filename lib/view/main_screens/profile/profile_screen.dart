@@ -22,6 +22,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  Future<void> launchAppUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
     await launchUrl(launchUri);
@@ -119,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Text(
-                          profile.name ?? 'New User',
+                          profile.name,
                           style: TextStyle(
                             color: colorscheme.primaryContainer,
                             fontSize: 20.sp,
@@ -261,10 +268,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     trailingIcon: Icons.arrow_forward_ios,
                                   ),
                                   SizedBox(height: 15.0.h),
-                                  ProfileOptionsWidget(
-                                    leadingIcon: FontAwesomeIcons.shieldHalved,
-                                    text: "Privacy and Security",
-                                    trailingIcon: Icons.arrow_forward_ios,
+                                  InkWell(
+                                    onTap: () {
+                                      launchAppUrl(
+                                        'https://projectf0724.com/privacy-policy',
+                                      );
+                                    },
+                                    child: ProfileOptionsWidget(
+                                      leadingIcon:
+                                          FontAwesomeIcons.shieldHalved,
+                                      text: "Privacy and Security",
+                                      trailingIcon: Icons.arrow_forward_ios,
+                                    ),
                                   ),
                                   SizedBox(height: 15.0.h),
                                   InkWell(

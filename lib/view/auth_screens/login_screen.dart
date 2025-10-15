@@ -10,6 +10,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phonecontroller = TextEditingController();
   bool isLoginLoading = false;
+
+  Future<void> launchAppUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -216,9 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      // launchUrls(
-                                      //   'https://aoladmin.kods.app/terms-of-use',
-                                      // );
+                                      launchAppUrl(
+                                        'https://projectf0724.com/privacy-policy',
+                                      );
                                     },
                                 ),
                                 TextSpan(
@@ -237,9 +245,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      // launchUrls(
-                                      //   'https://aoladmin.kods.app/privacy-policy',
-                                      // );
+                                      launchAppUrl(
+                                        'https://projectf0724.com/terms-conditions',
+                                      );
                                     },
                                 ),
                               ],
