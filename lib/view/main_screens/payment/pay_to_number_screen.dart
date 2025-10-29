@@ -13,7 +13,7 @@ class _PayToNumberScreenState extends State<PayToNumberScreen> {
 
   bool _isProcessing = false;
 
-  Future<void> _launchPhonePePayment() async {
+  Future<void> _launchUpiPayment() async {
     final phone = _phoneController.text.trim();
     final amount = _amountController.text.trim();
 
@@ -26,33 +26,32 @@ class _PayToNumberScreenState extends State<PayToNumberScreen> {
 
     final upiId = phone;
     final txnNote = Uri.encodeComponent("Payment to $phone");
-    final callbackurl = 'com.fint.app://upi-response';
+    final callbackUrl = 'com.fint.app://upi-response';
+
     final urlString =
-        "upi://pay?pa=$upiId&pn=Receiver&am=$amount&cu=INR&tn=$txnNote&url=$callbackurl";
+        "upi://pay?pa=$upiId&pn=Receiver&am=$amount&cu=INR&tn=$txnNote&url=$callbackUrl";
+
     final Uri uri = Uri.parse(urlString);
 
-    if (await canLaunchUrl(uri)) {
-      setState(() => _isProcessing = true);
+    try {
+      if (await canLaunchUrl(uri)) {
+        setState(() => _isProcessing = true);
 
-      try {
-        final response = await launchUrl(
-          uri,
-          mode: LaunchMode.externalApplication,
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+        print(" Payment flow started");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("No UPI app found on this device.")),
         );
-
-        print("Transaction response :$response");
-      } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Could not launch PhonePe: $e")));
-        print("Transaction Failed response :$e");
-      } finally {
-        setState(() => _isProcessing = false);
       }
-    } else {
+    } catch (e) {
+      print(" Error launching UPI payment: $e");
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("PhonePe app not found")));
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    } finally {
+      setState(() => _isProcessing = false);
     }
   }
 
@@ -153,7 +152,7 @@ class _PayToNumberScreenState extends State<PayToNumberScreen> {
                         ),
                       )
                     : ElevatedButton.icon(
-                        onPressed: _launchPhonePePayment,
+                        onPressed: _launchUpiPayment,
                         icon: const Icon(Icons.payment),
                         label: Text(
                           "Proceed to Pay",
