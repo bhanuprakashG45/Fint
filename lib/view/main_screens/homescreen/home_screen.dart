@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(color: colorScheme.tertiary),
                         child: Column(
                           children: [
-                            SizedBox(height: 10.h),
+                            SizedBox(height: 25.h),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [

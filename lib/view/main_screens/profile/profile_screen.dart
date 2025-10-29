@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 10.0.h),
+                        SizedBox(height: 35.0.h),
                         SafeArea(
                           top: false,
                           child: Stack(

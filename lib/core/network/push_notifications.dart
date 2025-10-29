@@ -2,6 +2,7 @@ import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/network/globalkey.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:io';
 
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundHandler(RemoteMessage message) async {
@@ -28,16 +29,16 @@ Future<void> _showGeneralNotification(
 ) async {
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
-        'notification_1',
-        'general notification',
-        channelDescription: 'general notification',
-        enableVibration: true,
-        enableLights: true,
-        importance: Importance.high,
-        playSound: true,
-        priority: Priority.high,
-        visibility: NotificationVisibility.public,
-      );
+    'notification_1',
+    'general notification',
+    channelDescription: 'general notification',
+    enableVibration: true,
+    enableLights: true,
+    importance: Importance.high,
+    playSound: true,
+    priority: Priority.high,
+    visibility: NotificationVisibility.public,
+  );
   const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
     presentAlert: true,
     presentBadge: true,
@@ -64,15 +65,34 @@ void notificationTapBackground(NotificationResponse response) {
 
 Future<void> initMessaging() async {
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
+
   await fltNotification.initialize(
     initSetting,
     onDidReceiveNotificationResponse: notificationTapBackground,
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 
-  await FirebaseMessaging.instance.requestPermission();
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (Platform.isIOS) {
+    String? apnsToken;
+    int retries = 0;
+    while (apnsToken == null && retries < 5) {
+      apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      await Future.delayed(const Duration(seconds: 1));
+      retries++;
+    }
+    if (apnsToken == null) return;
+  }
+
   final token = await FirebaseMessaging.instance.getToken();
-  await _pref.storeDeviceToken(token!);
+  if (token != null) {
+    await _pref.storeDeviceToken(token);
+  }
 
   FirebaseMessaging.instance.getInitialMessage().then((message) {
     if (message != null && message.data['push_type'] == 'general') {
@@ -81,13 +101,14 @@ Future<void> initMessaging() async {
       );
     }
   });
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     if (notification != null) {
-      if (kDebugMode) print('Notification data: ${notification.body}');
       _showGeneralNotification(message.data, notification);
     }
   });
+
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     navigatorKey.currentState?.push(
       MaterialPageRoute(builder: (context) => NotificationScreen()),
