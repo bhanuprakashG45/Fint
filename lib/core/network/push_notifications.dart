@@ -29,16 +29,16 @@ Future<void> _showGeneralNotification(
 ) async {
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
-    'notification_1',
-    'general notification',
-    channelDescription: 'general notification',
-    enableVibration: true,
-    enableLights: true,
-    importance: Importance.high,
-    playSound: true,
-    priority: Priority.high,
-    visibility: NotificationVisibility.public,
-  );
+        'notification_1',
+        'general notification',
+        channelDescription: 'general notification',
+        enableVibration: true,
+        enableLights: true,
+        importance: Importance.high,
+        playSound: true,
+        priority: Priority.high,
+        visibility: NotificationVisibility.public,
+      );
   const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
     presentAlert: true,
     presentBadge: true,
@@ -72,11 +72,8 @@ Future<void> initMessaging() async {
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 
-  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  NotificationSettings settings = await FirebaseMessaging.instance
+      .requestPermission(alert: true, badge: true, sound: true);
 
   if (Platform.isIOS) {
     String? apnsToken;

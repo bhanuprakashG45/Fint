@@ -29,6 +29,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> launchEmail({
+    required String toEmail,
+    String? subject,
+    String? body,
+  }) async {
+    final encodedSubject = subject != null ? Uri.encodeComponent(subject) : '';
+    final encodedBody = body != null ? Uri.encodeComponent(body) : '';
+
+    final emailUri = Uri.parse(
+      'mailto:$toEmail?subject=$encodedSubject&body=$encodedBody',
+    );
+
+    if (!await launchUrl(emailUri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch email client');
+    }
+  }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
     await launchUrl(launchUri);
@@ -261,12 +278,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 15.0.h),
-                                  ProfileOptionsWidget(
-                                    leadingIcon: Icons.key,
-                                    text: "Change Password",
-                                    trailingIcon: Icons.arrow_forward_ios,
-                                  ),
+                                  // SizedBox(height: 15.0.h),
+                                  // ProfileOptionsWidget(
+                                  //   leadingIcon: Icons.key,
+                                  //   text: "Change Password",
+                                  //   trailingIcon: Icons.arrow_forward_ios,
+                                  // ),
                                   SizedBox(height: 15.0.h),
                                   InkWell(
                                     onTap: () {
@@ -284,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SizedBox(height: 15.0.h),
                                   InkWell(
                                     onTap: () async {
-                                      await _makePhoneCall("9631445521");
+                                      await _makePhoneCall("8147441592");
                                     },
                                     child: ProfileOptionsWidget(
                                       leadingIcon: FontAwesomeIcons.phone,
@@ -293,18 +310,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 15.0.h),
-                                  ProfileOptionsWidget(
-                                    leadingIcon: Icons.help_center_outlined,
-                                    text: "Help Center",
-                                    trailingIcon: Icons.arrow_forward_ios,
+                                  InkWell(
+                                    onTap: () {
+                                      launchEmail(
+                                        toEmail: 'projectf0724@gmail.com',
+                                        subject: 'Help Required',
+                                        body:
+                                            'Hello, I need assistance with...',
+                                      );
+                                    },
+                                    child: ProfileOptionsWidget(
+                                      leadingIcon: Icons.help_center_outlined,
+                                      text: "Help Center",
+                                      trailingIcon: Icons.arrow_forward_ios,
+                                    ),
                                   ),
                                   SizedBox(height: 15.0.h),
-                                  ProfileOptionsWidget(
-                                    leadingIcon: Icons.info_outline,
-                                    text: "About Fint",
-                                    trailingIcon: Icons.arrow_forward_ios,
-                                  ),
-                                  SizedBox(height: 20.0.h),
+                                  // ProfileOptionsWidget(
+                                  //   leadingIcon: Icons.info_outline,
+                                  //   text: "About Fint",
+                                  //   trailingIcon: Icons.arrow_forward_ios,
+                                  // ),
+                                  // SizedBox(height: 20.0.h),
                                 ],
                               ),
                             ),
