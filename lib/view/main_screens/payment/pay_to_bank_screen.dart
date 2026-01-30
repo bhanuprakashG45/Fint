@@ -1,4 +1,7 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/main_screens/homescreen/ad_dialog.dart';
+import 'package:fint/view_model/advertisement_vm/advertisement_viewmodel.dart';
+import 'package:fint/view_model/razorpay_vm/razorpay_viewmodel.dart';
 
 class PayToBankScreen extends StatefulWidget {
   const PayToBankScreen({super.key});
@@ -12,57 +15,164 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
   final TextEditingController _ifscController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
+  late final RazorpayViewmodel _razorpayVM;
 
-  bool _isProcessing = false;
+  @override
+  void initState() {
+    super.initState();
+    _razorpayVM = Provider.of<RazorpayViewmodel>(context, listen: false);
 
-  Future<void> _launchPhonePeToBank() async {
-    final account = _accountController.text.trim();
-    final ifsc = _ifscController.text.trim();
-    final name = _nameController.text.trim();
-    final amount = _amountController.text.trim();
-
-    if (account.isEmpty || ifsc.isEmpty || amount.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all required fields")),
-      );
-      return;
-    }
-
-    final upiId = "$account@$ifsc";
-    final txnNote = Uri.encodeComponent("Bank Transfer to $name");
-    final callbackUrl = 'com.fint.app://upi-response';
-
-    final urlString =
-        "upi://pay?pa=$upiId&pn=${Uri.encodeComponent(name.isEmpty ? 'Receiver' : name)}"
-        "&am=$amount&cu=INR&tn=$txnNote&url=$callbackUrl";
-
-    final Uri uri = Uri.parse(urlString);
-
-    if (await canLaunchUrl(uri)) {
-      setState(() => _isProcessing = true);
-      try {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Failed to open PhonePe: $e")));
-      } finally {
-        setState(() => _isProcessing = false);
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("PhonePe or UPI app not found")),
-      );
-    }
+    _razorpayVM.addListener(_paymentListener);
   }
 
   @override
   void dispose() {
+    _razorpayVM.removeListener(_paymentListener);
     _accountController.dispose();
     _ifscController.dispose();
     _nameController.dispose();
     _amountController.dispose();
     super.dispose();
+  }
+
+  bool _isPaymentDialogVisible = false;
+
+  void _paymentListener() {
+    if (!mounted) return;
+
+    if (_razorpayVM.isPaymentProcessing) {
+      if (_isPaymentDialogVisible) return;
+
+      _isPaymentDialogVisible = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withValues(alpha: 0.6),
+        builder: (_) => const PopScope(
+          canPop: false,
+          child: Material(
+            color: Colors.transparent,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 12),
+                  Text(
+                    "Processing payment...",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      if (_isPaymentDialogVisible &&
+          Navigator.of(context, rootNavigator: true).canPop()) {
+        _isPaymentDialogVisible = false;
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    }
+  }
+
+  Future<void> startPayment(int amount) async {
+    final advProvider = Provider.of<AdvertisementViewmodel>(
+      context,
+      listen: false,
+    );
+    try {
+      if (_accountController.text.isEmpty) {
+        ToastHelper.show(
+          context,
+          "Please enter valid Account number",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        return;
+      }
+      if (_ifscController.text.isEmpty) {
+        ToastHelper.show(
+          context,
+          "Please enter valid Account number",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        return;
+      }
+      if (_accountController.text.isEmpty) {
+        ToastHelper.show(
+          context,
+          "Please enter valid Account number",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        return;
+      }
+
+      if (amount <= 0) {
+        ToastHelper.show(
+          context,
+          "Please enter valid amount",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        return;
+      }
+
+      final payload = {
+        "amount": amount,
+        "accountHolderName": _nameController.text,
+        "bankAccountNumber": _accountController.text,
+        "ifscCode": _ifscController.text,
+        "accountType": "Savings",
+        "module": "P2P_TRANSFER",
+        "moduleData": {"note": "Rent share"},
+      };
+
+      final result = await _razorpayVM.createOrder(
+        context,
+        "payToBank",
+        payload,
+      );
+      await advProvider.fetchAds();
+
+      if (result.success) {
+        Navigator.pop(context);
+        ToastHelper.show(
+          context,
+          "Payment Successful",
+          type: ToastificationType.success,
+          duration: Duration(seconds: 3),
+        );
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AdDialog(
+            imagePath: advProvider.advData.img,
+            title: advProvider.advData.title,
+            description: advProvider.advData.description,
+          ),
+        );
+      } else {
+        ToastHelper.show(
+          context,
+          "Payment Failed",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        debugPrint("Payment Failed: ${result.error}");
+      }
+    } catch (e) {
+      ToastHelper.show(
+        context,
+        "Something went wrong",
+        type: ToastificationType.error,
+        duration: Duration(seconds: 3),
+      );
+      debugPrint('Error: $e');
+    }
   }
 
   InputDecoration _inputDecoration(String label, String hint) {
@@ -108,13 +218,26 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20.h),
-              Text(
-                " Enter Bank A/c Number",
-                style: TextStyle(
-                  color: colorscheme.primary,
-                  fontSize: 16.0.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Container(
+                    height: 16.h,
+                    width: 5.w,
+                    decoration: BoxDecoration(
+                      color: colorscheme.tertiary,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Enter Bank A/c Number",
+                    style: TextStyle(
+                      color: colorscheme.primary,
+                      fontSize: 18.0.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 5.0.h),
               TextField(
@@ -127,13 +250,26 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
               ),
 
               SizedBox(height: 16.h),
-              Text(
-                " Enter IFSC Code",
-                style: TextStyle(
-                  color: colorscheme.primary,
-                  fontSize: 16.0.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Container(
+                    height: 16.h,
+                    width: 5.w,
+                    decoration: BoxDecoration(
+                      color: colorscheme.tertiary,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Enter IFSC Code",
+                    style: TextStyle(
+                      color: colorscheme.primary,
+                      fontSize: 18.0.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 5.0.h),
 
@@ -143,13 +279,26 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
                 decoration: _inputDecoration("IFSC Code", "e.g., SBIN0001234"),
               ),
               SizedBox(height: 16.h),
-              Text(
-                " Enter A/c holder Name",
-                style: TextStyle(
-                  color: colorscheme.primary,
-                  fontSize: 16.0.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Container(
+                    height: 16.h,
+                    width: 5.w,
+                    decoration: BoxDecoration(
+                      color: colorscheme.tertiary,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Enter A/c holder Name",
+                    style: TextStyle(
+                      color: colorscheme.primary,
+                      fontSize: 18.0.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 5.0.h),
               TextField(
@@ -160,17 +309,31 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
                 ),
               ),
               SizedBox(height: 16.h),
-              Text(
-                " Enter Amount",
-                style: TextStyle(
-                  color: colorscheme.primary,
-                  fontSize: 16.0.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Container(
+                    height: 16.h,
+                    width: 5.w,
+                    decoration: BoxDecoration(
+                      color: colorscheme.tertiary,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    "Enter Amount",
+                    style: TextStyle(
+                      color: colorscheme.primary,
+                      fontSize: 18.0.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 5.0.h),
               TextField(
                 controller: _amountController,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -180,32 +343,29 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: _isProcessing
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: colorscheme.primaryContainer,
-                          strokeWidth: 2.0,
-                        ),
-                      )
-                    : ElevatedButton.icon(
-                        onPressed: _launchPhonePeToBank,
-                        icon: const Icon(Icons.account_balance),
-                        label: Text(
-                          "Pay to Bank",
-                          style: TextStyle(color: colorscheme.primaryContainer),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: colorscheme.tertiary,
-                          foregroundColor: colorscheme.primaryContainer,
-                          textStyle: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12).r,
-                          ),
-                        ),
-                      ),
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    await startPayment(
+                      int.tryParse(_amountController.text) ?? 0,
+                    );
+                  },
+                  icon: const Icon(Icons.account_balance),
+                  label: Text(
+                    "Pay to Bank",
+                    style: TextStyle(color: colorscheme.primaryContainer),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorscheme.tertiary,
+                    foregroundColor: colorscheme.primaryContainer,
+                    textStyle: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12).r,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

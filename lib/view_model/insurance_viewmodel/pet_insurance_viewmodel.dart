@@ -22,7 +22,6 @@ class PetInsuranceViewmodel with ChangeNotifier {
       final url = AppUrls.applyPetInsuranceUrl;
 
       final result = await _repository.applyPetInsurance(
-        context,
         url,
         name,
         email,

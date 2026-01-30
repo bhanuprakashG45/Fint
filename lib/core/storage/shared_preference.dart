@@ -8,13 +8,6 @@ class SharedPref {
     _prefs ??= await SharedPreferences.getInstance();
   }
 
-  Future<void> storeFirebaseToken(String? firebaseToken) async {
-    await _initSharedPreferences();
-    if (firebaseToken != null) {
-      await _prefs!.setString('firebaseToken', firebaseToken);
-    }
-  }
-
   Future<void> storeAccessToken(String? accessToken) async {
     await _initSharedPreferences();
     if (accessToken != null) {
@@ -37,11 +30,6 @@ class SharedPref {
   Future<String> getRefreshToken() async {
     await _initSharedPreferences();
     return _prefs!.getString('refreshToken') ?? '';
-  }
-
-  Future<String> getFirebaseToken() async {
-    await _initSharedPreferences();
-    return _prefs!.getString('firebaseToken') ?? '';
   }
 
   Future<void> clearAccessToken() async {
@@ -85,23 +73,64 @@ class SharedPref {
     print("Fetching Device Token ");
     String? devicetoken = preferences.getString("device_token");
     if (devicetoken != null && devicetoken.isNotEmpty) {
+      print("Device Token : $devicetoken");
       return devicetoken;
     } else {
       return null;
     }
   }
 
-  // Future<void> storeUserData(User userData) async {
-  //   await _initSharedPreferences();
-  //   String username = userData.name;
-  //   String userid = userData.id;
-  //   await _prefs!.setString('userId', userid);
-  //   await _prefs!.setString('userName', username);
-  // }
+  Future<void> storeUserId(String userId) async {
+    await _initSharedPreferences();
+    await _prefs!.setString('userId', userId);
+  }
 
   Future<String?> getUserId() async {
     await _initSharedPreferences();
 
     return _prefs!.getString('userId');
+  }
+
+  Future<void> clearUserId() async {
+    await _initSharedPreferences();
+    if (_prefs!.containsKey('userId')) {
+      await _prefs!.remove('userId');
+    }
+  }
+
+  Future<void> storeUserName(String userName) async {
+    await _initSharedPreferences();
+    await _prefs!.setString('userName', userName);
+  }
+
+  Future<String?> getUserName() async {
+    await _initSharedPreferences();
+
+    return _prefs!.getString('userName');
+  }
+
+  Future<void> clearUserName() async {
+    await _initSharedPreferences();
+    if (_prefs!.containsKey('userName')) {
+      await _prefs!.remove('userName');
+    }
+  }
+
+  Future<void> storeUserMobile(String userMobile) async {
+    await _initSharedPreferences();
+    await _prefs!.setString('userMobile', userMobile);
+  }
+
+  Future<String?> getUserMobile() async {
+    await _initSharedPreferences();
+
+    return _prefs!.getString('userMobile');
+  }
+
+  Future<void> clearUserMobile() async {
+    await _initSharedPreferences();
+    if (_prefs!.containsKey('userMobile')) {
+      await _prefs!.remove('userMobile');
+    }
   }
 }

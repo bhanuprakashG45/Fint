@@ -13,18 +13,16 @@ class LoginViewModel with ChangeNotifier {
   bool _isLoginLoading = false;
   bool get isLoginLoading => _isLoginLoading;
 
-  set setLoginLoading(bool value) {
+  set isLoginLoading(bool value) {
     _isLoginLoading = value;
     notifyListeners();
   }
 
-  Future<void> loginUser(String phoneNumber, BuildContext context) async {
-    setLoginLoading = true;
+  Future<bool> loginUser(String phoneNumber, BuildContext context) async {
+    isLoginLoading = true;
 
     try {
-      await sendDeviceToken(context);
-      final result = await _repository.login(context, phoneNumber);
-      print("Entered into Login vm");
+      final result = await _repository.login(phoneNumber);
 
       if (result.success) {
         _userLoginData = result.data;
@@ -36,12 +34,7 @@ class LoginViewModel with ChangeNotifier {
           type: ToastificationType.success,
           duration: const Duration(seconds: 3),
         );
-
-        Navigator.pushNamed(
-          context,
-          RoutesName.otpscreen,
-          arguments: phoneNumber,
-        );
+        return true;
       } else {
         ToastHelper.show(
           context,
@@ -49,7 +42,7 @@ class LoginViewModel with ChangeNotifier {
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
-        throw Exception("Login Failed :${result.statusCode}");
+        return false;
       }
     } catch (e) {
       if (e is AppException) {
@@ -59,9 +52,11 @@ class LoginViewModel with ChangeNotifier {
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
+        debugPrint(e.userFriendlyMessage);
       }
+      return false;
     } finally {
-      setLoginLoading = false;
+      isLoginLoading = false;
     }
   }
 
@@ -70,7 +65,7 @@ class LoginViewModel with ChangeNotifier {
     debugPrint("$deviceToken");
 
     try {
-      final response = await _repository.sendDeviceToken(context, deviceToken!);
+      final response = await _repository.sendDeviceToken(deviceToken!);
       if (response.message == "Token subscribed to 'all' topic successfully") {
         debugPrint("Device Token Send SuccessFully");
       }

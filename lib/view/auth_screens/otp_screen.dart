@@ -10,7 +10,6 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController otpController = TextEditingController();
-  bool isOtpVerifying = false;
 
   @override
   void dispose() {
@@ -21,13 +20,10 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final otpprovider = Provider.of<OtpViewModel>(context, listen: false);
-    final loginprovider = Provider.of<LoginViewModel>(context, listen: false);
     final size = MediaQuery.of(context).size;
+
     Future<void> checkOTP() async {
-      setState(() {
-        isOtpVerifying = true;
-      });
+      final otpprovider = Provider.of<OtpViewModel>(context, listen: false);
       final phone = widget.phoneNumber;
       final otp = otpController.text;
       if (otp.isEmpty) {
@@ -37,31 +33,22 @@ class _OtpScreenState extends State<OtpScreen> {
           type: ToastificationType.error,
           duration: Duration(seconds: 5),
         );
-        setState(() {
-          isOtpVerifying = false;
-        });
       } else {
-        await otpprovider.verifyOtp(phone, otp, context);
-        otpprovider.isOtpLoading
-            ? setState(() {
-                isOtpVerifying = true;
-              })
-            : setState(() {
-                isOtpVerifying = false;
-              });
+        bool result = await otpprovider.verifyOtp(phone, otp, context);
+        if (result) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RoutesName.homescreen,
+            (route) => false,
+          );
+        }
       }
     }
 
     Future<void> resendOTP() async {
+      final loginprovider = Provider.of<LoginViewModel>(context, listen: false);
       final phone = widget.phoneNumber;
       await loginprovider.loginUser(phone, context);
-      loginprovider.isLoginLoading
-          ? setState(() {
-              isOtpVerifying = true;
-            })
-          : setState(() {
-              isOtpVerifying = false;
-            });
     }
 
     return Scaffold(
@@ -157,45 +144,53 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
 
                         SizedBox(height: 20.h),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20).r,
-                          child: Container(
-                            width: double.infinity,
-                            height: 50.h,
-                            decoration: BoxDecoration(
-                              color: AppColor.appcolor,
-                              borderRadius: BorderRadius.circular(10.0).r,
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                        Consumer<OtpViewModel>(
+                          builder: (context, otpvm, _) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ).r,
+                              child: Container(
+                                width: double.infinity,
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                  color: AppColor.appcolor,
+                                  borderRadius: BorderRadius.circular(10.0).r,
+                                ),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  onPressed: otpvm.isOtpLoading
+                                      ? null
+                                      : () async {
+                                          await checkOTP();
+                                        },
+                                  child: otpvm.isOtpLoading
+                                      ? SizedBox(
+                                          height: 20.0.h,
+                                          width: 20.0.w,
+                                          child: CircularProgressIndicator(
+                                            color: colorScheme.onPrimary,
+                                            strokeWidth: 3.0,
+                                          ),
+                                        )
+                                      : Text(
+                                          'VERIFY',
+                                          style: TextStyle(
+                                            fontSize: 18.sp,
+                                            color: colorScheme.onPrimary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              onPressed: () async {
-                                await checkOTP();
-                              },
-                              child: isOtpVerifying
-                                  ? SizedBox(
-                                      height: 20.0.h,
-                                      width: 20.0.w,
-                                      child: CircularProgressIndicator(
-                                        color: colorScheme.onPrimary,
-                                        strokeWidth: 3.0,
-                                      ),
-                                    )
-                                  : Text(
-                                      'VERIFY',
-                                      style: TextStyle(
-                                        fontSize: 18.sp,
-                                        color: colorScheme.onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                         SizedBox(height: 20.h),
                         Row(
@@ -206,7 +201,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               "Didn't Receive the OTP ? ",
                               style: TextStyle(
                                 color: colorScheme.onSecondary,
-                                fontSize: 16.sp,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

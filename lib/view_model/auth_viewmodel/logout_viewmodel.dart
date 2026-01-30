@@ -1,6 +1,4 @@
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/storage/shared_preference.dart';
 import 'package:fint/model/auth_model/logout_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +19,7 @@ class LogoutViewmodel with ChangeNotifier {
       final url = AppUrls.logoutUrl;
       final accessToken = await prefs.getAccessToken();
       final refreshToken = await prefs.getRefreshToken();
-      final firebaseToken = await prefs.getFirebaseToken();
+      final firebaseToken = await prefs.fetchDeviceToken();
 
       print("AccessTokenq :$accessToken");
       print("RefreshTokenq :$refreshToken");
@@ -76,11 +74,13 @@ class LogoutViewmodel with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      if (e is AppException) {
-        throw e.userFriendlyMessage;
-      } else {
-        throw Exception(e);
-      }
+      ToastHelper.show(
+        context,
+        "Something went wrong",
+        type: ToastificationType.error,
+        duration: const Duration(seconds: 3),
+      );
+      return false;
     }
   }
 }

@@ -48,15 +48,14 @@ dependencies:
   shared_preferences: ^2.5.3
   skeletonizer: ^2.0.1
   url_launcher: ^6.3.1
-  phonepe_payment_sdk: ^3.0.0
-  crypto: ^3.0.6
-  upi_pay: ^1.1.0
   intl: ^0.20.2
   flutter_launcher_icons: ^0.14.4
   firebase_core: ^4.1.1
   firebase_messaging: ^16.0.2
   flutter_local_notifications: ^19.4.2
-
+  razorpay_flutter: ^1.4.0
+  pretty_qr_code: ^3.5.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

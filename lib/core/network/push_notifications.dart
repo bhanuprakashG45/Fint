@@ -2,65 +2,98 @@ import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/network/globalkey.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io';
 
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message: ${message.messageId}');
+  if (kDebugMode) {
+    print('Handling background message: ${message.messageId}');
+  }
 }
 
-FirebaseMessaging messaging = FirebaseMessaging.instance;
-FlutterLocalNotificationsPlugin fltNotification =
+final FirebaseMessaging messaging = FirebaseMessaging.instance;
+final FlutterLocalNotificationsPlugin fltNotification =
     FlutterLocalNotificationsPlugin();
-int id = 0;
-SharedPref _pref = SharedPref();
 
-var androidInit = const AndroidInitializationSettings('@mipmap/ic_launcher');
-var iosInit = const DarwinInitializationSettings(
+final SharedPref _pref = SharedPref();
+int notificationId = 0;
+
+const AndroidInitializationSettings androidInit = AndroidInitializationSettings(
+  '@mipmap/ic_launcher',
+);
+
+const DarwinInitializationSettings iosInit = DarwinInitializationSettings(
   defaultPresentAlert: true,
   defaultPresentBadge: true,
   defaultPresentSound: true,
 );
-var initSetting = InitializationSettings(android: androidInit, iOS: iosInit);
 
-Future<void> _showGeneralNotification(
-  Map<String, dynamic> message,
+const InitializationSettings initSetting = InitializationSettings(
+  android: androidInit,
+  iOS: iosInit,
+);
+
+Future<void> showGeneralNotification(
+  Map<String, dynamic> data,
   RemoteNotification notification,
 ) async {
-  const AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails(
-        'notification_1',
-        'general notification',
-        channelDescription: 'general notification',
-        enableVibration: true,
-        enableLights: true,
-        importance: Importance.high,
-        playSound: true,
-        priority: Priority.high,
-        visibility: NotificationVisibility.public,
-      );
+  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    'general_channel',
+    'General Notifications',
+    channelDescription: 'General app notifications',
+    importance: Importance.high,
+    priority: Priority.high,
+    playSound: true,
+    enableVibration: true,
+    visibility: NotificationVisibility.public,
+  );
+
   const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
     presentAlert: true,
     presentBadge: true,
     presentSound: true,
   );
+
   const NotificationDetails notificationDetails = NotificationDetails(
-    android: androidNotificationDetails,
+    android: androidDetails,
     iOS: iosDetails,
   );
+
   await fltNotification.show(
-    id++,
-    message['title'],
+    notificationId++,
+    notification.title,
     notification.body,
     notificationDetails,
-    payload: 'general',
+    payload: jsonEncode(data),
   );
 }
 
-void notificationTapBackground(NotificationResponse response) {
-  navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => NotificationScreen()),
-  );
+void onNotificationTap(NotificationResponse response) {
+  if (response.payload == null || response.payload!.isEmpty) return;
+
+  final Map<String, dynamic> data =
+      jsonDecode(response.payload!) as Map<String, dynamic>;
+
+  Future.microtask(() => handleNotificationNavigation(data));
+}
+
+void handleNotificationNavigation(Map<String, dynamic> data) {
+  final String? pushType = data['push_type'] ?? data['notificationType'];
+
+  debugPrint("PushType:$pushType");
+
+  if (pushType == 'payment') {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (_) => TransactionHistoryScreen()),
+    );
+  } else if (pushType == 'coupon') {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (_) => CouponsScreen()),
+    );
+  } else {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (_) => NotificationScreen()),
+    );
+  }
 }
 
 Future<void> initMessaging() async {
@@ -68,69 +101,35 @@ Future<void> initMessaging() async {
 
   await fltNotification.initialize(
     initSetting,
-    onDidReceiveNotificationResponse: notificationTapBackground,
-    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+    onDidReceiveNotificationResponse: onNotificationTap,
+    onDidReceiveBackgroundNotificationResponse: onNotificationTap,
   );
 
-  NotificationSettings settings = await FirebaseMessaging.instance
-      .requestPermission(alert: true, badge: true, sound: true);
+  await messaging.requestPermission();
 
-  if (Platform.isIOS) {
-    String? apnsToken;
-    int retries = 0;
-    while (apnsToken == null && retries < 5) {
-      apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      await Future.delayed(const Duration(seconds: 1));
-      retries++;
-    }
-    if (apnsToken == null) return;
+  final String? token = await messaging.getToken();
+  await _pref.storeDeviceToken(token ?? '');
+
+  final RemoteMessage? initialMessage = await FirebaseMessaging.instance
+      .getInitialMessage();
+
+  if (initialMessage != null) {
+    Future.microtask(() {
+      handleNotificationNavigation(initialMessage.data);
+    });
   }
 
-  final token = await FirebaseMessaging.instance.getToken();
-  if (token != null) {
-    await _pref.storeDeviceToken(token);
-  }
-
-  FirebaseMessaging.instance.getInitialMessage().then((message) {
-    if (message != null && message.data['push_type'] == 'general') {
-      navigatorKey.currentState?.push(
-        MaterialPageRoute(builder: (context) => NotificationScreen()),
-      );
-    }
-  });
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    RemoteNotification? notification = message.notification;
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    final notification = message.notification;
     if (notification != null) {
-      _showGeneralNotification(message.data, notification);
+      if (kDebugMode) {
+        print('Foreground notification: ${notification.body}');
+      }
+      showGeneralNotification(message.data, notification);
     }
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    navigatorKey.currentState?.push(
-      MaterialPageRoute(builder: (context) => NotificationScreen()),
-    );
+    handleNotificationNavigation(message.data);
   });
 }
-
-var androidDetails = const AndroidNotificationDetails(
-  '54321',
-  'normal_notification',
-  enableVibration: true,
-  enableLights: true,
-  importance: Importance.high,
-  playSound: true,
-  priority: Priority.high,
-  visibility: NotificationVisibility.private,
-);
-
-const iosDetails = DarwinNotificationDetails(
-  presentAlert: true,
-  presentBadge: true,
-  presentSound: true,
-);
-
-var generalNotificationDetails = NotificationDetails(
-  android: androidDetails,
-  iOS: iosDetails,
-);

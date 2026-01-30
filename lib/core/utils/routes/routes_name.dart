@@ -18,4 +18,5 @@ class RoutesName {
   static const String payToNumberScreen = "payToNumberScreen";
   static const String payToBankscreen = "payToBankscreen";
   static const String payToSelfscreen = "payToSelfscreen";
+  static const String addbankAccountscreen = "addbankAccountscreen";
 }

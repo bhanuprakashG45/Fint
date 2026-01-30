@@ -3,12 +3,9 @@ import 'package:fint/core/constants/exports.dart';
 class CouponRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
-  Future<AllCouponsModel> fetchAllCoupons(
-    BuildContext context,
-    String url,
-  ) async {
+  Future<AllCouponsModel> fetchAllCoupons(String url) async {
     try {
-      final response = await _apiServices.getApiResponse(context, url);
+      final response = await _apiServices.getApiResponse(url);
       print("${response}");
 
       Map<String, dynamic> jsonMap;
@@ -29,7 +26,7 @@ class CouponRepository {
 
   Future<CouponModel> fetchCouponById(BuildContext context, String url) async {
     try {
-      final response = await _apiServices.getApiResponse(context, url);
+      final response = await _apiServices.getApiResponse(url);
 
       print("${response}");
 

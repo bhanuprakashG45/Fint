@@ -61,11 +61,11 @@ class CouponsViewmodel with ChangeNotifier {
   AllCouponsModel get allCoupons => _allCoupons;
 
   Future<void> fetchCoupons(BuildContext context) async {
-    _isCouponsLoading = true;
+    isCouponsLoading = true;
     try {
       final url = AppUrls.getAllCouponsUrl;
 
-      final response = await _couponRepository.fetchAllCoupons(context, url);
+      final response = await _couponRepository.fetchAllCoupons(url);
 
       if (response.success == true) {
         _allCoupons = response;

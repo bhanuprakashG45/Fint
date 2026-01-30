@@ -4,7 +4,6 @@ class InsuranceRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
   Future<PetInsuranceModel> applyPetInsurance(
-    context,
     String url,
     String name,
     String email,
@@ -33,7 +32,7 @@ class InsuranceRepository {
         "petAddress": petAddress,
         "petNoseImg": null,
       };
-      final response = await _apiServices.postApiResponse(context, url, body);
+      final response = await _apiServices.postApiResponse(url, body);
 
       Map<String, dynamic> jsonMap;
       if (response is Map<String, dynamic>) {

@@ -57,7 +57,7 @@ class ReedemCoupon {
   factory ReedemCoupon.fromJson(Map<String, dynamic> json) => ReedemCoupon(
     id: json["_id"] ?? '',
     couponTitle: json["couponTitle"] ?? '',
-    logo: json["logo"],
+    logo: json["img"],
     offerTitle: json["offerTitle"] ?? '',
     offerDescription: json["offerDescription"] ?? '',
     termsAndConditions: json["termsAndConditions"] ?? '',

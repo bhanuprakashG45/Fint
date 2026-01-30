@@ -10,7 +10,7 @@ class SignupViewmodel with ChangeNotifier {
   bool _isSignupLoading = false;
   bool get isSignupLoading => _isSignupLoading;
 
-  void setsignupLoading(bool value) {
+  set isSignupLoading(bool value) {
     _isSignupLoading = value;
     notifyListeners();
   }
@@ -23,11 +23,10 @@ class SignupViewmodel with ChangeNotifier {
     String pinCode,
     BuildContext context,
   ) async {
-    setsignupLoading(true);
+    isSignupLoading = true;
     print("Entered into SignUp Viewmodel");
     try {
       final result = await _repository.signUp(
-        contex: context,
         name: name,
         phone: phoneNumber,
         email: email,
@@ -60,21 +59,13 @@ class SignupViewmodel with ChangeNotifier {
       if (e is AppException) {
         ToastHelper.show(
           context,
-          e.message ?? 'Sign Up Failed',
-          type: ToastificationType.error,
-          duration: const Duration(seconds: 3),
-        );
-      } else {
-        ToastHelper.show(
-          context,
-          "An unexpected error occurred.",
+          e.userFriendlyMessage,
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
       }
     } finally {
-      setsignupLoading(false);
-      notifyListeners();
+      isSignupLoading = false;
     }
   }
 }

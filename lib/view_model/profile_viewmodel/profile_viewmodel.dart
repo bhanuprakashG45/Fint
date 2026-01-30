@@ -12,8 +12,16 @@ class ProfileViewmodel with ChangeNotifier {
   bool _isFetchingProfile = false;
   bool get isFetchingProfile => _isFetchingProfile;
 
-  void setFetchingProfile(bool value) {
+  set isFetchingProfile(bool value) {
     _isFetchingProfile = value;
+    notifyListeners();
+  }
+
+  bool _isProfileUpdating = false;
+  bool get isProfileUpdating => _isProfileUpdating;
+
+  set isProfileUpdating(bool value) {
+    _isProfileUpdating = value;
     notifyListeners();
   }
 
@@ -32,11 +40,11 @@ class ProfileViewmodel with ChangeNotifier {
   UserProfile get profileData => _profileData;
 
   Future<void> fetchProfileDetails(context) async {
-    setFetchingProfile(true);
+    isFetchingProfile = true;
 
     try {
       final url = AppUrls.profileUrl;
-      final result = await _repository.fetchProfile(context, url);
+      final result = await _repository.fetchProfile(url);
       if (result.success == true) {
         final responseData = result.data.user;
         _profileData = responseData;
@@ -56,8 +64,7 @@ class ProfileViewmodel with ChangeNotifier {
         );
       }
     } finally {
-      setFetchingProfile(false);
-      notifyListeners();
+      isFetchingProfile = false;
     }
   }
 
@@ -67,6 +74,7 @@ class ProfileViewmodel with ChangeNotifier {
     String? pinCode,
     bool? beADonor,
   }) async {
+    isProfileUpdating = true;
     try {
       final url = AppUrls.updateProfileUrl;
       final Map<String, dynamic> data = {};
@@ -76,13 +84,11 @@ class ProfileViewmodel with ChangeNotifier {
       if (beADonor != null) data['beADonor'] = beADonor;
       print("Entered into update vm");
 
-      final result = await _repository.updateprofileData(context, url, data);
+      final result = await _repository.updateprofileData(url, data);
 
       print("Updated Data :${result.data}");
 
       if (result.success == true) {
-        // _profileData = result.data.user;
-
         notifyListeners();
         ToastHelper.show(
           context,
@@ -109,6 +115,8 @@ class ProfileViewmodel with ChangeNotifier {
           type: ToastificationType.error,
         );
       }
+    } finally {
+      isProfileUpdating = false;
     }
   }
 }

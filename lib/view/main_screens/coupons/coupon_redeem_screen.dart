@@ -1,4 +1,7 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/main_screens/coupons/coupon_clipper.dart';
+import 'package:intl/intl.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class CouponRedeemScreen extends StatefulWidget {
   final String couponId;
@@ -46,123 +49,152 @@ class _CouponRedeemScreenState extends State<CouponRedeemScreen> {
               enabled: couponprovider.isReedemCouponLoading,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0).r,
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    right: 10,
+                    left: 10,
+                    bottom: 10,
+                  ).r,
                   child: Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(10).r,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20).r,
+                      PhysicalModel(
+                        color: Colors.transparent,
+                        elevation: 6,
+                        shadowColor: Colors.black54,
+                        borderRadius: BorderRadius.circular(20).r,
+                        child: ClipPath(
+                          clipper: CouponClipper(),
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              top: 12,
+                              bottom: 12,
+                              right: 12,
+                              left: 20,
+                            ).r,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20).r,
 
-                          color: colorscheme.onPrimary,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+                              color: colorscheme.onPrimary,
+                            ),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                reedemcoupon.logo == null
-                                    ? Container(
-                                        height: 30.h,
-                                        width: 30.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade300,
-                                          borderRadius: BorderRadius.circular(
-                                            5.r,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    reedemcoupon.logo == null
+                                        ? Container(
+                                            height: 100.h,
+                                            width: 100.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade300,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.r),
+                                            ),
+                                            child: Icon(
+                                              Icons.image_not_supported,
+                                              size: 90.sp,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          )
+                                        : ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ).r,
+                                            child: Container(
+                                              height: 100.0.h,
+                                              width: 100.0.w,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade300,
+                                                borderRadius:
+                                                    BorderRadius.circular(12.r),
+                                              ),
+                                              child: Image.network(
+                                                reedemcoupon.logo,
+                                                fit: BoxFit.cover,
+
+                                                errorBuilder:
+                                                    (
+                                                      context,
+                                                      error,
+                                                      stackTrace,
+                                                    ) => Icon(
+                                                      Icons.image_not_supported,
+                                                      size: 90.sp,
+                                                      color:
+                                                          Colors.grey.shade600,
+                                                    ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        child: Icon(
-                                          Icons.image_not_supported,
-                                          size: 20.sp,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                      )
-                                    : Image.network(
-                                        reedemcoupon.logo,
-                                        height: 100.0.h,
-                                        width: 100.0.w,
+                                    SizedBox(width: 20.0.w),
 
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                Container(
-                                                  height: 100.0.h,
-                                                  width: 100.0.w,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey.shade300,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          5.r,
-                                                        ),
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.image_not_supported,
-                                                    size: 20.sp,
-                                                    color: Colors.grey.shade600,
-                                                  ),
-                                                ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            reedemcoupon.couponTitle
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                              fontSize: 22.0.sp,
+                                              color: colorscheme.tertiary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.0.h),
+                                          Text(
+                                            reedemcoupon.offerTitle,
+                                            style: TextStyle(
+                                              fontSize: 18.0.sp,
+                                              color: colorscheme.secondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.0.h),
+                                          Text(
+                                            reedemcoupon.offerDescription,
+                                            style: TextStyle(
+                                              fontSize: 16.0.sp,
+                                              color: colorscheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                SizedBox(width: 20.0.w),
-
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        reedemcoupon.couponTitle,
-                                        style: TextStyle(
-                                          fontSize: 22.0.sp,
-                                          color: colorscheme.tertiary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.0.h),
-                                      Text(
-                                        reedemcoupon.offerTitle,
-                                        style: TextStyle(
-                                          fontSize: 18.0.sp,
-                                          color: colorscheme.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.0.h),
-                                      Text(
-                                        reedemcoupon.offerDescription,
-                                        style: TextStyle(
-                                          fontSize: 16.0.sp,
-                                          color: colorscheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
+
+                                // SizedBox(height: 20.h),
+
+                                // Column(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   children: [
+                                //     Text(
+                                //       reedemcoupon.offerDetails,
+                                //       style: TextStyle(
+                                //         fontSize: 16.0.sp,
+                                //         color: colorscheme.onSecondary,
+                                //         fontWeight: FontWeight.bold,
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             ),
-
-                            SizedBox(height: 20.h),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  reedemcoupon.offerDetails,
-                                  style: TextStyle(
-                                    fontSize: 16.0.sp,
-                                    color: colorscheme.onSecondary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 20.0.h),
                       Container(
                         padding: EdgeInsets.all(10).r,
                         decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade500,
+                            width: 0.5,
+                          ),
                           borderRadius: BorderRadius.circular(20).r,
 
                           color: colorscheme.onPrimary,
@@ -179,7 +211,7 @@ class _CouponRedeemScreenState extends State<CouponRedeemScreen> {
                                   ),
                                   SizedBox(width: 15.0.w),
                                   Text(
-                                    "Expires on : ${reedemcoupon.expiryDate.toLocal().toString().split(' ')[0]}",
+                                    "Expires on : ${DateFormat('dd MMM yyyy').format(reedemcoupon.expiryDate)}",
                                     style: TextStyle(
                                       fontSize: 18.0.sp,
                                       color: colorscheme.tertiary,
@@ -191,88 +223,100 @@ class _CouponRedeemScreenState extends State<CouponRedeemScreen> {
                             ),
                             SizedBox(height: 5.h),
 
-                            ExpansionTile(
-                              leading: Padding(
-                                padding: EdgeInsets.only(top: 3.0.h),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  color: colorscheme.tertiary,
-                                ),
-                              ),
-                              title: Text(
-                                "Offer Details",
-                                style: TextStyle(
-                                  fontSize: 18.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorscheme.tertiary,
-                                ),
-                              ),
-
-                              collapsedIconColor: colorscheme.tertiary,
-                              iconColor: colorscheme.tertiary,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 30.0.w,
-                                    vertical: 8.0.h,
+                            Theme(
+                              data: Theme.of(
+                                context,
+                              ).copyWith(dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                leading: Padding(
+                                  padding: EdgeInsets.only(top: 3.0.h),
+                                  child: Icon(
+                                    Icons.info_outline,
+                                    color: colorscheme.tertiary,
                                   ),
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      reedemcoupon.offerDetails,
-                                      style: TextStyle(
-                                        fontSize: 16.sp,
-                                        color: colorscheme.onSecondary,
-                                        fontWeight: FontWeight.bold,
+                                ),
+                                title: Text(
+                                  "Offer Details",
+                                  style: TextStyle(
+                                    fontSize: 18.0.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorscheme.tertiary,
+                                  ),
+                                ),
+
+                                collapsedIconColor: colorscheme.tertiary,
+                                iconColor: colorscheme.tertiary,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 30.0.w,
+                                      vertical: 8.0.h,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Text(
+                                        reedemcoupon.offerDetails,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          color: colorscheme.onSecondary,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
 
-                            ExpansionTile(
-                              leading: Padding(
-                                padding: EdgeInsets.only(top: 4.0.h),
-                                child: FaIcon(
-                                  FontAwesomeIcons.fileLines,
-                                  color: colorscheme.tertiary,
-                                ),
-                              ),
-                              title: Text(
-                                reedemcoupon.aboutCompany.isNotEmpty
-                                    ? "About Company"
-                                    : "Terms & Conditions",
-                                style: TextStyle(
-                                  fontSize: 18.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorscheme.tertiary,
-                                ),
-                              ),
-
-                              collapsedIconColor: colorscheme.tertiary,
-                              iconColor: colorscheme.tertiary,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 30.0.w,
-                                    vertical: 8.0.h,
+                            Theme(
+                              data: Theme.of(
+                                context,
+                              ).copyWith(dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                leading: Padding(
+                                  padding: EdgeInsets.only(top: 4.0.h),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.fileLines,
+                                    color: colorscheme.tertiary,
                                   ),
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      reedemcoupon.aboutCompany.isNotEmpty
-                                          ? reedemcoupon.aboutCompany
-                                          : reedemcoupon.termsAndConditions,
-                                      style: TextStyle(
-                                        fontSize: 16.sp,
-                                        color: colorscheme.onSecondary,
-                                        fontWeight: FontWeight.bold,
+                                ),
+                                title: Text(
+                                  reedemcoupon.aboutCompany.isNotEmpty
+                                      ? "About Company"
+                                      : "Terms & Conditions",
+                                  style: TextStyle(
+                                    fontSize: 18.0.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorscheme.tertiary,
+                                  ),
+                                ),
+
+                                collapsedIconColor: colorscheme.tertiary,
+                                iconColor: colorscheme.tertiary,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 30.0.w,
+                                      vertical: 8.0.h,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Text(
+                                        reedemcoupon.aboutCompany.isNotEmpty
+                                            ? reedemcoupon.aboutCompany
+                                            : reedemcoupon.termsAndConditions,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          color: colorscheme.onSecondary,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -287,16 +331,40 @@ class _CouponRedeemScreenState extends State<CouponRedeemScreen> {
                               borderRadius: BorderRadius.circular(15).r,
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
+                          onPressed: () async {
+                            final SharedPref _pref = SharedPref();
+                            final userId = await _pref.getUserId();
+                            final Map<String, dynamic> qrMap = {
+                              "couponId": reedemcoupon.id,
+                              "userId": userId,
+                            };
+
+                            final String qrData = jsonEncode(qrMap);
+                            debugPrint("QRData : $qrData");
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (_) => _qrBottomSheet(context, qrData),
+                            );
                           },
-                          child: Text(
-                            "CLAIM & GENERATE QR CODE",
-                            style: TextStyle(
-                              color: colorscheme.onPrimary,
-                              fontSize: 20.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.qr_code,
+                                color: colorscheme.primaryContainer,
+                              ),
+                              SizedBox(width: 10.w),
+                              Text(
+                                "Claim & Generate QR",
+                                style: TextStyle(
+                                  color: colorscheme.onPrimary,
+                                  fontSize: 20.0.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -306,6 +374,37 @@ class _CouponRedeemScreenState extends State<CouponRedeemScreen> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _qrBottomSheet(BuildContext context, dynamic data) {
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Scan to Approve Coupon",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            ),
+            PrettyQrView.data(
+              data: data,
+              decoration: const PrettyQrDecoration(
+                image: PrettyQrDecorationImage(
+                  image: AssetImage('assets/images/appicon_final.png'),
+                ),
+                quietZone: PrettyQrQuietZone.standart,
+              ),
+            ),
+          ],
         ),
       ),
     );

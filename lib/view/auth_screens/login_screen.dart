@@ -9,7 +9,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phonecontroller = TextEditingController();
-  bool isLoginLoading = false;
 
   Future<void> launchAppUrl(String url) async {
     final uri = Uri.parse(url);
@@ -21,34 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    Future<void> checkLogin() async {
-      setState(() {
-        isLoginLoading = true;
-      });
-      final loginprovider = Provider.of<LoginViewModel>(context, listen: false);
-      final phone = phonecontroller.text.trim();
-      if (phone.isEmpty) {
-        ToastHelper.show(
-          context,
-          'Phone Number is required',
-          type: ToastificationType.warning,
-          duration: Duration(seconds: 5),
-        );
-        setState(() {
-          isLoginLoading = false;
-        });
-      } else {
-        await loginprovider.loginUser(phone, context);
-        loginprovider.isLoginLoading
-            ? setState(() {
-                isLoginLoading = true;
-              })
-            : setState(() {
-                isLoginLoading = false;
-              });
-      }
-    }
 
     return Scaffold(
       body: SafeArea(
@@ -156,45 +127,71 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     SizedBox(height: 30.0.h),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20).r,
-                      child: Container(
-                        width: double.infinity,
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                          color: AppColor.appcolor,
+                    Consumer<LoginViewModel>(
+                      builder: (context, loginvm, _) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20).r,
+                          child: Container(
+                            width: double.infinity,
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                              color: AppColor.appcolor,
 
-                          borderRadius: BorderRadius.circular(10.0).r,
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0).r,
                             ),
-                          ),
-                          onPressed: () async {
-                            await checkLogin();
-                          },
-                          child: isLoginLoading
-                              ? SizedBox(
-                                  height: 20.0.h,
-                                  width: 20.0.w,
-                                  child: CircularProgressIndicator(
-                                    color: colorScheme.onPrimary,
-                                    strokeWidth: 3.0,
-                                  ),
-                                )
-                              : Text(
-                                  'VERIFY',
-                                  style: TextStyle(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0).r,
                                 ),
-                        ),
-                      ),
+                              ),
+                              onPressed: loginvm.isLoginLoading
+                                  ? null
+                                  : () async {
+                                      final phone = phonecontroller.text.trim();
+                                      if (phone.isEmpty) {
+                                        ToastHelper.show(
+                                          context,
+                                          'Phone Number is required',
+                                          type: ToastificationType.warning,
+                                          duration: Duration(seconds: 5),
+                                        );
+                                      } else {
+                                        bool result = await loginvm.loginUser(
+                                          phone,
+                                          context,
+                                        );
+                                        result
+                                            ? Navigator.pushNamed(
+                                                context,
+                                                RoutesName.otpscreen,
+                                                arguments: phone,
+                                              )
+                                            : null;
+                                      }
+                                    },
+                              child: loginvm.isLoginLoading
+                                  ? SizedBox(
+                                      height: 20.0.h,
+                                      width: 20.0.w,
+                                      child: CircularProgressIndicator(
+                                        color: colorScheme.onPrimary,
+                                        strokeWidth: 3.0,
+                                      ),
+                                    )
+                                  : Text(
+                                      'VERIFY',
+                                      style: TextStyle(
+                                        color: colorScheme.onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 15.h),
                     Column(
@@ -210,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               text:
                                   "By proceeding , you are agreeing to Fint's ",
                               style: TextStyle(
-                                fontSize: 16.0.sp,
+                                fontSize: 15.0.sp,
                                 color: colorScheme.onSecondary,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -232,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 TextSpan(
                                   text: ' and ',
                                   style: TextStyle(
-                                    fontSize: 16.0.sp,
+                                    fontSize: 15.0.sp,
                                     color: colorScheme.onSecondary,
                                   ),
                                 ),

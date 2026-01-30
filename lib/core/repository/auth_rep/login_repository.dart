@@ -4,13 +4,12 @@ import 'package:fint/model/auth_model/devicetoken_model.dart';
 class LoginRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
-  Future<LoginModel> login(BuildContext context, String phone) async {
+  Future<LoginModel> login(String phone) async {
     print("Entered into Login repo");
     try {
       final body = {"phoneNumber": phone};
 
       final response = await _apiServices.postApiResponse(
-        context,
         AppUrls.loginUrl,
         body,
       );
@@ -32,15 +31,11 @@ class LoginRepository {
     }
   }
 
-  Future<DeviceTokenModel> sendDeviceToken(
-    BuildContext context,
-    String deviceToken,
-  ) async {
+  Future<DeviceTokenModel> sendDeviceToken(String deviceToken) async {
     try {
       final body = {"token": deviceToken};
 
       final response = await _apiServices.postApiResponse(
-        context,
         AppUrls.deviceTokenUrl,
         body,
       );

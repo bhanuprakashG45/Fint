@@ -1,4 +1,5 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/main_screens/coupons/coupon_clipper.dart';
 import 'package:intl/intl.dart';
 
 class CouponsAnalyticsScreen extends StatefulWidget {
@@ -245,75 +246,108 @@ class _CouponsAnalyticsScreenState extends State<CouponsAnalyticsScreen>
         final c = filtered[index];
         return Stack(
           children: [
-            Container(
-              padding: EdgeInsets.all(10).r,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5.r),
-                    child: c.logo == null
-                        ? Icon(Icons.image_not_supported, size: 30.h)
-                        : Image.network(
-                            c.logo!,
-                            height: 30.h,
-                            width: 30.h,
-                            fit: BoxFit.fill,
-                          ),
+            PhysicalModel(
+              color: Colors.transparent,
+              elevation: 6,
+              shadowColor: Colors.black26,
+              child: ClipPath(
+                clipper: CouponClipper(),
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 10,
+                    bottom: 10,
+                  ).r,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r),
                   ),
-                  SizedBox(width: 15.w),
-                  Column(
-                    children: List.generate(
-                      10,
-                      (index) => Container(
-                        width: 1.5,
-                        height: 3,
-                        margin: EdgeInsets.symmetric(vertical: 2).r,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          c.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.sp,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: colorscheme.onSecondary,
+                          borderRadius: BorderRadius.circular(10).r,
+                          border: Border.all(
+                            color: colorscheme.onSecondary,
+                            width: 0.1,
                           ),
                         ),
-                        SizedBox(height: 4.h),
-                        Text(c.offerTitle, style: TextStyle(fontSize: 14.sp)),
-                        SizedBox(height: 5.h),
-                        type == "active"
-                            ? Text(
-                                "Valid until: ${DateFormat("dd MMM yyyy").format(c.expiryDate)}",
-                                style: TextStyle(color: Colors.green),
-                              )
-                            : type == "expired"
-                            ? SizedBox()
-                            : Text(
-                                "Status: ${c.status.toUpperCase()}",
-                                style: TextStyle(color: iconColor),
+                        child: c.logo == null
+                            ? Icon(Icons.image_not_supported, size: 50.h)
+                            : Image.network(
+                                c.logo!,
+                                height: 50.h,
+                                width: 50.h,
+                                fit: BoxFit.cover,
                               ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 15.w),
+                      Column(
+                        children: List.generate(
+                          10,
+                          (index) => Container(
+                            width: 1.5,
+                            height: 3,
+                            margin: EdgeInsets.symmetric(vertical: 2).r,
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              c.title.toUpperCase(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.sp,
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              c.offerTitle,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                color: colorscheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 5.h),
+                            type == "active"
+                                ? Text(
+                                    "Valid until:   ${DateFormat("dd MMM yyyy").format(c.expiryDate)}",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : type == "expired"
+                                ? SizedBox()
+                                : Text(
+                                    "Status: ${c.status.toUpperCase()}",
+                                    style: TextStyle(
+                                      color: iconColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
             if (type == "expired")
               Positioned(
                 top: 10,
-                right: 10,
+                right: 20,
                 child: Image.asset(
                   "assets/icons/expired.png",
                   height: 60.h,

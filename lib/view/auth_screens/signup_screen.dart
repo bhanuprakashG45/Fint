@@ -12,7 +12,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final phoneController = TextEditingController();
   final bloodGroupController = TextEditingController();
   final pincodeController = TextEditingController();
-  bool isSignUpLoading = false;
 
   final List<String> bloodGroups = [
     'A+',
@@ -29,27 +28,17 @@ class _SignupScreenState extends State<SignupScreen> {
   void dispose() {
     nameController.dispose();
     phoneController.dispose();
-    // emailController.dispose();
     bloodGroupController.dispose();
     pincodeController.dispose();
     super.dispose();
   }
 
   Future<void> _userSignUp() async {
-    setState(() {
-      isSignUpLoading = true;
-    });
     final signupprovider = Provider.of<SignupViewmodel>(context, listen: false);
     final name = nameController.text.trim();
-    // final email = emailController.text.trim();
     final phone = phoneController.text.trim();
     final blood = selectedBloodGroup;
     final pincode = pincodeController.text.trim();
-
-    debugPrint("Name : $name");
-    debugPrint("phone : $phone");
-    debugPrint("Blood : $blood");
-    debugPrint("Pincode : $pincode");
 
     if (name.isEmpty || phone.isEmpty || blood == null || pincode.isEmpty) {
       ToastHelper.show(
@@ -58,18 +47,8 @@ class _SignupScreenState extends State<SignupScreen> {
         type: ToastificationType.info,
         duration: Duration(seconds: 5),
       );
-      setState(() {
-        isSignUpLoading = false;
-      });
     } else {
       await signupprovider.signup(name, phone, '', blood, pincode, context);
-      signupprovider.isSignupLoading
-          ? setState(() {
-              isSignUpLoading = true;
-            })
-          : setState(() {
-              isSignUpLoading = false;
-            });
     }
   }
 
@@ -160,12 +139,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             LengthLimitingTextInputFormatter(10),
                           ],
                         ),
-                        // SizedBox(height: 10.h),
-                        // _buildLabel(context, "EMAIL ID"),
-                        // _buildInputField(
-                        //   controller: emailController,
-                        //   keyboardType: TextInputType.emailAddress,
-                        // ),
                         SizedBox(height: 10.h),
                         _buildLabel(context, "BLOOD GROUP"),
                         Padding(
@@ -231,45 +204,51 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     SizedBox(height: 20.0.h),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20).r,
-                      child: Container(
-                        width: double.infinity,
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                          color: AppColor.appcolor,
+                    Consumer<SignupViewmodel>(
+                      builder: (context, signupvm, _) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20).r,
+                          child: Container(
+                            width: double.infinity,
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                              color: AppColor.appcolor,
 
-                          borderRadius: BorderRadius.circular(10.0).r,
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0).r,
                             ),
-                          ),
-                          onPressed: () {
-                            _userSignUp();
-                          },
-                          child: isSignUpLoading
-                              ? SizedBox(
-                                  height: 20.0.h,
-                                  width: 20.0.w,
-                                  child: CircularProgressIndicator(
-                                    color: colorScheme.onPrimary,
-                                    strokeWidth: 3.0,
-                                  ),
-                                )
-                              : Text(
-                                  'SIGN UP',
-                                  style: TextStyle(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0).r,
                                 ),
-                        ),
-                      ),
+                              ),
+                              onPressed: signupvm.isSignupLoading
+                                  ? null
+                                  : () {
+                                      _userSignUp();
+                                    },
+                              child: signupvm.isSignupLoading
+                                  ? SizedBox(
+                                      height: 20.0.h,
+                                      width: 20.0.w,
+                                      child: CircularProgressIndicator(
+                                        color: colorScheme.onPrimary,
+                                        strokeWidth: 3.0,
+                                      ),
+                                    )
+                                  : Text(
+                                      'SIGN UP',
+                                      style: TextStyle(
+                                        color: colorScheme.onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 15.h),
                   ],

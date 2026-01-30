@@ -1,8 +1,5 @@
 import 'package:fint/core/repository/auth_rep/otp_repository.dart';
 import 'package:fint/core/constants/exports.dart';
-import 'package:fint/core/exceptions/app_exceptions.dart';
-import 'package:fint/core/storage/shared_preference.dart';
-import 'package:fint/model/auth_model/otp_model.dart';
 
 class OtpViewModel with ChangeNotifier {
   final OtpRepository _repository = OtpRepository();
@@ -14,35 +11,48 @@ class OtpViewModel with ChangeNotifier {
   bool _isOtpLoading = false;
   bool get isOtpLoading => _isOtpLoading;
 
-  void setOtpLoading(bool value) {
+  set isOtpLoading(bool value) {
     _isOtpLoading = value;
     notifyListeners();
   }
 
-  Future<void> verifyOtp(
+  Future<bool> verifyOtp(
     String phoneNumber,
     String otp,
     BuildContext context,
   ) async {
-    setOtpLoading(true);
+    isOtpLoading = true;
 
     try {
-      final result = await _repository.verifyOtp(context, phoneNumber, otp);
+      final deviceToken = await pref.fetchDeviceToken();
+      debugPrint("Device Token From OTP : $deviceToken");
+      final result = await _repository.verifyOtp(
+        phoneNumber,
+        otp,
+        deviceToken ?? '',
+      );
 
       if (result.success) {
+        await pref.clearAccessToken();
+        await pref.clearRefreshToken();
+        await pref.clearUserId();
+        await pref.clearUserName();
+        await pref.clearUserMobile();
         _otpData = result.data;
         final accesstoken = otpData?.accessToken;
         final refreshtoken = otpData?.refreshToken;
         final firebaseToken = otpData?.firebaseToken;
-        await pref.clearAccessToken();
-        await pref.clearRefreshToken();
-        await pref.clearFirebaseToken();
+        await pref.storeUserId(otpData?.user?.id ?? '');
+        await pref.storeUserName(otpData?.user?.name ?? '');
+        await pref.storeUserMobile(otpData?.user?.phoneNumber ?? '');
         await pref.storeAccessToken(accesstoken);
         await pref.storeRefreshToken(refreshtoken);
-        await pref.storeFirebaseToken(firebaseToken);
+        await pref.storeDeviceToken(firebaseToken ?? '');
+
         print("Access:$accesstoken");
         print("Refresh:$refreshtoken");
         print("FIrebase:$firebaseToken");
+        // await context.read<BankaccountsViewmodel>().getAllBankAccounts(context);
 
         notifyListeners();
 
@@ -54,24 +64,21 @@ class OtpViewModel with ChangeNotifier {
           type: ToastificationType.success,
           duration: const Duration(seconds: 3),
         );
-
-        Navigator.pushNamed(context, RoutesName.homescreen);
+        return true;
       } else {
         ToastHelper.show(
           context,
-          result.message.isNotEmpty
-              ? result.message
-              : "Invalid Otp",
+          result.message.isNotEmpty ? result.message : "Invalid Otp",
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
-        throw Exception("Otp Verified Failed :${result.statusCode}");
+        return false;
       }
     } catch (e) {
       if (e is AppException) {
         ToastHelper.show(
           context,
-          e.message?? '',
+          e.message ?? '',
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
@@ -83,9 +90,9 @@ class OtpViewModel with ChangeNotifier {
           duration: const Duration(seconds: 3),
         );
       }
+      return false;
     } finally {
-      setOtpLoading(false);
-      notifyListeners();
+      isOtpLoading = false;
     }
   }
 }

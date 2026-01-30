@@ -2,7 +2,11 @@ import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/constants/route_tracker.dart';
 import 'package:fint/core/network/globalkey.dart';
 import 'package:fint/core/network/push_notifications.dart';
+import 'package:fint/view_model/advertisement_vm/advertisement_viewmodel.dart';
+import 'package:fint/view_model/bankaccounts_vm/bankaccounts_viewmodel.dart';
+import 'package:fint/view_model/expense_tracker_vm/expensetracker_viewmodel.dart';
 import 'package:fint/view_model/home_viewmodel/home_viewmodel.dart';
+import 'package:fint/view_model/razorpay_vm/razorpay_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -37,17 +41,19 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_) => PetInsuranceViewmodel()),
             ChangeNotifierProvider(create: (_) => CouponsViewmodel()),
             ChangeNotifierProvider(create: (_) => HomeViewmodel()),
+            ChangeNotifierProvider(create: (_) => BankaccountsViewmodel()),
+            ChangeNotifierProvider(create: (_) => RazorpayViewmodel()),
+            ChangeNotifierProvider(create: (_) => ExpensetrackerViewmodel()),
+            ChangeNotifierProvider(create: (_) => AdvertisementViewmodel()),
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,
             navigatorObservers: [RouteTracker()],
             debugShowCheckedModeBanner: false,
             title: 'FINT',
-
             theme: materialTheme.light(),
             darkTheme: materialTheme.light(),
             themeMode: ThemeMode.light,
-
             initialRoute: RoutesName.splashscreen,
             onGenerateRoute: Routes.generateRoute,
           ),

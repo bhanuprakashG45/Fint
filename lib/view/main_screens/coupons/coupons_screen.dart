@@ -1,4 +1,6 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/view/main_screens/coupons/coupon_clipper.dart';
+import 'package:intl/intl.dart';
 
 class CouponsScreen extends StatefulWidget {
   const CouponsScreen({super.key});
@@ -64,7 +66,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
                   decoration: BoxDecoration(
                     color: colorScheme.surfaceTint,
                     borderRadius: BorderRadius.circular(15).r,
-                    border: Border.all(width: 1, color: colorScheme.onPrimary),
+                    border: Border.all(width: 0.3, color: colorScheme.tertiary),
                   ),
                   child: Row(
                     children: [
@@ -149,122 +151,138 @@ class _CouponsScreenState extends State<CouponsScreen> {
             final coupon = filtered[index];
             return Stack(
               children: [
-                ClipPath(
-                  clipper: _CouponClipper(),
-                  child: Container(
-                    padding: EdgeInsets.all(10).r,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        if (coupon.status.toLowerCase() == 'active') {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.couponredeempage,
-                            arguments: coupon.id,
-                          );
-                        }
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          coupon.logo == null
-                              ? Container(
-                                  height: 30.h,
-                                  width: 30.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(5.r),
+                PhysicalModel(
+                  color: Colors.transparent,
+                  elevation: 6,
+                  shadowColor: Colors.black26,
+                  child: ClipPath(
+                    clipper: CouponClipper(),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        top: 10,
+                        right: 10,
+                        bottom: 10,
+                      ).r,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          if (coupon.status.toLowerCase() == 'active') {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.couponredeempage,
+                              arguments: coupon.id,
+                            );
+                          }
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            coupon.logo == null
+                                ? Container(
+                                    height: 100.h,
+                                    width: 100.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                    ),
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      size: 90.sp,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(12).r,
+                                    child: Image.network(
+                                      coupon.logo!,
+                                      height: 100.h,
+                                      width: 100.h,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  child: Icon(
-                                    Icons.image_not_supported,
-                                    size: 20.sp,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(5).r,
-                                  child: Image.network(
-                                    coupon.logo!,
-                                    height: 30.h,
-                                    width: 30.h,
-                                    fit: BoxFit.fill,
-                                  ),
+
+                            SizedBox(width: 15.w),
+
+                            Column(
+                              children: List.generate(
+                                14,
+                                (index) => Container(
+                                  width: 1.5,
+                                  height: 3,
+                                  margin: EdgeInsets.symmetric(vertical: 2).r,
+                                  color: Colors.orange,
                                 ),
-
-                          SizedBox(width: 15.w),
-
-                          Column(
-                            children: List.generate(
-                              10,
-                              (index) => Container(
-                                width: 1.5,
-                                height: 3,
-                                margin: EdgeInsets.symmetric(vertical: 2).r,
-                                color: Colors.orange,
                               ),
                             ),
-                          ),
 
-                          SizedBox(width: 10.w),
+                            SizedBox(width: 10.w),
 
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  coupon.title,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.sp,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    coupon.title.toUpperCase(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.sp,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  coupon.offerTitle,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15.sp,
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    coupon.offerTitle.toUpperCase(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                      color: colorscheme.secondary,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  coupon.offerDescription,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: Colors.grey.shade700,
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    coupon.offerDescription,
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade700,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 5.h),
-                                coupon.status.toLowerCase() == 'active'
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Valid until:",
-                                            style: TextStyle(
-                                              fontSize: 13.sp,
-                                              color: Colors.grey,
+                                  SizedBox(height: 5.h),
+                                  coupon.status.toLowerCase() == 'active'
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Valid until:",
+                                              style: TextStyle(
+                                                fontSize: 13.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            "${coupon.expiryDate.day}/${coupon.expiryDate.month}/${coupon.expiryDate.year}",
-                                            style: TextStyle(
-                                              fontSize: 13.sp,
-                                              color: Colors.red.shade400,
-                                              fontWeight: FontWeight.bold,
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              DateFormat(
+                                                'dd MMM yyyy',
+                                              ).format(coupon.expiryDate),
+                                              style: TextStyle(
+                                                fontSize: 13.sp,
+                                                color: Colors.green.shade400,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    : SizedBox(height: 5.h),
-                              ],
+                                          ],
+                                        )
+                                      : SizedBox(height: 5.h),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -289,32 +307,4 @@ class _CouponsScreenState extends State<CouponsScreen> {
       },
     );
   }
-}
-
-class _CouponClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    const double cutRadius = 10;
-    final path = Path();
-    path.moveTo(0, 0);
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height - cutRadius);
-    path.arcToPoint(
-      Offset(size.width, size.height),
-      radius: Radius.circular(cutRadius),
-      clockwise: false,
-    );
-    path.lineTo(0, size.height);
-    path.lineTo(0, cutRadius);
-    path.arcToPoint(
-      Offset(0, 0),
-      radius: Radius.circular(cutRadius),
-      clockwise: false,
-    );
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

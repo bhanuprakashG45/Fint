@@ -4,18 +4,19 @@ class OtpRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
   Future<OtpModel> verifyOtp(
-    BuildContext context,
     String phone,
     String otp,
+    String deviceToken,
   ) async {
     try {
-      final body = {"identifier": phone, "otp": otp, "firebaseToken": ''};
+      final body = {
+        "identifier": phone,
+        "otp": otp,
+        "firebaseToken": deviceToken,
+      };
+      debugPrint("Body:$body");
 
-      final response = await _apiServices.postApiResponse(
-        context,
-        AppUrls.otpUrl,
-        body,
-      );
+      final response = await _apiServices.postApiResponse(AppUrls.otpUrl, body);
 
       Map<String, dynamic> jsonMap;
 

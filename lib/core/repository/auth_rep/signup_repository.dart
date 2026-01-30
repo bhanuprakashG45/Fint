@@ -4,7 +4,6 @@ class SignupRepository {
   final NetworkApiServices _apiServices = NetworkApiServices();
 
   Future<SignUpModel> signUp({
-    required BuildContext contex,
     required String phone,
     required String name,
     required String email,
@@ -24,7 +23,6 @@ class SignupRepository {
       print("Signup Payload: ${jsonEncode(requestBody)}");
 
       final response = await _apiServices.postApiResponse(
-        contex,
         AppUrls.signUpUrl,
         requestBody,
       );

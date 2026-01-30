@@ -40,6 +40,9 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
     );
     final colorscheme = Theme.of(context).colorScheme;
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(10),
+      ),
       backgroundColor: colorscheme.onPrimary,
       title: Text(
         'Update Profile',
@@ -61,20 +64,20 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
                 fontWeight: FontWeight.bold,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.onSecondary),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.onSecondary),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.tertiary, width: 2),
               ),
             ),
           ),
-           SizedBox(height: 12.h),
+          SizedBox(height: 12.h),
           TextField(
             controller: _pincodeController,
             decoration: InputDecoration(
@@ -84,15 +87,15 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
                 fontWeight: FontWeight.bold,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.tertiary),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.tertiary),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: colorscheme.tertiary, width: 2),
               ),
             ),
@@ -102,6 +105,10 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
+            shadowColor: colorscheme.tertiary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             backgroundColor: colorscheme.onPrimary,
           ),
           onPressed: () => Navigator.of(context).pop(),
@@ -116,6 +123,9 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: colorscheme.tertiary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           onPressed: () async {
             await profileprovider.updateProfile(

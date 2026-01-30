@@ -1,4 +1,5 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/core/network/globalkey.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkApiServices extends BaseApiServices {
@@ -17,7 +18,7 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   /// ===== REFRESH TOKEN FUNCTION =====
-  Future<bool> _refreshToken(BuildContext context) async {
+  Future<bool> _refreshToken() async {
     print("Entered into REfresh Token");
     try {
       String token = await _sharedPref.getAccessToken();
@@ -45,8 +46,7 @@ class NetworkApiServices extends BaseApiServices {
         return true;
       } else if (response.statusCode == 403 || response.statusCode == 401) {
         await _sharedPref.clear();
-        Navigator.pushNamedAndRemoveUntil(
-          context,
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(
           RoutesName.loginscreen,
           (route) => false,
         );
@@ -60,7 +60,6 @@ class NetworkApiServices extends BaseApiServices {
   /// ======== GET =========
   @override
   Future<dynamic> getApiResponse(
-    BuildContext context,
     String url, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
@@ -80,13 +79,12 @@ class NetworkApiServices extends BaseApiServices {
       print(response.body);
 
       if (response.statusCode == 401) {
-        if (await _refreshToken(context)) {
+        if (await _refreshToken()) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.get(uri, headers: requestHeaders);
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
             RoutesName.loginscreen,
             (route) => false,
           );
@@ -102,7 +100,6 @@ class NetworkApiServices extends BaseApiServices {
   /// ======== POST =========
   @override
   Future<dynamic> postApiResponse(
-    BuildContext context,
     String url,
     dynamic data, {
     Map<String, String>? headers,
@@ -121,7 +118,7 @@ class NetworkApiServices extends BaseApiServices {
       print("${response.statusCode}");
 
       if (response.statusCode == 401) {
-        if (await _refreshToken(context)) {
+        if (await _refreshToken()) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.post(
             Uri.parse(url),
@@ -130,8 +127,7 @@ class NetworkApiServices extends BaseApiServices {
           );
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
             RoutesName.loginscreen,
             (route) => false,
           );
@@ -146,7 +142,6 @@ class NetworkApiServices extends BaseApiServices {
 
   /// ======== PUT =========
   Future<dynamic> putApiResponse(
-    BuildContext context,
     String url,
     dynamic data, {
     Map<String, String>? headers,
@@ -162,7 +157,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken(context)) {
+        if (await _refreshToken()) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.put(
             Uri.parse(url),
@@ -171,8 +166,7 @@ class NetworkApiServices extends BaseApiServices {
           );
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
             RoutesName.loginscreen,
             (route) => false,
           );
@@ -187,7 +181,6 @@ class NetworkApiServices extends BaseApiServices {
 
   /// ======== PATCH =========
   Future<dynamic> patchApiResponse(
-    BuildContext context,
     String url,
     dynamic data, {
     Map<String, String>? headers,
@@ -203,7 +196,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken(context)) {
+        if (await _refreshToken()) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.patch(
             Uri.parse(url),
@@ -212,8 +205,7 @@ class NetworkApiServices extends BaseApiServices {
           );
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
             RoutesName.loginscreen,
             (route) => false,
           );
@@ -228,7 +220,6 @@ class NetworkApiServices extends BaseApiServices {
 
   /// ======== DELETE =========
   Future<dynamic> deleteApiResponse(
-    BuildContext context,
     String url, {
     dynamic data,
     Map<String, String>? headers,
@@ -244,7 +235,7 @@ class NetworkApiServices extends BaseApiServices {
       );
 
       if (response.statusCode == 401) {
-        if (await _refreshToken(context)) {
+        if (await _refreshToken()) {
           requestHeaders = await _getHeaders(extraHeaders: headers);
           response = await http.delete(
             Uri.parse(url),
@@ -253,8 +244,7 @@ class NetworkApiServices extends BaseApiServices {
           );
         } else if (response.statusCode == 403) {
           await _sharedPref.clear();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
             RoutesName.loginscreen,
             (route) => false,
           );

@@ -8,6 +8,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final SharedPref pref = SharedPref();
   @override
   void initState() {
     super.initState();
@@ -15,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateAfterDelay() async {
-    SharedPref pref = SharedPref();
     Future.delayed(Duration(seconds: 5), () async {
       final accessToken = await pref.getAccessToken();
       if (accessToken.isEmpty) {
