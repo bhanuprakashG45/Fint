@@ -25,6 +25,14 @@ class ProfileViewmodel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isAccountDeleting = false;
+  bool get isAccountDeleting => _isAccountDeleting;
+
+  set isAccountDeleting(bool value) {
+    _isAccountDeleting = value;
+    notifyListeners();
+  }
+
   UserProfile _profileData = UserProfile(
     id: '',
     name: '',
@@ -107,7 +115,12 @@ class ProfileViewmodel with ChangeNotifier {
       }
     } catch (e) {
       if (e is AppException) {
-        print(e.userFriendlyMessage);
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
       } else {
         ToastHelper.show(
           context,
@@ -117,6 +130,57 @@ class ProfileViewmodel with ChangeNotifier {
       }
     } finally {
       isProfileUpdating = false;
+    }
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    isAccountDeleting = true;
+    try {
+      final url = AppUrls.deleteAccountUrl;
+      final result = await _repository.deleteAccount(url);
+
+      if (result.success) {
+        await prefs.clearAccessToken();
+        await prefs.clearRefreshToken();
+        ToastHelper.show(
+          context,
+          result.message,
+          type: ToastificationType.success,
+          duration: Duration(seconds: 3),
+        );
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.loginscreen,
+          (route) => false,
+        );
+      } else {
+        ToastHelper.show(
+          context,
+          result.message,
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+        throw Exception("Failed to delete account.");
+      }
+    } catch (e) {
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        print(e);
+      }
+      ToastHelper.show(
+        context,
+        "An unexpected error occurred.Try again later.",
+        type: ToastificationType.error,
+        duration: Duration(seconds: 3),
+      );
+    } finally {
+      isAccountDeleting = false;
     }
   }
 }

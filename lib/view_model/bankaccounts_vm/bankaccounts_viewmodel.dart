@@ -1,5 +1,6 @@
 import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/repository/bank_rep/bank_accounts_repository.dart';
+import 'package:fint/model/profile_model/bank_accounts/banknamesandtypes_model.dart';
 import 'package:fint/model/profile_model/bank_accounts/get_allbankaccounts_model.dart';
 
 class BankaccountsViewmodel with ChangeNotifier {
@@ -26,6 +27,20 @@ class BankaccountsViewmodel with ChangeNotifier {
 
   void removebankAccount(String bankId) {
     _allBankAccounts.removeWhere((bank) => bank.id == bankId);
+    notifyListeners();
+  }
+
+  List<BankNames> _banknames = [];
+  List<BankNames> get bankNames => _banknames;
+
+  List<CardType> _cardTypes = [];
+  List<CardType> get cardTypes => _cardTypes;
+
+  bool _isBankNamesorCardTypesLoading = false;
+  bool get isBankNamesorCardTypesLoading => _isBankNamesorCardTypesLoading;
+
+  set isBankNamesorCardTypesLoading(bool value) {
+    _isBankNamesorCardTypesLoading = value;
     notifyListeners();
   }
 
@@ -91,12 +106,14 @@ class BankaccountsViewmodel with ChangeNotifier {
       }
     } catch (e) {
       debugPrint(e.toString());
-      ToastHelper.show(
-        context,
-        e.toString(),
-        type: ToastificationType.error,
-        duration: const Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
     } finally {
       isAllBankAccountsLoading = false;
     }
@@ -121,12 +138,14 @@ class BankaccountsViewmodel with ChangeNotifier {
       }
     } catch (e) {
       debugPrint(e.toString());
-      ToastHelper.show(
-        context,
-        e.toString(),
-        type: ToastificationType.error,
-        duration: const Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
     }
   }
 
@@ -146,12 +165,44 @@ class BankaccountsViewmodel with ChangeNotifier {
       }
     } catch (e) {
       debugPrint(e.toString());
-      ToastHelper.show(
-        context,
-        e.toString(),
-        type: ToastificationType.error,
-        duration: const Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    }
+  }
+
+  Future<void> getBankNamesandCardTypes(BuildContext context) async {
+    isBankNamesorCardTypesLoading = true;
+    try {
+      final response = await _repository.getBankNamesandCardTypes();
+      if (response.success) {
+        _banknames = response.banks;
+        _cardTypes = response.cardTypes;
+      } else {
+        ToastHelper.show(
+          context,
+          response.message,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    } finally {
+      isBankNamesorCardTypesLoading = false;
     }
   }
 }

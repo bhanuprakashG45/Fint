@@ -131,19 +131,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
       } else {
         ToastHelper.show(
           context,
-          "Payment Failed",
+          result.error ?? "Payment Failed",
           type: ToastificationType.error,
           duration: Duration(seconds: 3),
         );
         debugPrint("Payment Failed: ${result.error}");
       }
     } catch (e) {
-      ToastHelper.show(
-        context,
-        "Something went wrong",
-        type: ToastificationType.error,
-        duration: Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        ToastHelper.show(
+          context,
+          "Something went wrong",
+          type: ToastificationType.error,
+          duration: Duration(seconds: 3),
+        );
+      }
       debugPrint('Error: $e');
     }
   }

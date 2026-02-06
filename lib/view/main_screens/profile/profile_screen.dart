@@ -1,4 +1,6 @@
 import 'package:fint/core/constants/exports.dart';
+import 'package:fint/core/utils/widgets/showdeleteaccount_dialog.dart';
+import 'package:fint/model/profile_model/bank_accounts/get_allbankaccounts_model.dart';
 import 'package:fint/view/main_screens/profile/qrcode_dialog.dart';
 import 'package:fint/view_model/bankaccounts_vm/bankaccounts_viewmodel.dart';
 
@@ -92,126 +94,153 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(width: 30.w),
         ],
       ),
-      body: Consumer2<ProfileViewmodel, BankaccountsViewmodel>(
-        builder: (context, profileVm, bankVm, _) {
-          final profile = profileVm.profileData;
-          final banks = bankVm.allBankAccounts;
+      body: SafeArea(
+        top: false,
+        child: Consumer2<ProfileViewmodel, BankaccountsViewmodel>(
+          builder: (context, profileVm, bankVm, _) {
+            final profile = profileVm.profileData;
+            final banks = bankVm.allBankAccounts;
 
-          return Skeletonizer(
-            enabled:
-                profileVm.isFetchingProfile || bankVm.isAllBankAccountsLoading,
-            child: Column(
-              children: [
-                _ProfileHeader(profile: profile),
-                banks.isEmpty
-                    ? _AddBankAccountCard(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.addbankAccountscreen,
-                            arguments: false,
-                          );
-                        },
-                      )
-                    : _BankAccountsList(banks: banks),
+            return Skeletonizer(
+              enabled:
+                  profileVm.isFetchingProfile ||
+                  bankVm.isAllBankAccountsLoading,
+              child: Column(
+                children: [
+                  _ProfileHeader(profile: profile),
+                  banks.isEmpty
+                      ? _AddBankAccountCard(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.addbankAccountscreen,
+                              arguments: false,
+                            );
+                          },
+                        )
+                      : _BankAccountsList(banks: banks),
 
-                // _QrCard(userId: profile.id, userName: profile.name),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      SingleChildScrollView(
-                        padding: EdgeInsets.only(bottom: 80.h),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: cs.primaryContainer,
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(10).r,
+                  // _QrCard(userId: profile.id, userName: profile.name),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: EdgeInsets.only(bottom: 40.h),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: cs.primaryContainer,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(10).r,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 10.h),
+                                ProfileOptionsWidget(
+                                  leadingIcon: Icons.water_drop_outlined,
+                                  text: "Be a Donor",
+                                  trailingWidget: Switch(
+                                    value: profile.beADonor,
+                                    activeColor: cs.tertiary,
+                                    onChanged: (_) async {
+                                      await profileVm.updateProfile(
+                                        context,
+                                        beADonor: !profile.beADonor,
+                                      );
+                                      await profileVm.fetchProfileDetails(
+                                        context,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                ProfileOptionsWidget(
+                                  leadingIcon: FontAwesomeIcons.fingerprint,
+                                  text: "Bio Metric & Screen Lock",
+                                  trailingWidget: Switch(
+                                    value: isBiometricEnabled,
+                                    activeColor: cs.secondary,
+                                    onChanged: (v) =>
+                                        setState(() => isBiometricEnabled = v),
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                _NavTile(
+                                  icon: FontAwesomeIcons.shieldHalved,
+                                  text: "Privacy and Security",
+                                  onTap: () => _launchUrl(
+                                    'https://projectf0724.com/privacy-policy',
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                _NavTile(
+                                  icon: FontAwesomeIcons.phone,
+                                  text: "Contact Us",
+                                  onTap: () => _makePhoneCall("8147441592"),
+                                ),
+                                SizedBox(height: 10.h),
+                                _NavTile(
+                                  icon: Icons.help_center_outlined,
+                                  text: "Help Center",
+                                  onTap: () => _launchEmail(
+                                    toEmail: 'projectf0724@gmail.com',
+                                    subject: 'Help Required',
+                                    body: 'Hello, I need assistance with...',
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                InkWell(
+                                  onTap: () {
+                                    showDeleteAccountDialog(context);
+                                  },
+                                  child: ProfileOptionsWidget(
+                                    leadingIcon: FontAwesomeIcons.trashCan,
+                                    text: "Delete Account",
+                                    trailingIcon: Icons.arrow_forward_ios,
+                                  ),
+                                ),
+                                SizedBox(height: 80.h),
+                              ],
                             ),
                           ),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 10.h),
-                              ProfileOptionsWidget(
-                                leadingIcon: Icons.water_drop_outlined,
-                                text: "Be a Donor",
-                                trailingWidget: Switch(
-                                  value: profile.beADonor,
-                                  activeColor: cs.tertiary,
-                                  onChanged: (_) async {
-                                    await profileVm.updateProfile(
-                                      context,
-                                      beADonor: !profile.beADonor,
-                                    );
-                                    await profileVm.fetchProfileDetails(
-                                      context,
-                                    );
-                                  },
-                                ),
-                              ),
-                              ProfileOptionsWidget(
-                                leadingIcon: FontAwesomeIcons.fingerprint,
-                                text: "Bio Metric & Screen Lock",
-                                trailingWidget: Switch(
-                                  value: isBiometricEnabled,
-                                  activeColor: cs.secondary,
-                                  onChanged: (v) =>
-                                      setState(() => isBiometricEnabled = v),
-                                ),
-                              ),
-                              SizedBox(height: 15.h),
-                              _NavTile(
-                                icon: FontAwesomeIcons.shieldHalved,
-                                text: "Privacy and Security",
-                                onTap: () => _launchUrl(
-                                  'https://projectf0724.com/privacy-policy',
-                                ),
-                              ),
-                              SizedBox(height: 15.h),
-                              _NavTile(
-                                icon: FontAwesomeIcons.phone,
-                                text: "Contact Us",
-                                onTap: () => _makePhoneCall("8147441592"),
-                              ),
-                              SizedBox(height: 15.h),
-                              _NavTile(
-                                icon: Icons.help_center_outlined,
-                                text: "Help Center",
-                                onTap: () => _launchEmail(
-                                  toEmail: 'projectf0724@gmail.com',
-                                  subject: 'Help Required',
-                                  body: 'Hello, I need assistance with...',
-                                ),
-                              ),
-                              SizedBox(height: 80.h),
-                            ],
+                        ),
+                        Positioned(
+                          bottom: 0.h,
+                          left: 10.w,
+                          right: 10.w,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10.h, top: 5.h),
+                            color: cs.primaryContainer,
+                            child: _LogoutButton(
+                              onLogout: () async {
+                                final result = await logoutVm.userLogout(
+                                  context,
+                                );
+                                if (result == true) {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    RoutesName.loginscreen,
+                                    (_) => false,
+                                  );
+                                } else {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    RoutesName.loginscreen,
+                                    (_) => false,
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 10.h,
-                        left: 10.w,
-                        right: 10.w,
-                        child: _LogoutButton(
-                          onLogout: () async {
-                            final result = await logoutVm.userLogout(context);
-                            if (result == true) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                RoutesName.loginscreen,
-                                (_) => false,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -280,7 +309,7 @@ class _ProfileHeader extends StatelessWidget {
 }
 
 class _BankAccountsList extends StatelessWidget {
-  final List banks;
+  final List<BankAccounts> banks;
   const _BankAccountsList({required this.banks});
 
   @override
@@ -393,21 +422,97 @@ class _BankAccountsList extends StatelessWidget {
                           ),
                   ],
                 ),
-                Center(
-                  child: Image.asset(
-                    'assets/images/bankcard_logo.png',
-                    height: 100.h,
-                  ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      bank.bankId.bankImage,
+                      height: 60.h,
+
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 60.h,
+                          width: 60.w,
+                          decoration: BoxDecoration(
+                            color: cs.onPrimary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(10).r,
+                          ),
+                          child: Icon(
+                            Icons.account_balance,
+                            color: cs.onPrimary,
+                            size: 25.sp,
+                          ),
+                        );
+                      },
+
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+
+                        return SizedBox(
+                          height: 60.h,
+                          width: 60.w,
+                          child: Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(width: 85.w),
+                    Image.asset(
+                      'assets/images/bankcard_logo.png',
+                      height: 100.h,
+                    ),
+                  ],
                 ),
                 Spacer(),
-                Text(
-                  bank.bankAccountNumber,
-                  style: TextStyle(
-                    fontSize: 25.sp,
-                    letterSpacing: 4,
-                    color: cs.onPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      bank.bankAccountNumber,
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        letterSpacing: 4,
+                        color: cs.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Image.network(
+                      bank.cardTypeId.image,
+                      height: 30.h,
+
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 30.h,
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                            color: cs.onPrimary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.credit_card,
+                            color: cs.onPrimary,
+                            size: 30.sp,
+                          ),
+                        );
+                      },
+
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+
+                        return SizedBox(
+                          height: 30.h,
+                          width: 30.w,
+                          child: Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
+                      },
+                    ),
+
+                    SizedBox(width: 5.w),
+                  ],
                 ),
               ],
             ),

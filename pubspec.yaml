@@ -55,6 +55,7 @@ dependencies:
   flutter_local_notifications: ^19.4.2
   razorpay_flutter: ^1.4.0
   pretty_qr_code: ^3.5.0
+  dropdown_search: ^6.0.2
   
 dev_dependencies:
   flutter_test:

@@ -27,7 +27,7 @@ class MyqrScreen extends StatelessWidget {
       body: Consumer<BankaccountsViewmodel>(
         builder: (context, bankvm, _) {
           final bank = bankvm.allBankAccounts.isNotEmpty
-              ? bankvm.allBankAccounts[0].bankName
+              ? bankvm.allBankAccounts[0].bankId.bankName
               : '';
           final accountNumber = bankvm.allBankAccounts.isNotEmpty
               ? bankvm.allBankAccounts[0].bankAccountNumber

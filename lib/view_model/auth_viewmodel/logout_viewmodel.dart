@@ -74,12 +74,15 @@ class LogoutViewmodel with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      ToastHelper.show(
-        context,
-        "Something went wrong",
-        type: ToastificationType.error,
-        duration: const Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
+
       return false;
     }
   }

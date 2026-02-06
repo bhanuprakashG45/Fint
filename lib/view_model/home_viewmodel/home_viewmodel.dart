@@ -182,12 +182,14 @@ class HomeViewmodel with ChangeNotifier {
         );
       }
     } catch (e) {
-      ToastHelper.show(
-        context,
-        "Something Went Wrong",
-        type: ToastificationType.error,
-        duration: Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
       debugPrint(e.toString());
     } finally {
       isTransactionHistoryLoading = false;
@@ -255,12 +257,14 @@ class HomeViewmodel with ChangeNotifier {
         );
       }
     } catch (e) {
-      ToastHelper.show(
-        context,
-        "Something Went Wrong",
-        type: ToastificationType.error,
-        duration: Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
       debugPrint(e.toString());
     } finally {
       isFilteringTransactions = false;
@@ -290,12 +294,14 @@ class HomeViewmodel with ChangeNotifier {
         );
       }
     } catch (e) {
-      ToastHelper.show(
-        context,
-        "Something went wrong",
-        type: ToastificationType.success,
-        duration: Duration(seconds: 3),
-      );
+      if (e is AppException) {
+        ToastHelper.show(
+          context,
+          e.userFriendlyMessage,
+          type: ToastificationType.error,
+          duration: const Duration(seconds: 3),
+        );
+      }
       debugPrint(e.toString());
     } finally {
       isEchangeClaiming = false;

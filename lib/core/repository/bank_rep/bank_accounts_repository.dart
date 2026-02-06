@@ -1,5 +1,6 @@
 import 'package:fint/core/constants/exports.dart';
 import 'package:fint/model/profile_model/bank_accounts/add_bankaccount_model.dart';
+import 'package:fint/model/profile_model/bank_accounts/banknamesandtypes_model.dart';
 import 'package:fint/model/profile_model/bank_accounts/delete_bankaccount_model.dart';
 import 'package:fint/model/profile_model/bank_accounts/get_allbankaccounts_model.dart';
 import 'package:fint/model/profile_model/bank_accounts/update_bankaccount_model.dart';
@@ -104,6 +105,29 @@ class BankAccountsRepository {
     } catch (e) {
       if (e is AppException) rethrow;
       throw AppException('', 'Update failed: $e');
+    }
+  }
+
+  Future<BankNamesAndTypesModel> getBankNamesandCardTypes() async {
+    try {
+      final url = AppUrls.getBankNamesAndTypesUrl;
+      final response = await _apiServices.getApiResponse(url);
+
+      print("${response}");
+
+      Map<String, dynamic> jsonMap;
+
+      if (response is Map<String, dynamic>) {
+        jsonMap = response;
+      } else if (response is String) {
+        jsonMap = json.decode(response);
+      } else {
+        throw AppException('Unexpected response format', '');
+      }
+      return BankNamesAndTypesModel.fromJson(jsonMap);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw AppException('', 'Fetch Bank Names and CardTypes failed: $e');
     }
   }
 }

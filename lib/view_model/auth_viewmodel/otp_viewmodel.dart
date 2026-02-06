@@ -78,7 +78,7 @@ class OtpViewModel with ChangeNotifier {
       if (e is AppException) {
         ToastHelper.show(
           context,
-          e.message ?? '',
+          e.userFriendlyMessage,
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );

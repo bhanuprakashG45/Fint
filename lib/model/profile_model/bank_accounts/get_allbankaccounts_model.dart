@@ -8,7 +8,7 @@ String getAllBankAccountsModelToJson(GetAllBankAccountsModel data) =>
 
 class GetAllBankAccountsModel {
   int statusCode;
-  BankAccountsData data;
+  BankAccountData data;
   String message;
   bool success;
 
@@ -22,8 +22,12 @@ class GetAllBankAccountsModel {
   factory GetAllBankAccountsModel.fromJson(Map<String, dynamic> json) =>
       GetAllBankAccountsModel(
         statusCode: json["statusCode"] ?? 0,
-        data: BankAccountsData.fromJson(json["data"] ?? {}),
-        message: json["message"] ?? '',
+
+        data: json["data"] != null
+            ? BankAccountData.fromJson(json["data"])
+            : BankAccountData(bankAccounts: []),
+
+        message: json["message"] ?? "",
         success: json["success"] ?? false,
       );
 
@@ -35,22 +39,22 @@ class GetAllBankAccountsModel {
   };
 }
 
-class BankAccountsData {
+class BankAccountData {
   List<BankAccounts> bankAccounts;
 
-  BankAccountsData({required this.bankAccounts});
+  BankAccountData({required this.bankAccounts});
 
-  factory BankAccountsData.fromJson(Map<String, dynamic> json) =>
-      BankAccountsData(
+  factory BankAccountData.fromJson(Map<String, dynamic> json) =>
+      BankAccountData(
         bankAccounts: json["bankAccounts"] != null
             ? List<BankAccounts>.from(
-                json["bankAccounts"].map((x) => BankAccounts.fromJson(x ?? {})),
+                json["bankAccounts"].map((x) => BankAccounts.fromJson(x)),
               )
-            : <BankAccounts>[],
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
-    "bankAccounts": List<dynamic>.from(bankAccounts.map((x) => x.toJson())),
+    "bankAccounts": bankAccounts.map((x) => x.toJson()).toList(),
   };
 }
 
@@ -59,38 +63,57 @@ class BankAccounts {
   String accountHolderName;
   String bankAccountNumber;
   String ifscCode;
-  String bankName;
+
+  BankId bankId;
+  CardTypeId cardTypeId;
+
   String accountType;
-  DateTime createdAt;
-  DateTime updatedAt;
   bool isActive;
+
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   BankAccounts({
     required this.id,
     required this.accountHolderName,
     required this.bankAccountNumber,
     required this.ifscCode,
-    required this.bankName,
+    required this.bankId,
+    required this.cardTypeId,
     required this.accountType,
+    required this.isActive,
     required this.createdAt,
     required this.updatedAt,
-    required this.isActive,
   });
 
   factory BankAccounts.fromJson(Map<String, dynamic> json) => BankAccounts(
-    id: json["_id"] ?? '',
-    accountHolderName: json["accountHolderName"] ?? '',
-    bankAccountNumber: json["bankAccountNumber"] ?? '',
-    ifscCode: json["ifscCode"] ?? '',
-    bankName: json["bankName"] ?? '',
-    accountType: json["accountType"] ?? '',
-    createdAt:
-        DateTime.tryParse(json["createdAt"] ?? '') ??
-        DateTime.fromMillisecondsSinceEpoch(0),
-    updatedAt:
-        DateTime.tryParse(json["updatedAt"] ?? '') ??
-        DateTime.fromMillisecondsSinceEpoch(0),
-    isActive: json["isAcive"] ?? false,
+    id: json["_id"] ?? "",
+
+    accountHolderName: json["accountHolderName"] ?? "",
+
+    bankAccountNumber: json["bankAccountNumber"] ?? "",
+
+    ifscCode: json["ifscCode"] ?? "",
+
+    bankId: json["bankId"] != null
+        ? BankId.fromJson(json["bankId"])
+        : BankId(id: "", bankName: "", bankImage: ""),
+
+    cardTypeId: json["cardTypeId"] != null
+        ? CardTypeId.fromJson(json["cardTypeId"])
+        : CardTypeId(id: "", name: "", image: ""),
+
+    accountType: json["accountType"] ?? "",
+
+    isActive: json["isActive"] ?? false,
+
+    createdAt: json["createdAt"] != null
+        ? DateTime.tryParse(json["createdAt"])
+        : null,
+
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.tryParse(json["updatedAt"])
+        : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -98,10 +121,47 @@ class BankAccounts {
     "accountHolderName": accountHolderName,
     "bankAccountNumber": bankAccountNumber,
     "ifscCode": ifscCode,
-    "bankName": bankName,
+    "bankId": bankId.toJson(),
+    "cardTypeId": cardTypeId.toJson(),
     "accountType": accountType,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "isAcive": isActive,
+    "isActive": isActive,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
   };
+}
+
+class BankId {
+  String id;
+  String bankName;
+  String bankImage;
+
+  BankId({required this.id, required this.bankName, required this.bankImage});
+
+  factory BankId.fromJson(Map<String, dynamic> json) => BankId(
+    id: json["_id"] ?? "",
+    bankName: json["bankName"] ?? "",
+    bankImage: json["bankImage"] ?? "",
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "bankName": bankName,
+    "bankImage": bankImage,
+  };
+}
+
+class CardTypeId {
+  String id;
+  String name;
+  String image;
+
+  CardTypeId({required this.id, required this.name, required this.image});
+
+  factory CardTypeId.fromJson(Map<String, dynamic> json) => CardTypeId(
+    id: json["_id"] ?? "",
+    name: json["name"] ?? "",
+    image: json["image"] ?? "",
+  );
+
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "image": image};
 }

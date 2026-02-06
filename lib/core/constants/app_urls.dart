@@ -14,6 +14,7 @@ class AppUrls {
   //Profile
   static const String profileUrl = '${baseUrl}auth/fint/profile';
   static const String updateProfileUrl = '${baseUrl}auth/fint/update-profile';
+  static const String deleteAccountUrl = "${baseUrl}auth/fint/delete-account";
   //Insurance
   static const String applyPetInsuranceUrl = '${baseUrl}petInsurance/apply';
 
@@ -24,7 +25,8 @@ class AppUrls {
       '${baseUrl}coupons/display-coupons-details/';
   //Home
   static const String notificationsUrl = '${baseUrl}notefication/fint-user';
-  static const String transactionHistoryUrl = "${baseUrl}history/userTransation";
+  static const String transactionHistoryUrl =
+      "${baseUrl}history/userTransation";
 
   //Bank Accounts
   static const String addBankAccountUrl =
@@ -35,6 +37,7 @@ class AppUrls {
       "${baseUrl}auth/fint/update-bank-account";
   static const String deleteBankAccountUrl =
       "${baseUrl}auth/fint/delete-bank-account";
+  static const String getBankNamesAndTypesUrl = "${baseUrl}bank";
 
   //Payment
   static const String paytoNumberUrl = '${baseUrl}payment/send/phone';

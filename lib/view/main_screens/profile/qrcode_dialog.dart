@@ -18,7 +18,7 @@ class QrcodeDialog extends StatelessWidget {
       child: Consumer<BankaccountsViewmodel>(
         builder: (context, bankvm, _) {
           final hasBank = bankvm.allBankAccounts.isNotEmpty;
-          final bank = hasBank ? bankvm.allBankAccounts.first.bankName : '';
+          final bank = hasBank ? bankvm.allBankAccounts.first.bankId.bankName : '';
           final accountNumber = hasBank
               ? bankvm.allBankAccounts.first.bankAccountNumber
               : '';

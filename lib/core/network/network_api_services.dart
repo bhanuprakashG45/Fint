@@ -257,32 +257,45 @@ class NetworkApiServices extends BaseApiServices {
     }
   }
 
-  dynamic _processResponse(http.Response response) {
+   dynamic _processResponse(http.Response response) {
+    final body = response.body.trim();
+
+    final isJson = body.startsWith('{') || body.startsWith('[');
+
     switch (response.statusCode) {
       case 200:
       case 201:
-        return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+        return isJson ? jsonDecode(body) : body;
+
       case 400:
-        final error = response.body.isNotEmpty
-            ? jsonDecode(response.body)
-            : null;
-        throw BadRequestException(error?['message'] ?? "Bad Request");
+        throw BadRequestException(_extractMessage(body));
+
       case 401:
       case 403:
-        final error = response.body.isNotEmpty
-            ? jsonDecode(response.body)
-            : null;
-        throw UnauthorizedException(error?['message'] ?? "Unauthorized");
+        throw UnauthorizedException(_extractMessage(body));
+
       case 404:
       case 500:
-        final error = response.body.isNotEmpty
-            ? jsonDecode(response.body)
-            : null;
-        return error;
+        return isJson ? jsonDecode(body) : body;
+
       default:
         throw FetchDataException(
           'Error occurred with status code: ${response.statusCode}',
         );
+    }
+  }
+
+  String _extractMessage(String body) {
+    try {
+      final data = jsonDecode(body);
+
+      if (data is Map<String, dynamic>) {
+        return data['message']?.toString() ?? data['error']?.toString() ?? body;
+      }
+
+      return body;
+    } catch (_) {
+      return body;
     }
   }
 }
