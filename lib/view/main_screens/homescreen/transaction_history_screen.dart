@@ -35,6 +35,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen>
     WidgetsBinding.instance.addPostFrameCallback((value) async {
       final homevm = Provider.of<HomeViewmodel>(context, listen: false);
       homevm.clearSearchData();
+      homevm.resetFilters();
 
       await homevm.fetchTransactionHistory(context);
 
@@ -281,7 +282,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen>
                       builder: (_) {
                         final transactions =
                             homevm.filteredTransactionData.isNotEmpty ||
-                                searchQuery.isNotEmpty
+                                searchQuery.isNotEmpty ||
+                                homevm.selectedDate.isNotEmpty ||
+                                homevm.selectedMonth.isNotEmpty
                             ? homevm.filteredTransactionData
                             : homevm.transactionHistoryData;
 

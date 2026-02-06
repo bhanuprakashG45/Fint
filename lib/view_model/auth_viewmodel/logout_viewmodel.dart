@@ -14,7 +14,16 @@ class LogoutViewmodel with ChangeNotifier {
 
   LogoutModel get logoutdata => _logoutdata;
 
-  Future<bool> userLogout(context) async {
+  bool _isLogoutLoading = false;
+  bool get isLogoutLoading => _isLogoutLoading;
+
+  set isLogoutLoading(bool value) {
+    _isLogoutLoading = value;
+    notifyListeners();
+  }
+
+  Future<void> userLogout(context) async {
+    isLogoutLoading = true;
     try {
       final url = AppUrls.logoutUrl;
       final accessToken = await prefs.getAccessToken();
@@ -49,7 +58,12 @@ class LogoutViewmodel with ChangeNotifier {
           type: ToastificationType.success,
           duration: Duration(seconds: 3),
         );
-        return true;
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.loginscreen,
+          (_) => false,
+        );
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         await prefs.clearAccessToken();
         await prefs.clearRefreshToken();
@@ -62,16 +76,24 @@ class LogoutViewmodel with ChangeNotifier {
           type: ToastificationType.success,
           duration: Duration(seconds: 3),
         );
-        return true;
-      } else {
-        ToastHelper.show(
+        Navigator.pushNamedAndRemoveUntil(
           context,
-          "Failed to logout",
-          type: ToastificationType.error,
-          duration: Duration(seconds: 3),
+          RoutesName.loginscreen,
+          (_) => false,
         );
-        print("Failed to Logout:${response.statusCode}");
-        return false;
+      } else {
+        // ToastHelper.show(
+        //   context,
+        //   "Failed to logout",
+        //   type: ToastificationType.error,
+        //   duration: Duration(seconds: 3),
+        // );
+        // print("Failed to Logout:${response.statusCode}");
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.loginscreen,
+          (_) => false,
+        );
       }
     } catch (e) {
       if (e is AppException) {
@@ -82,8 +104,8 @@ class LogoutViewmodel with ChangeNotifier {
           duration: const Duration(seconds: 3),
         );
       }
-
-      return false;
+    } finally {
+      isLogoutLoading = false;
     }
   }
 }

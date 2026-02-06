@@ -24,7 +24,7 @@ class RazorpayRepository {
       final response = await _apiServices.postApiResponse(url, body);
       return CreatePayToNumberOrderModel.fromJson(response);
     } catch (e) {
-      debugPrint("Unexpected error in Creating Pay to Number order: $e");
+      debugPrint("Unexpected error in Creating order: $e");
       rethrow;
     }
   }

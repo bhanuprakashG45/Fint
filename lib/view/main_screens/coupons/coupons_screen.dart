@@ -295,7 +295,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
                     child: Image.asset(
                       coupon.status.toLowerCase() == 'deleted'
                           ? 'assets/icons/deleted.png'
-                          : 'assets/icons/rejected.png',
+                          : 'assets/icons/expired.png',
                       width: 70.w,
                       fit: BoxFit.contain,
                     ),

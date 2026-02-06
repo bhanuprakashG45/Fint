@@ -27,6 +27,31 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       12,
       (index) => DateTime(now.year, now.month - index, 1),
     );
+    WidgetsBinding.instance.addPostFrameCallback((value) async {
+      final homevm = Provider.of<HomeViewmodel>(context, listen: false);
+
+      setState(() {
+        selectedDate = homevm.selectedDate.isNotEmpty
+            ? DateTime.parse(homevm.selectedDate)
+            : null;
+
+        if (homevm.selectedMonth.isNotEmpty) {
+          selectedMonth = parseSavedMonth(homevm.selectedMonth);
+          isDateSelected = false;
+        }
+      });
+      debugPrint(
+        "Selected Date: $selectedDate, Selected Month: $selectedMonth",
+      );
+    });
+  }
+
+  DateTime? parseSavedMonth(String month) {
+    try {
+      return DateFormat("MMMM-yyyy").parse(month);
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> _pickDate() async {
@@ -58,7 +83,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10).r,
             width: double.infinity,
             decoration: BoxDecoration(
               color: cs.tertiary,
@@ -151,11 +176,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           ),
                         ),
                         onPressed: () {
+                          homevm.resetFilters();
                           setState(() {
                             isDateSelected = true;
                             selectedDate = null;
                             selectedMonth = null;
                           });
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           "Clear All",

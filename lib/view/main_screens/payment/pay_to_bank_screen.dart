@@ -83,7 +83,7 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
       listen: false,
     );
     try {
-      if (_accountController.text.isEmpty) {
+      if (_accountController.text.trim().isEmpty) {
         ToastHelper.show(
           context,
           "Please enter valid Account number",
@@ -92,19 +92,10 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
         );
         return;
       }
-      if (_ifscController.text.isEmpty) {
+      if (_ifscController.text.trim().isEmpty) {
         ToastHelper.show(
           context,
-          "Please enter valid Account number",
-          type: ToastificationType.error,
-          duration: Duration(seconds: 3),
-        );
-        return;
-      }
-      if (_accountController.text.isEmpty) {
-        ToastHelper.show(
-          context,
-          "Please enter valid Account number",
+          "Please enter valid IFSC code",
           type: ToastificationType.error,
           duration: Duration(seconds: 3),
         );
@@ -172,15 +163,13 @@ class _PayToBankScreenState extends State<PayToBankScreen> {
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
-      }else{
-       
+      } else {
         ToastHelper.show(
           context,
           "Something went wrong",
           type: ToastificationType.error,
           duration: const Duration(seconds: 3),
         );
-      
       }
       debugPrint('Error: $e');
     }

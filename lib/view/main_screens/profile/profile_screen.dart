@@ -1,5 +1,6 @@
 import 'package:fint/core/constants/exports.dart';
 import 'package:fint/core/utils/widgets/showdeleteaccount_dialog.dart';
+import 'package:fint/core/utils/widgets/showlogout_dialog.dart';
 import 'package:fint/model/profile_model/bank_accounts/get_allbankaccounts_model.dart';
 import 'package:fint/view/main_screens/profile/qrcode_dialog.dart';
 import 'package:fint/view_model/bankaccounts_vm/bankaccounts_viewmodel.dart';
@@ -46,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final logoutVm = context.read<LogoutViewmodel>();
     final profileProvider = context.read<ProfileViewmodel>();
 
     return Scaffold(
@@ -212,23 +212,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.only(bottom: 10.h, top: 5.h),
                             color: cs.primaryContainer,
                             child: _LogoutButton(
-                              onLogout: () async {
-                                final result = await logoutVm.userLogout(
-                                  context,
-                                );
-                                if (result == true) {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    RoutesName.loginscreen,
-                                    (_) => false,
-                                  );
-                                } else {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    RoutesName.loginscreen,
-                                    (_) => false,
-                                  );
-                                }
+                              onLogout: () {
+                                showLogoutPopup(context);
                               },
                             ),
                           ),
@@ -426,6 +411,7 @@ class _BankAccountsList extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(width: 10.w),
                     Image.network(
                       bank.bankId.bankImage,
                       height: 60.h,
@@ -458,7 +444,7 @@ class _BankAccountsList extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(width: 85.w),
+                    SizedBox(width: 70.w),
                     Image.asset(
                       'assets/images/bankcard_logo.png',
                       height: 100.h,

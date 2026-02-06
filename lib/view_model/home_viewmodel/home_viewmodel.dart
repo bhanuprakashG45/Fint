@@ -124,6 +124,13 @@ class HomeViewmodel with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetFilters() {
+    _selectedDate = '';
+    _selectedMonth = '';
+    _filteredTransactionData.clear();
+    notifyListeners();
+  }
+
   Future<void> fetchNotifications(BuildContext context) async {
     isNotificationsLoading = true;
     try {

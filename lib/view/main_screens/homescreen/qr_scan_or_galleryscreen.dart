@@ -128,8 +128,8 @@ class _QRScanOrGalleryScreenState extends State<QRScanOrGalleryScreen> {
             context,
             MaterialPageRoute(
               builder: (_) => ClaimExchangeScreen(
-                orderId: decoded['orderId'],
-                amount: decoded['amount'],
+                orderId: decoded['orderId'].toString(),
+                amount: decoded['amount'].toString(),
               ),
             ),
           );

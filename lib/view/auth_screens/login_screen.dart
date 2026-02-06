@@ -151,13 +151,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? null
                                   : () async {
                                       final phone = phonecontroller.text.trim();
-                                      if (phone.isEmpty) {
-                                        ToastHelper.show(
-                                          context,
-                                          'Phone Number is required',
-                                          type: ToastificationType.warning,
-                                          duration: Duration(seconds: 5),
-                                        );
+                                      if (phone.isEmpty || phone.length < 10) {
+                                        if (phone.isEmpty) {
+                                          ToastHelper.show(
+                                            context,
+                                            'Phone Number is required',
+                                            type: ToastificationType.warning,
+                                            duration: Duration(seconds: 5),
+                                          );
+                                        } else {
+                                          ToastHelper.show(
+                                            context,
+                                            'Please enter a valid 10-digit phone number',
+                                            type: ToastificationType.warning,
+                                            duration: Duration(seconds: 5),
+                                          );
+                                        }
                                       } else {
                                         bool result = await loginvm.loginUser(
                                           phone,
