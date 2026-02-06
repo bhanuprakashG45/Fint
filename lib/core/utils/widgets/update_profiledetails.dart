@@ -128,6 +128,26 @@ class _UpdateProfileDialogState extends State<UpdateProfileDialog> {
             ),
           ),
           onPressed: () async {
+            if (_nameController.text.trim().isEmpty) {
+              ToastHelper.show(
+                context,
+                "Name cannot be empty",
+                type: ToastificationType.error,
+                duration: const Duration(seconds: 3),
+              );
+              return;
+            }
+            ;
+            if (_pincodeController.text.trim().length != 6) {
+              ToastHelper.show(
+                context,
+                "PinCode must be 6 digits",
+                type: ToastificationType.error,
+                duration: const Duration(seconds: 3),
+              );
+              return;
+            }
+            ;
             await profileprovider.updateProfile(
               context,
               name: _nameController.text.trim(),
